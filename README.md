@@ -291,3 +291,14 @@ Laores now offers its first unique card after a lost round: **Lizard Have No Win
 Fire damage gains +3 percentage points for each elapsed match round (+3% round 2, +6% round 3, +12% round 5). This stacks with the existing form growth and also applies to burn damage. Wings disappear visually. From round 3, Fly is replaced by **Inferno**: 65 base damage, 1000 range, 1-second aimed windup, 20-second cooldown. It is a single beam hit that stops at cover; dodge, guard, reflection and stun interruption still work. The first two moves and normal HP/speed progression remain. Round 2 still has only Fire Ball/Flamethrower.
 
 Unit and simulated online tests cover the one-card draft/skip, duplicate exclusion, damage growth, round-3 replacement, windup, cooldown, wall block, stun interruption and guest-authoritative damage snapshots.
+
+### Laores card 2: I Studid Magic
+
+Two unique cards are now offered (plus Skip), with no duplicates and a two-card cap. Either acquisition order composes identically.
+
+- **Magic Missile** replaces Fire Ball: weak homing (turn cap 1.8 radians/second), speed 300, range 500, 1.6-second cooldown, 10 base damage growing with form, 0.1-second stun on an unblocked hit. Walls, dodge, guard, reflection and existing stun immunity apply.
+- **Gravity Well** replaces Flamethrower: place within 420 range, 120 radius, 0.6-second warning, 7-second cooldown. Deals 8 base damage growing with form and pulls an enemy up to 100 units toward its center. Cover, dodge, control immunity and passenger/grab restrictions apply.
+- **Fly** remains when only Magic is selected. Egg still has one move and the second/third slots unlock in rounds 2/3 as usual.
+- **Magic + Lizard:** slot three becomes **Time Stop**, replacing Inferno from round 3. Target within 500, 120-radius area, 0.6-second windup and 24-second cooldown. A valid hit stuns for 3 seconds and gives Laores 4× cooldown recovery for those 3 seconds; Time Stop itself always recovers at the normal rate. No damage and no buff on a miss. Cover, dodge, stun immunity and windup interruption counter it. On hit the enemy receives 6 seconds of stun immunity to prevent immediate restuns. Buff/stun reset each round. Control magic does not gain the Lizard fire-damage bonus; wing loss remains.
+
+Unit tests cover both card orders, homing/ministun, gravity pull, Fly preservation, stop duration, cooldown acceleration excluding itself, cover and expiry. Simulated online tests cover actual drafts in both orders and synchronized stop/recovery state.
