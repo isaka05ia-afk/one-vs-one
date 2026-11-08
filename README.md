@@ -231,3 +231,16 @@ Attackcooldowns reduceras genom den sammansatta attacklistan. Kortare animatione
 Nätverksspelet synkar upp till tio dörrar, familjeskyttar, deras HP och tillhörighet, fällor samt den fördröjda Sonic-rörelsen. Värden väljer slumpad hotellutgång och avgör alla träffar. Båda sidor behöver ladda om till samma version.
 
 Tester täcker alla tjugo ordnade Door Man-kortpar, fem dörrar/slumpad utgång/ersättning, faktiska Key Gun-cooldowns, halvt liv, 10-HP-dörrar, begränsade familjespawners, förstörelse, ingen teleport med Family, fällstun och andra Door Mans immunitet samt Sonic-formens tomma attacklista, styrfördröjning och kontaktskada. Simulerade tvåklientstester verifierar fem dörrar, fällor, skyttars liv/förstörelse och Sonic-formens HUD/kontaktskada. Den tidigare gränsen för riktiga WebRTC-/enhetstester kvarstår.
+
+### The Essy Kid ability cards
+
+The Essy Kid now offers **Cheter**, **Big Hands**, and **Gloves** instead of basic stat cards. Three choices on the first loss, two remaining choices on the second loss, plus Skip. All three pairs compose in either acquisition order.
+
+- **Cheter:** identical aimed Gun in all three slots, each with an independent 1-second cooldown; 10 damage, 460 range. Shots respect walls, dodge, guard and reflection.
+- **Big Hands:** 1.5× melee/grab reach and arc, beam reach/width, gun range/projectile size; enlarged fist visuals.
+- **Gloves:** all three moves become distinct visible, destructible 5-HP summons. Stone Boxer chases and punches (12 damage / 1 second); Scissors Turret stays put and fires (8 / 1.2 seconds); Bag Catcher chases and stuns (3 damage, 0.7-second stun with target stun immunity). Summon cooldowns are 7 / 9 / 11 seconds. At most three summons per player, oldest replaced; 18-second lifetime and round cleanup.
+- **Big Hands + Gloves:** larger summons with 20 HP and 1.5× attack range/projectile size.
+- **Cheter + Gloves:** each slot creates the same flying pistol that follows and shoots (6 damage / 0.85 seconds), with 5 HP and summon cooldowns.
+- **Cheter + Big Hands:** all three guns gain the size and range bonus.
+
+Summons use host-owned simulation and shared snapshots; guests cannot create or damage units independently. Tests cover every ordered pair, HP/destruction, distinct AI behaviors, cooldowns, bounded populations, expiry, round cleanup, remote card selection with two remaining choices, and synchronized large/flying summons. Online transport tests are simulated rather than a real network connection.
