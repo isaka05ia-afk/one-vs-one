@@ -17,9 +17,9 @@ setup(4);run('attack(0,1);hit(fighters[1],fighters[0],20)');assert.equal(run('fi
 setup(3);run('fighters[1].x=220;attack(0,0)');step(.5);assert.equal(run('fighters[1].hp'),110);step(.4);assert.equal(run('fighters[1].hp'),78);
 setup(4);run('mouseAim=true;aimPoint={x:300,y:350};attack(0,2)');assert.equal(run('fighters[1].hp'),110);run('fighters[1].y=500');step(1);assert.equal(run('fighters[1].hp'),110);
 setup();run("$('mode').value='ai';$('opponent').value='1';start()");assert.equal(run('fighters[1].id'),4);step(8);assert(run('fighters.every(f=>free(f.x,f.y)&&Number.isFinite(f.hp))'));
-for(let i=0;i<5;i++)for(let j=0;j<3;j++){setup(i);run(`attack(0,${j})`);step(2);run('render()');assert(run('fighters.every(f=>Number.isFinite(f.hp)&&f.hp>=0&&f.hp<=f.maxHp&&free(f.x,f.y))'))}
+for(let i=0;i<6;i++)for(let j=0;j<3;j++){setup(i);run(`attack(0,${j})`);step(2);run('render()');assert(run('fighters.every(f=>Number.isFinite(f.hp)&&f.hp>=0&&f.hp<=f.maxHp&&free(f.x,f.y))'))}
 setup();run("attack(0,0);paused=true");const cd=run('fighters[0].cd[0]'),x=run('fighters[0].x');step(.4);assert.equal(run('fighters[0].cd[0]'),cd);assert.equal(run('fighters[0].x'),x);
-console.log('PASS: 15 abilities, 2D movement, normalized diagonals, cover collision, blocked shots, aiming/misses, burn, lock, dodge immunity, dash collision, shields, pose delay, blast escape, bot identity/navigation, pause and rendering.');
+console.log('PASS: 18 abilities, 2D movement, normalized diagonals, cover collision, blocked shots, aiming/misses, burn, lock, dodge immunity, dash collision, shields, pose delay, blast escape, bot identity/navigation, pause and rendering.');
 const originalRandom=Math.random;run('Math.random=()=>.75');
 const observations=[];
 for(const key of ['easy','normal','hard','expert']){
@@ -65,3 +65,13 @@ setup(1);placeDoor(100,350);placeDoor(800,350);run('fighters[0].x=740');step(.01
 setup(1);placeDoor(100,350);placeDoor(800,350);run('fighters[0].x=740');step(.01);run('fighters[0].x=800;fighters[1].x=100');step(.1);assert.equal(run('fighters[0].x'),800);run('fighters[1].x=250');step(.01);assert.equal(run('fighters[0].x'),100);run('render();spawnRound()');assert.equal(run('portals.length'),0);
 setup(1,1);placeDoor(100,350);placeDoor(800,350);placeDoor(100,600,1);placeDoor(800,600,1);assert.equal(run('portals.filter(p=>p.owner===0).length'),2);assert.equal(run('portals.filter(p=>p.owner===1).length'),2);
 console.log('PASS: Running Man first attack and damage; two linked doors, walking teleport both directions, no bounce, oldest replacement, placement spacing, stun/blocked exit protection, round cleanup and separate owner pairs.');
+setup(5);assert.equal(run('fighters[0].maxHp'),170);assert(run('roster[5].speed<roster[0].speed'));run('attack(0,0)');step(.15);assert.equal(run('shots.length'),0);step(.6);assert.equal(run('fighters[1].hp'),101);assert(run('fighters[1].x>400'));
+setup(5);run('attack(0,1)');step(.2);assert.equal(run('fighters[1].hp'),110);step(.2);assert.equal(run('fighters[1].hp'),106);assert(run('fighters[1].x<200'));assert(run('fighters[1].controlImmune>0'));
+setup(5);run('fighters[0].x=400;fighters[0].y=280;fighters[1].x=600;fighters[1].y=280;attack(0,1)');step(.5);assert.equal(run('fighters[1].hp'),110);assert.equal(run('fighters[1].x'),600);
+setup(5);run('fighters[1].dodge=.8;attack(0,1)');step(.5);assert.equal(run('fighters[1].hp'),110);assert.equal(run('fighters[1].x'),300);
+setup(5);run("inputMode='mouse';mouseAim=true;aimPoint={x:500,y:350};attack(0,2)");step(.3);assert.equal(run('boats.length'),0);step(.7);assert.equal(run('fighters[1].boatOwner'),0);assert.equal(run('fighters[1].hp'),102);run("keys.add('arrowdown');dodge(1);attack(1,0)");assert.equal(run('fighters[1].dodge'),0);assert.equal(run('fighters[1].cd[0]'),0);step(1.2);assert.equal(run('boats.length'),0);assert.equal(run('fighters[1].boatOwner'),-1);assert(run('fighters[1].x>480'));assert(run('fighters[1].controlImmune>0'));
+setup(5);run("inputMode='touch';attack(0,2)");step(.5);assert.equal(run('boats[0].tx'),520);run("inputMode='mouse'");
+setup(5);run('fighters[0].x=400;fighters[0].y=280;fighters[1].x=600;fighters[1].y=280;attack(0,2)');step(1);assert.equal(run('boats.length'),0);assert.equal(run('fighters[1].boatOwner'),-1);assert.equal(run('fighters[1].hp'),110);
+setup(5);run('attack(0,2)');step(.6);run('fighters[1].y=480');step(1.5);assert.equal(run('fighters[1].boatOwner'),-1);assert.equal(run('fighters[1].hp'),110);
+setup(5);run('attack(0,2)');step(.6);run('spawnRound()');assert.equal(run('boats.length'),0);assert.equal(run('controlFx.length'),0);assert(run('fighters.every(f=>f.boatOwner===-1)'));
+console.log('PASS: Sailer health/speed, wide wave push and delay, wind pull and cover/dodge, boat windup/capture/action lock/transport/release, mobile destination, wall stop, sidestep and round cleanup.');

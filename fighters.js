@@ -11,7 +11,14 @@ function drawFighter(c,f,time=0,preview=false){const d=roster[f.id],k=d.kind,att
  if(k===0){path(c,[[-20,-121],[-21,-135],[13,-138],[22,-126],[37,-123]],'#92b6fa');c.fillStyle='#d6e3ff';c.fillRect(-16,-126,37,5);c.fillStyle='#d75d6b';for(const x of [-34,attack?66:35]){c.beginPath();c.arc(x,attack&&x>0?-80:-54,13,0,7);c.fill()}}
  if(k===1){c.fillStyle='#9e7049';c.fillRect(-23,-151,46,59);c.strokeStyle='#e0b981';c.lineWidth=4;c.strokeRect(-23,-151,46,59);c.lineWidth=1;c.strokeRect(-16,-144,32,21);c.strokeRect(-16,-117,32,19);c.fillStyle='#ffe49c';c.beginPath();c.arc(12,-119,3,0,7);c.fill();c.fillStyle='#ffe49c';c.fillRect(-4,-63,10,4);c.beginPath();c.arc(3,-58,6,0,7);c.stroke()}
  if(k===2){path(c,[[-22,-107],[-24,-132],[-12,-126],[-7,-158],[5,-139],[18,-153],[25,-122],[17,-108],[9,-131],[-2,-122],[-12,-126]],'#ff702f');path(c,[[-10,-133],[0,-151],[6,-131],[15,-140],[12,-119]],'#ffdd72')}
- if(k===4){
+ if(k===5){
+ // Sailor silhouette: striped jersey, yellow coat, captain cap and a wooden oar.
+ path(c,[[-28,-94],[-9,-91],[-13,-40],[-30,-42]],'#e5b24d');path(c,[[9,-91],[28,-94],[30,-42],[13,-40]],'#e5b24d');
+ c.fillStyle='#f2f1df';c.fillRect(-12,-90,24,46);c.fillStyle='#234a6d';for(let y=-86;y<-44;y+=12)c.fillRect(-12,y,24,5);
+ c.fillStyle='#f5f2de';c.fillRect(-24,-140,48,18);c.fillStyle='#17364e';c.fillRect(-25,-125,50,8);c.fillRect(-18,-144,36,6);c.fillStyle='#ecc75d';c.fillRect(-3,-137,6,9);
+ path(c,[[-16,-107],[0,-96],[16,-107],[10,-89],[-9,-89]],'#d3d8d5');c.strokeStyle='#a87340';c.lineWidth=6;c.beginPath();c.moveTo(32,-24);c.lineTo(attack?91:49,attack?-93:-145);c.stroke();path(c,attack?[[82,-83],[92,-112],[108,-106],[96,-78]]:[[39,-133],[43,-163],[59,-163],[58,-131]],'#e2bd7c');
+ c.strokeStyle='#e5d3a5';c.lineWidth=4;c.beginPath();c.arc(-29,-65,12,0,7);c.stroke();
+ }if(k===4){
  // Segmented robot armor, glass face, antennae and a pulsing AI core.
  c.fillStyle='#638b9b';c.fillRect(-26,-94,52,53);c.fillStyle='#172f40';c.fillRect(-20,-88,40,40);c.strokeStyle='#7dfae4';c.lineWidth=2;c.strokeRect(-20,-88,40,40);
  c.fillStyle='#a5c9d4';c.fillRect(-25,-140,50,41);c.fillStyle='#0a202d';c.fillRect(-20,-135,40,28);c.fillStyle='#6fffe5';c.fillRect(-14,-127,9,6);c.fillRect(5,-127,9,6);c.fillRect(-8,-115,16,2);
