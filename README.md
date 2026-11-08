@@ -324,3 +324,11 @@ This pair now has an acquisition-order requirement. Choosing No Time to Wait fir
 Rejuvenate removes one elapsed round of aging per use, restoring the corresponding movement speed, damage and maximum HP. Current HP increases only by the restored maximum-HP difference (up to 45), preserving existing wounds. Twelve-second fixed cooldown. Cannot go younger than the first Elder round and does nothing at that floor; it does not grant movement or invulnerability. Existing stun/cast/grab/action locks apply. Rejuvenation only changes the current fighter state. Next round rebuilds age from the original card activation round, discarding all rejuvenation uses. Rematches reset it. The HUD labels the replacement and bots can use it. The server validates and applies the action; snapshots synchronize revised age/max HP/current HP and cooldown.
 
 Unit tests verify the order requirement, age floor, wound-preserving recovery, action locks, cooldown, next-round rejuvenation reset, reverse-order dodge and reset. Simulated online tests obtain both cards through real drafts, activate via guest dodge input and verify host-owned age/HP changes and next-round rejuvenation reset.
+
+### Laores card 4: Toothless
+
+**Toothless** turns Laores into a Speedster: 1.5× ground and flight speed, 0.65× maximum HP. Attack damage, cooldowns and stage unlocks stay intact. Round 2: 65 HP / 300 speed; round 3: 78 HP / 330 speed; Elder: 120.25 HP / 367.5 speed. Applies after No Time to Wait aging reductions and composes in either order with Lizard, Magic or No Time to Wait. Lizard still removes Fly; Magic preserves its moves and hat; aging penalties still apply. The two-card limit is unchanged.
+
+The appearance is slimmer with dark scales, blue-gray wings and glowing green eyes. Laores now offers three random unowned cards from its four-card pool (plus Skip); at most two can be owned.
+
+Unit tests cover both pair orders with each card, HP/speed/flight and role, aging composition and unique random offers. Simulated online tests cover actual draft selection, reduced HP snapshots, Speedster HUD, movement and Magic/flight composition.

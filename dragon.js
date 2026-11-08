@@ -9,6 +9,7 @@ function dragonStage(f){if(hasCard(f,'no_wait'))return 5;return Math.max(1,Math.
 function baseDragonMoves(f){const s=dragonStage(f);if(s===1)return [['Tackling','eggdash',12,150,2.8,'Rulla fram och tackla fienden.']];const scale=[0,1,1.15,1.4,1.75][s-1];let moves=[['Fire Ball','shot',Math.round(15*scale),440+(s-2)*30,1.5,'Eldklot som bränner.'],['Flamethrower','breath',Math.round(4*scale),180+(s-2)*25,6,'Spruta eld framför dig i en sekund.']];if(hasCard(f,'studied'))moves=[['Magic Missile','missile',Math.round(10*scale),500,1.6,'Svagt målsökande magi med 0,1 s stun.'],['Gravity Well','gravity',Math.round(8*scale),420,7,'Efter 0,6 s: dra fienden mot ett magiskt centrum.']];if(s>=3&&hasCard(f,'lizard')&&hasCard(f,'studied'))moves.push(['Time Stop','timestop',0,500,24,'Efter 0,6 s: 3 s stun i området. Vid träff: andra cooldowns återhämtas 4× i 3 s.']);else if(s>=3&&hasCard(f,'lizard'))moves.push(['Inferno','inferno',65,1000,20,'En kraftig eldstråle efter 1 s uppladdning. Väggar stoppar strålen.']);else if(s>=3)moves.push(['Fly','dragonfly',0,560+(s-3)*40,10,'Flyg över hinder i 2 sekunder. Gör ingen skada. Du kan träffas.']);return moves}
 function magicCooldownScale(f){return f.id===2&&hasCard(f,'studied')?hasCard(f,'no_wait')?.8:Math.max(.25,1-.05*Math.max(0,roundNumber-1)):1}
 function dragonMoves(f){return baseDragonMoves(f).map(m=>[...m.slice(0,4),Number((m[4]*magicCooldownScale(f)).toFixed(4)),m[5]])}
+function dragonFlightSpeed(f){return (280+(dragonStage(f)-3)*20)*(hasCard(f,'no_wait')?Math.max(120,245-25*dragonAge(f))/245:1)*(hasCard(f,'toothless')?1.5:1)}
 function flying(f){return f?.id===2&&f.fly>0}
 function landDragon(f){if(f.id!==2)return;if(!free(f.x,f.y)){f.x=f.groundX;f.y=f.groundY}f.fly=0}
 function drawWizardHat(c,x,y,clock=false){
@@ -22,23 +23,23 @@ function drawWizardHat(c,x,y,clock=false){
 }
 function drawDragon(c,f,time){
  const s=dragonStage(f),lizard=hasCard(f,'lizard'),wizard=hasCard(f,'studied'),combo=lizard&&wizard;
- const body=lizard?(s===5?'#688b55':'#829d5b'):(s===5?'#8f509c':'#c67747'),head=lizard?'#a5b96e':(s===5?'#b873bb':'#e39b5d');
+ const tooth=hasCard(f,'toothless');const body=tooth?'#283742':lizard?(s===5?'#688b55':'#829d5b'):(s===5?'#8f509c':'#c67747'),head=tooth?'#3b4c56':lizard?'#a5b96e':(s===5?'#b873bb':'#e39b5d');
  c.save();c.translate(f.x,f.y);c.scale(2,2);disc(0,3,22+s*3,'#0005');c.scale(f.face||1,1);
  if(s===1){
   c.rotate(Math.sin(time*9)*(Math.abs(f.vx||0)>1?.35:.04));c.fillStyle=lizard?'#d5dfb4':'#f0e2b9';c.beginPath();c.ellipse(0,-23,24,33,0,0,Math.PI*2);c.fill();c.strokeStyle='#b78b62';c.lineWidth=3;c.stroke();path(c,[[-12,-45],[-3,-34],[-9,-24],[4,-16]],'#c18066');disc(9,-35,5,'#bca4e8');disc(-9,-12,7,'#bca4e8');if(wizard)drawWizardHat(c,0,-53,combo);
  }else{
-  const scale=.65+(s-2)*.16;c.scale(scale,scale);if(flying(f))c.translate(0,-20);
+  const scale=.65+(s-2)*.16;c.scale(scale*(tooth?.85:1),scale);if(flying(f))c.translate(0,-20);
   if(wizard){disc(0,-31,43,null,'#b4a1ff');for(let j=0;j<3;j++){const a=time*1.3+j*Math.PI*2/3;disc(Math.cos(a)*46,-31+Math.sin(a)*31,2.5,'#e2d2ff')}}
   const flap=Math.sin(time*(flying(f)?15:4))*12;
   c.strokeStyle=body;c.lineWidth=lizard?16:12;c.lineCap='round';c.beginPath();c.moveTo(-18,-23);c.quadraticCurveTo(-50,lizard?16:7,lizard?-80:-70,-23);c.stroke();
-  if(!lizard){path(c,[[-15,-40],[-65,-86-flap],[-47,-28],[-12,-12]],'#a568bd');path(c,[[8,-43],[61,-91+flap],[49,-26],[12,-12]],'#c081d1')}
+  if(!lizard){path(c,[[-15,-40],[-65,-86-flap],[-47,-28],[-12,-12]],tooth?'#536d83':'#a568bd');path(c,[[8,-43],[61,-91+flap],[49,-26],[12,-12]],tooth?'#6b8a9b':'#c081d1')}
   else{for(let j=0;j<4;j++)path(c,[[-18-j*14,-30+j*2],[-27-j*14,-44+j*3],[-30-j*14,-25+j*2]],'#e2ba6c')}
   disc(0,-28,29,body);
   if(lizard){c.strokeStyle='#eac377';c.lineWidth=3;for(let j=0;j<3;j++){c.beginPath();c.moveTo(-13+j*11,-45);c.lineTo(-7+j*9,-34);c.lineTo(-12+j*10,-23);c.stroke()}}
   if(wizard){path(c,[[-20,-49],[-7,-40],[7,-40],[21,-49],[25,-5],[-25,-5]],'#5b438e');c.strokeStyle='#e3be76';c.lineWidth=3;c.beginPath();c.moveTo(0,-40);c.lineTo(0,-6);c.stroke();path(c,[[-3,-27],[0,-34],[3,-27],[10,-24],[3,-21],[0,-14],[-3,-21],[-10,-24]],'#d5b6fc')}
   path(c,[[-10,-48],[-11,-82],[21,-86],[39,-67],[25,-51]],head);
   path(c,[[-9,-78],[-19,-101],[2,-85],[16,-89],[22,-107],[29,-82]],'#f1d5a0');
-  disc(18,-72,4,wizard?'#c9b8ff':'#fff3a5');disc(20,-72,2,'#2e203d');
+  disc(18,-72,4,tooth?'#a6f875':wizard?'#c9b8ff':'#fff3a5');disc(20,-72,2,'#2e203d');
   c.fillStyle='#eacb85';c.fillRect(-17,-7,11,13);c.fillRect(10,-7,11,13);
   if(wizard)drawWizardHat(c,3,-90,combo);if(hasCard(f,'no_wait')){c.strokeStyle='#e1e0ce';c.lineWidth=3+dragonAge(f);c.beginPath();c.moveTo(27,-61);c.quadraticCurveTo(33,-48,24,-38-dragonAge(f)*2);c.moveTo(14,-60);c.quadraticCurveTo(12,-45,19,-38);c.stroke();c.strokeStyle='#a6a59b';c.lineWidth=2;for(let j=0;j<Math.min(4,dragonAge(f)+1);j++){c.beginPath();c.moveTo(5+j*5,-78);c.lineTo(9+j*5,-75);c.stroke()}}
   if(f.breath>0)path(c,[[36,-66],[68,-82],[58,-63],[83,-56],[57,-48]],'#ffd171');
