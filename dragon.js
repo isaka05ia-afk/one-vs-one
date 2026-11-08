@@ -1,9 +1,11 @@
 'use strict';
 const DRAGON_FORMS=['Ägg','Drakunge','Ung drake','Vuxen drake','Elder Dragon'];
 const DRAGON_HP=[85,100,120,150,185],DRAGON_SPEED=[160,200,220,235,245];
-function dragonStage(f){return Math.max(1,Math.min(5,f?.stage||1))}
+function dragonAge(f,round=roundNumber){return hasCard(f,'no_wait')?Math.max(0,round-(f.ageStart||round)):0}
+function dragonAgeDamage(f){return Math.max(.25,1-.25*dragonAge(f))}
+function dragonStage(f){if(hasCard(f,'no_wait'))return 5;return Math.max(1,Math.min(5,f?.stage||1))}
 function baseDragonMoves(f){const s=dragonStage(f);if(s===1)return [['Tackling','eggdash',12,150,2.8,'Rulla fram och tackla fienden.']];const scale=[0,1,1.15,1.4,1.75][s-1];let moves=[['Fire Ball','shot',Math.round(15*scale),440+(s-2)*30,1.5,'Eldklot som bränner.'],['Flamethrower','breath',Math.round(4*scale),180+(s-2)*25,6,'Spruta eld framför dig i en sekund.']];if(hasCard(f,'studied'))moves=[['Magic Missile','missile',Math.round(10*scale),500,1.6,'Svagt målsökande magi med 0,1 s stun.'],['Gravity Well','gravity',Math.round(8*scale),420,7,'Efter 0,6 s: dra fienden mot ett magiskt centrum.']];if(s>=3&&hasCard(f,'lizard')&&hasCard(f,'studied'))moves.push(['Time Stop','timestop',0,500,24,'Efter 0,6 s: 3 s stun i området. Vid träff: andra cooldowns återhämtas 4× i 3 s.']);else if(s>=3&&hasCard(f,'lizard'))moves.push(['Inferno','inferno',65,1000,20,'En kraftig eldstråle efter 1 s uppladdning. Väggar stoppar strålen.']);else if(s>=3)moves.push(['Fly','dragonfly',0,560+(s-3)*40,10,'Flyg över hinder i 2 sekunder. Gör ingen skada. Du kan träffas.']);return moves}
-function magicCooldownScale(f){return f.id===2&&hasCard(f,'studied')?Math.max(.25,1-.05*Math.max(0,roundNumber-1)):1}
+function magicCooldownScale(f){return f.id===2&&hasCard(f,'studied')?hasCard(f,'no_wait')?.8:Math.max(.25,1-.05*Math.max(0,roundNumber-1)):1}
 function dragonMoves(f){return baseDragonMoves(f).map(m=>[...m.slice(0,4),Number((m[4]*magicCooldownScale(f)).toFixed(4)),m[5]])}
 function flying(f){return f?.id===2&&f.fly>0}
 function landDragon(f){if(f.id!==2)return;if(!free(f.x,f.y)){f.x=f.groundX;f.y=f.groundY}f.fly=0}
@@ -36,7 +38,7 @@ function drawDragon(c,f,time){
   path(c,[[-9,-78],[-19,-101],[2,-85],[16,-89],[22,-107],[29,-82]],'#f1d5a0');
   disc(18,-72,4,wizard?'#c9b8ff':'#fff3a5');disc(20,-72,2,'#2e203d');
   c.fillStyle='#eacb85';c.fillRect(-17,-7,11,13);c.fillRect(10,-7,11,13);
-  if(wizard)drawWizardHat(c,3,-90,combo);
+  if(wizard)drawWizardHat(c,3,-90,combo);if(hasCard(f,'no_wait')){c.strokeStyle='#e1e0ce';c.lineWidth=3+dragonAge(f);c.beginPath();c.moveTo(27,-61);c.quadraticCurveTo(33,-48,24,-38-dragonAge(f)*2);c.moveTo(14,-60);c.quadraticCurveTo(12,-45,19,-38);c.stroke();c.strokeStyle='#a6a59b';c.lineWidth=2;for(let j=0;j<Math.min(4,dragonAge(f)+1);j++){c.beginPath();c.moveTo(5+j*5,-78);c.lineTo(9+j*5,-75);c.stroke()}}
   if(f.breath>0)path(c,[[36,-66],[68,-82],[58,-63],[83,-56],[57,-48]],'#ffd171');
  }
  c.restore();

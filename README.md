@@ -306,3 +306,13 @@ Unit tests cover both card orders, homing/ministun, gravity pull, Fly preservati
 **I Studid Magic cooldown growth:** all attack base cooldowns now shrink by 5 percentage points for every elapsed round: −5% round 2, −10% round 3, −15% round 4, −20% round 5. Includes Magic Missile, Gravity Well, Fly and Time Stop. Time Stop's active 4× recovery still excludes its own cooldown; the passive per-round discount applies normally. The multiplier bottoms at 0.25 for unusually long drawn series. Unit tests cover all unlocked moves and actual Time Stop casts in rounds 2–5; existing simulated online stop/recovery tests pass with the new values.
 
 **Laores appearance follows its cards:** Lizard removes both wings, changes scales to green, thickens/lengthens the tail and adds a spined silhouette and gold scale markings. Studied Magic adds a purple pointed wizard hat, gold band, star emblem, matching robe, violet eyes and orbiting sparks. The combined form keeps the wingless green lizard body and wizard clothes; its hat displays a clock for Time Stop. Features scale with the evolving dragon, derive directly from synchronized card loadouts and are independent of acquisition order. The egg renderer also supports the card colors/hat. Existing unit render checks and gameplay tests pass after the drawing change.
+
+### Laores card 3: No Time to Wait
+
+Starts on the round immediately after selection, following normal card timing. Laores instantly uses Elder form, all three unlocked moves, 185 HP and 245 movement speed. Age is measured from this activation round, not match start, and persists when acquiring a second card.
+
+Each subsequent round removes 45 max HP, 25 ground speed and 25 percentage points of damage: 185/140/95/50 HP; 100/75/50/25% damage. Floors: 50 HP, 120 movement speed, 25% damage. Flight speed also declines proportionally. Cooldowns are not worsened by aging.
+
+With **I Studid Magic**, immediately uses Elder-strength Magic Missile/Gravity Well/Fly with the round-five −20% base cooldown bonus. With **Lizard**, immediately uses Elder Fire Ball/Flamethrower/Inferno and the round-five +12% fire bonus. Aging damage multiplies those bonuses. Existing two-card cap remains, so all three cards cannot be combined. Both pair orders work; choosing aging second starts the clock then, choosing it first retains elapsed age when adding another card. Rematches reset age. Laores gains a white beard and increasingly visible wrinkles.
+
+Unit tests cover actual draft activation, all moves, stats/aging floors, maxed bonuses, pair order and reset. Simulated online tests cover both pair orders, instant Elder attack buttons, aging HP snapshots and passive bonuses.
