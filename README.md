@@ -338,3 +338,5 @@ Unit tests cover both pair orders with each card, HP/speed/flight and role, agin
 With **I Studid Magic**, slot two becomes **Magic Bomb** instead of Gravity Well: 12 base damage growing with form, same projectile/radius, 8-second base cooldown and 0.8-second area stun with 3-second target stun immunity. Magic's per-round cooldown discount applies. Both card acquisition orders work; speed, HP and other move effects remain.
 
 Tests verify contact/max-range splash, one damage event, cover, reflection, magic stun and both acquisition orders; simulated online tests verify visible projectile snapshots, authoritative explosion damage and synchronized magic stun.
+
+All fighter attack names and attack-button tooltips are now in English, including card-based replacements. The Essy Kid uses **Rock Punch**, **Scissor Beam** and **Bag Grab**; Door Man uses **Doors**; Laores starts with **Tackle**. Overpowerd's moves are spelled **Overpowered Punch** and **Doomsday**. Charge labels and named references in combat hints use the same names. Gameplay values and controls are unchanged. Syntax and existing unit/gameplay checks pass.
