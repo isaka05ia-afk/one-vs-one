@@ -316,3 +316,11 @@ Each subsequent round removes 45 max HP, 25 ground speed and 25 percentage point
 With **I Studid Magic**, immediately uses Elder-strength Magic Missile/Gravity Well/Fly with the round-five −20% base cooldown bonus. With **Lizard**, immediately uses Elder Fire Ball/Flamethrower/Inferno and the round-five +12% fire bonus. Aging damage multiplies those bonuses. Existing two-card cap remains, so all three cards cannot be combined. Both pair orders work; choosing aging second starts the clock then, choosing it first retains elapsed age when adding another card. Rematches reset age. Laores gains a white beard and increasingly visible wrinkles.
 
 Unit tests cover actual draft activation, all moves, stats/aging floors, maxed bonuses, pair order and reset. Simulated online tests cover both pair orders, instant Elder attack buttons, aging HP snapshots and passive bonuses.
+
+### Ordered combo: No Time to Wait → I Studid Magic
+
+This pair now has an acquisition-order requirement. Choosing No Time to Wait first and Magic second replaces dodge (Shift/mobile dodge button/online dodge action) with **Rejuvenate**. The reverse order retains ordinary dodge.
+
+Rejuvenate removes one elapsed round of aging per use, restoring the corresponding movement speed, damage and maximum HP. Current HP increases only by the restored maximum-HP difference (up to 45), preserving existing wounds. Twelve-second fixed cooldown. Cannot go younger than the first Elder round and does nothing at that floor; it does not grant movement or invulnerability. Existing stun/cast/grab/action locks apply. The age offset persists across rounds, so subsequent rounds add one age again. Rematches reset it. The HUD labels the replacement and bots can use it. The server validates and applies the action; snapshots synchronize revised age/max HP/current HP and cooldown.
+
+Unit tests verify the order requirement, age floor, wound-preserving recovery, action locks, cooldown, next-round persistence, reverse-order dodge and reset. Simulated online tests obtain both cards through real drafts, activate via guest dodge input and verify host-owned age/HP changes and next-round persistence.
