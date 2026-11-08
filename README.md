@@ -15,9 +15,9 @@ En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensi
 |---|---|---:|---:|---|
 | The Essy Kid | Tank | 150 | 195 | Närslag, riktad stråle, grab och kast |
 | Door Man | Speedster | 95 | 285 | Flanka, lås en riktad träff, rusa |
-| Flame Girl | DPS | 105 | 235 | Projektiler, eldspår, stor drake |
+| Laores the Dragon | Evolution | 85–185 | 160–245 | Ägg till Elder Dragon; kort ändrar formen |
 | The Overpowerd | Burst-DPS | 125 | 185 | Obligatorisk pose och tydligt markerade attacker |
-| Aegis | Defender | 140 | 200 | Sköldslag, blockering framifrån och reflektion |
+| Olympic Team | Relay | 3 × 40 | 180–360 | Löpare, simmare och skridskoåkare med egna liv |
 | Sailer | Control | 170 | 175 | Bred våg, vind som drar och en fångande segeljolle |
 
 Alla attacker har separata synliga cooldowns. Sten är ett tungt närslag (23 skada, 60 räckvidd, 1,5 s cooldown). Sax laddar synligt i 0,4 sekunder och skjuter sedan en riktad stråle (26 skada, 400 räckvidd, 4,2 s cooldown), som stoppas av väggar. Påse är en grab på nära håll: håll fast i 0,55 s och kasta sedan för 22 skada (145 räckvidd, 7,2 s cooldown). Båda står still under greppet, den fångade kan inte attackera eller undvika, och stun på The Essy Kid avbryter greppet. Missar och undanmanövrer ger ingen träff. Door Mans första attack är Running Man: rusa och tackla längs siktet (24 skada, 3,2 s cooldown). Andra attacken är Lock. Tredje förmågan är Dörrar: placera en dörr där du står (3 s cooldown). Han kan ha två egna dörrar, A och B, samtidigt; när båda finns kan han gå in i den ena och teleportera till den andra. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. The Overpowerd måste posera före varje attack, och poseringen avbryts av stun. Aegis har silverrustning, guldkanter, riddarhjälm och en spegelsköld.
@@ -29,7 +29,7 @@ Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sik
 `node test.cjs` testar 18 förmågor, tvådimensionell rörelse, normaliserad diagonal fart, väggkollision, blockerade skott, manuellt sikte och missar, brännskada, stun, undanmanöver, sköld, posering, undvikande av explosioner, botens identitet och navigering, paus och renderingsanrop i en simulerad miljö. Test i riktig webbläsare och på fysisk mobil återstår.
 
 ## Publicering
-GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, doors.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
+GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, doors.js, dragon.js, olympic.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
 
 
 ## Fyra svårighetsgrader
@@ -72,18 +72,8 @@ Sailer har 170 HP, 175 rörelsefart och 3 s cooldown på undanmanöver. Han är 
 På dator väljer muspekaren jollens slutplats: sikta förbi motståndaren för att fånga och transportera den. På mobil använder autosiktet riktningen mot fienden och låter jollen fortsätta förbi; högerspaken ger manuellt riktval. Jollen börjar mot vald destination. Under färden styr WASD / vänsterspaken jollen, medan Sailer står still. Efter manuell styrning fortsätter den rakt om spaken släpps. Den har begränsad körsträcka, stannar vid väggar och släpper passageraren när färden tar slut. En fångad fiende kan inte röra sig, attackera, använda dörrar eller undvika under transporten. Man kan undvika eller gå åt sidan före fångsten. Våg och vind kräver fri sikt, och undanmanöver undviker träffen. Förflyttningseffekter ger kort immunitet mot ny kontroll: 0,65 s efter push/pull och 1,1 s efter jollens släpp. Boten kan också få Sailer som slumpad fighter.
 
 
-## Slumpad bot och Aegis
-Den gamla robotkaraktären har ersatts av Aegis. Boten kan slumpa vilken som helst av de sex nuvarande karaktärerna, även samma som spelaren. Slumpningen sker en gång per match. Botens rörelseavstånd och förmågeval anpassas efter karaktären: The Essy Kid söker närstrid, Door Man rusar och placerar dörrar, Flame Girl håller avstånd, The Overpowerd poserar, Aegis försvarar sig och Sailer använder push/pull. De fyra svårighetsgraderna gäller alla botkaraktärer. Botens liv, skada och cooldowns följer samma karaktärsvärden som spelarens.
-
-Aegis har 140 HP, 200 fart och 2,6 s cooldown på undanmanöver.
-- Shield Bash: 14 skada på nära håll, knuffar undan fienden, 2,4 s cooldown.
-- Iron Guard: blockerar 85 % av skada framifrån i 1,7 s, 5,5 s cooldown. Blockering stoppar också attackens knuff/låsning.
-- Mirror Guard: 0,85 s reflektionsfönster, 7,5 s cooldown. Projektiler skickas tillbaka mot skytten; direkta slag och strålar kontras med 60 % av skadan. Projektiler reflekteras högst en gång för att undvika eviga studsar.
-
-Skölden täcker cirka 140° framför Aegis och följer siktet. Under blockering/reflektion går han med 55 % av normal fart. En ny attack eller undanmanöver avslutar skyddet. Stun, grab eller jolle avbryter försvaret. Slag bakifrån, markexplosioner, brännskada, grab och jollens fångst kan gå förbi skölden. Mobilens autosikte riktar skölden mot motståndaren; högerspaken eller musen ger manuellt riktval.
-
-Verifiering inkluderar nu alla sex slumpbara botkaraktärer, bibehållen fighter mellan ronder, frontal blockering, sårbarhet bakifrån, reflekterade projektiler/strålar/slag, markattackernas motspel och avbrutet försvar vid stun.
-
+## Slumpad bot och Olympic Team
+Boten väljer en av de sex karaktärerna per match. Olympic Team ersätter Aegis och kan användas av både spelare och bot. Boten anpassar deltagarval och attacker efter vatten, is, skador och hot. Se Olympic Team-avsnittet nedan för reglerna.
 
 ## Sex större kartor och Quick Match
 Arenorna är nu 1600 × 1100 i stället för 1000 × 700, ungefär 2,5 gånger större till ytan. En följkamera och minikarta gör det möjligt att behålla läsbara figurer på mobil. Lokalt tvåspelarläge använder en gemensam kamera som zoomar ut för att visa båda spelarna. Musens sikte räknas om för kamerans position och zoom.
@@ -364,3 +354,20 @@ Every non-final round transition now rerolls from all six maps, even if a specif
 With **My Home** on either or both players, each new-round lottery has exactly 60% chance of Flooded Harbor. The remaining 40% is split among the five non-water maps. Two holders do not stack the probability. The host performs the lottery and sends the resulting map to the guest.
 
 Unit tests exercise five actual series rounds with five controlled outcomes, no extra map change after the final round, and exactly 60/100 water rolls for either/both My Home holders. Simulated online tests verify five actual round maps match between host and guest. Existing combat tests explicitly select their fixture maps so environmental differences do not change their intended checks.
+
+
+### Olympic Team replaces Aegis
+
+Three female athletes with distinct skin tones and outfits: Runner (deep brown skin, red track kit, high ponytail), Swimmer (warm tan skin, blue swimsuit/cap/goggles), Skater (light skin, white/turquoise kit, braid and skates). The roster preview shows all three; gameplay shows the active athlete. Each starts with 40 HP: 120 total team HP. Generic vitality bonuses divide evenly among all three.
+
+Each athlete has two moves; slot three is **Switch** (3-second cooldown), cycling to the next living athlete. Individual HP and attack cooldowns persist during switches, and all cooldowns continue ticking while benched. A killed athlete is removed for the round and automatically replaced by the next living teammate, with a brief stationary 0.25-second recovery. Overkill does not damage other teammates. The team loses only after all three are dead. Round reset revives all three; timeout compares total team health ratios. Healing applies only to the active living athlete.
+
+| Athlete | Moves | Special behavior |
+| --- | --- | --- |
+| Runner | Sprint; Energy Drink | 250 speed. Sprint: 18 damage, 4 s cooldown. Drink: costs 5 personal HP, +35% movement speed and Sprint damage rises to 27 for 5 s; 9 s cooldown. Cannot drink at 5 HP or below. |
+| Swimmer | Splash; Dive | 180 land speed, 320 in water with no water slow. Splash fires a pushing wave (12 damage, 3.5 s cooldown). Dive avoids attacks while moving forward for 0.35 s (7 s cooldown). |
+| Skater | Ice Dash; Ice Trail | 200 speed normally, 360 on ice with slippery momentum. Ice Dash: 3 damage, one Bleed stack; starting on ice boosts dash speed from 520 to 900 and applies three stacks. 3.2 s cooldown. Ice Trail lasts 3 s and lays patches lasting 8 s, making ground slippery for both players. 8 s cooldown. |
+
+Each Bleed stack deals 0.2 HP/second: five stacks = 1 HP/second. No stack cap or expiry during the round, and it continues across Olympic switches. It clears next round. Damage, energy cost, healing, cooldowns, automatic/manual switches, athlete appearance and temporary ice all use the host-owned simulation/snapshots online.
+
+Tests cover individual HP/cooldowns, energy cost/boost, manual and death switches, final defeat/reset, water immunity, ice empowerment/trails, permanent Bleed, healing/cards and three distinct skin tones. Simulated online tests cover actual guest input, changing ability buttons, individual HP/cooldown snapshots, all three athlete deaths, round reset, temporary ice and Bleed. Other-fighter regression tests use stationary damage targets rather than the removed knight. Browser/physical-device/real-network checks remain unverified in this environment.

@@ -1,11 +1,13 @@
 const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
 const context=new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
 const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){}},setAttribute(){},append(){},add(){},addEventListener(){},getContext:()=>context,querySelector:()=>node(),getBoundingClientRect:()=>({left:0,top:0,width:1000,height:700}),value:'local',textContent:'',innerHTML:''});
-const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
-const run=code=>vm.runInContext(code,sandbox);
+const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','olympic.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
+// Other-fighter regression tests use a stationary 140-HP training target.
+let dummyTarget=false;
+const run=code=>{const result=vm.runInContext(code,sandbox);if(dummyTarget)vm.runInContext("if(fighters.length===2&&$('mode').value==='local'&&fighters[1].id===3&&fighters[1].maxHp===125){if(fighters[1].hp>0)fighters[1].hp+=15;fighters[1].maxHp=140}",sandbox);return result};
 run("function useTestMap(){mapId=chooseMap($('map').value);walls=MAPS[mapId].walls}");
 run("function nextTestRound(){if(cardDraft)chooseAbilityCard(cardDraft.player,cardDraft.options[0],cardDraft.id);spawnRound()}");
-function setup(id=0,enemy=4){run(`selected=${id};$('mode').value='local';$('opponent').value='${enemy}';start();fighters[0].x=100;fighters[0].y=350;fighters[1].x=300;fighters[1].y=350;`)}
+function setup(id=0,enemy=4){dummyTarget=enemy===4;if(dummyTarget)enemy=3;run(`selected=${id};$('mode').value='local';$('opponent').value='${enemy}';start();fighters[0].x=100;fighters[0].y=350;fighters[1].x=300;fighters[1].y=350;`)}
 function step(s){for(let t=0;t<s;t+=.01)run('update(.01)')}
 setup();run("keys.add('w');keys.add('d')");step(.2);assert(run('fighters[0].x>100&&fighters[0].y<350'));assert(Math.abs(run('distance(fighters[0],{x:100,y:350})')-39)<1);
 setup();run('useTestMap();fighters[0].x=400;fighters[0].y=280;move(fighters[0],250,0)');assert(run('fighters[0].x<430'));assert(run('free(fighters[0].x,fighters[0].y)'));
@@ -15,9 +17,7 @@ setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run('at
 setup(1);run('attack(0,1)');step(.5);assert(run('fighters[1].stun>0'));step(1);assert.equal(run('fighters[1].stun'),0);
 setup();run("keys.add('d');dodge(0);hit(fighters[1],fighters[0],50)");assert.equal(run('fighters[0].hp'),150);step(.15);assert(run('fighters[0].x>180'));assert(run('fighters[0].dodgeCd>0'));
 setup(1);run('useTestMap();fighters[0].x=400;fighters[0].y=280;attack(0,0)');step(.5);assert(run('fighters[0].x<430'));
-setup(4);run('attack(0,1);hit(fighters[1],fighters[0],20)');assert.equal(run('fighters[0].hp'),137);
 setup(3);run('useTestMap();fighters[1].x=220;attack(0,0)');step(.5);assert.equal(run('fighters[1].hp'),140);step(.4);assert.equal(run('fighters[1].hp'),108);
-setup(4);run('mouseAim=true;aimPoint={x:300,y:350};attack(0,2)');assert.equal(run('fighters[1].hp'),140);run('fighters[1].y=500');step(1);assert.equal(run('fighters[1].hp'),140);
 setup();run("$('mode').value='ai';$('opponent').value='1';start()");assert(run('fighters[1].id>=0&&fighters[1].id<roster.length'));step(8);assert(run('fighters.every(f=>free(f.x,f.y)&&Number.isFinite(f.hp))'));
 for(let i=0;i<6;i++)for(let j=0;j<3;j++){setup(i);run(`attack(0,${j})`);step(2);run('render()');assert(run('fighters.every(f=>Number.isFinite(f.hp)&&f.hp>=0&&f.hp<=f.maxHp&&free(f.x,f.y))'))}
 setup();run("attack(0,0);paused=true");const cd=run('fighters[0].cd[0]'),x=run('fighters[0].x');step(.4);assert.equal(run('fighters[0].cd[0]'),cd);assert.equal(run('fighters[0].x'),x);
@@ -26,7 +26,7 @@ const originalRandom=Math.random;run('Math.random=()=>.75');
 const observations=[];
 for(const key of ['easy','normal','hard','expert']){
  setup();run(`$('mode').value='ai';$('difficulty').value='${key}';start()`);
- assert.equal(run('chosenDifficulty'),key);assert.equal(run('fighters[1].maxHp'),140);assert.equal(run('fighters[1].cd[0]'),0);
+ assert.equal(run('chosenDifficulty'),key);assert.equal(run('fighters[1].maxHp'),120);assert.equal(run('fighters[1].cd[0]'),0);
  run('fighters[1].aiThink=0;fighters[1].aiAction=100;bot(fighters[1],fighters[0],.01)');
  const reaction=run('fighters[1].aiThink');assert.equal(reaction,run('difficulty().reaction'));
  const aim=run('fighters[1].botAim');run('fighters[0].y+=100;bot(fighters[1],fighters[0],.01)');assert.equal(run('fighters[1].botAim'),aim);
@@ -77,22 +77,15 @@ setup(5);run('useTestMap();fighters[0].x=400;fighters[0].y=280;fighters[1].x=600
 setup(5);run('attack(0,2)');step(.6);run('fighters[1].y=480');step(1.5);assert.equal(run('fighters[1].boatOwner'),-1);assert.equal(run('fighters[1].hp'),140);
 setup(5);run('attack(0,2)');step(.6);run('nextTestRound()');assert.equal(run('boats.length'),0);assert.equal(run('controlFx.length'),0);assert(run('fighters.every(f=>f.boatOwner===-1)'));
 console.log('PASS: Sailer health/speed, wide wave push and delay, wind pull and cover/dodge, boat windup/capture/action lock/transport/release, mobile destination, wall stop, sidestep and round cleanup.');
-assert(run("roster.every(f=>f.name!=='MS AI')"));assert.equal(run('roster[4].name'),'AEGIS');
-setup(4);run('attack(0,1);hit(fighters[1],fighters[0],20)');assert.equal(run('fighters[0].hp'),137);run('useTestMap();fighters[1].x=50;hit(fighters[1],fighters[0],20)');assert.equal(run('fighters[0].hp'),117);step(1.8);assert.equal(run('fighters[0].guard'),0);
-setup(2,4);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run('attack(1,2);attack(0,0)');step(.8);assert.equal(run('fighters[1].hp'),140);assert(run('fighters[0].hp<=90'));assert(run('shots.every(s=>(s.reflections||0)<=1)'));
-setup(0,4);run('attack(1,2);attack(0,1)');step(.42);assert.equal(run('fighters[1].hp'),140);assert(Math.abs(run('fighters[0].hp')-134.4)<.001);
-setup(0,4);run('useTestMap();fighters[1].x=160;attack(1,2);attack(0,0)');assert.equal(run('fighters[1].hp'),140);assert(Math.abs(run('fighters[0].hp')-136.2)<.001);
-setup(4);run('attack(0,2);hit(fighters[1],fighters[0],20,{area:true})');assert.equal(run('fighters[0].hp'),120);
-setup(4);run('attack(0,2);fighters[0].stun=.5');step(.1);assert.equal(run('fighters[0].reflect'),0);
-setup(4);run('useTestMap();fighters[1].x=175;attack(0,0)');assert.equal(run('fighters[1].hp'),126);assert(run('fighters[1].x>175'));
+assert.equal(run('roster[4].name'),'OLYMPIC TEAM');
 const savedRandom=Math.random;
 for(let id=0;id<6;id++){
  run(`Math.random=()=>${(id+.1)/6};$('mode').value='ai';start()`);assert.equal(run('fighters[1].id'),id);assert.equal(run('fighters[1].maxHp'),run(`roster[${id}].hp`));run('nextTestRound()');assert.equal(run('fighters[1].id'),id);
  step(4);assert(run('fighters.every(f=>free(f.x,f.y)&&Number.isFinite(f.hp))'));
 }
 Math.random=savedRandom;
-console.log('PASS: Ms AI removed; Aegis frontal blocking, rear vulnerability, guard expiry, projectile/beam/melee reflection, area counterplay, stun interruption and shield bash; all six bot fighters and match-level random persistence.');
-function setupMap(map,id=0,format='series'){run(`$('map').value='${map}';$('format').value='${format}';selected=${id};$('mode').value='local';$('opponent').value='4';start()`)}
+console.log('PASS: Olympic Team replaces Aegis; all six bot fighters and match-level random persistence.');
+function setupMap(map,id=0,format='series'){dummyTarget=true;run(`$('map').value='${map}';$('format').value='${format}';selected=${id};$('mode').value='local';$('opponent').value='3';start()`)}
 assert.equal(run('Object.keys(MAPS).length'),6);assert(run('W>1000&&H>700'));
 for(const id of ['grove','harbor','frost','ember','dunes','factory']){setupMap(id);assert.equal(run('mapId'),id);assert(run('fighters.every(f=>free(f.x,f.y))'));run('render()');const reachable=run(`(()=>{const step=30,queue=[{x:135,y:550}],seen=new Set(['135,550']);for(let n=0;n<queue.length;n++){const f=queue[n];if(distance(f,{x:1465,y:550})<50)return true;for(const [dx,dy] of [[step,0],[-step,0],[0,step],[0,-step]]){const q={x:f.x+dx,y:f.y+dy},k=q.x+','+q.y;if(!seen.has(k)&&free(q.x,q.y)){seen.add(k);queue.push(q)}}}return false})()`);assert(reachable,id+' has no walkable route')}
 setupMap('harbor');run('useTestMap();fighters[0].x=600;fighters[0].y=350');assert.equal(run('terrainSpeed(fighters[0])'),.55);run('fighters[0].id=5');assert.equal(run('terrainSpeed(fighters[0])'),1);run('useTestMap();fighters[0].id=0;fighters[0].x=800;fighters[0].y=550');assert.equal(run('terrainSpeed(fighters[0])'),1);
@@ -131,7 +124,7 @@ for(const pair of [['capten','canons'],['canons','capten'],['my_home','capten'],
 setup(5);run("loadouts[0]=['capten'];spawnRound();useTestMap();applyDamage(fighters[0],60)");assert.equal(run('fighters[0].shipHp'),0);assert.equal(run('fighters[0].hp'),160);assert.equal(run('heroSpeed(fighters[0])'),175);assert.equal(run('getMoves(fighters[0]).length'),2);run('spawnRound()');assert.equal(run('fighters[0].shipHp'),50);run("mapId='harbor';walls=MAPS.harbor.walls;fighters[0].x=600;fighters[0].y=350");assert.equal(run('heroSpeed(fighters[0])'),315);assert.equal(run('terrainSpeed(fighters[0])'),1);
 setup(5);run("loadouts[0]=['my_home']");const savedCardRandom=Math.random;let harborRolls=0;for(let i=0;i<100;i++){let calls=0;Math.random=()=>calls++===0?i/100:.2;run('nextCardMap()');if(run('mapId')==='harbor')harborRolls++}Math.random=savedCardRandom;assert.equal(harborRolls,60);
 run("$('map').value='grove'");setup(5);run("loadouts[0]=['canons'];spawnRound();useTestMap();fighters[0].x=100;fighters[0].y=350;attack(0,2)");step(.3);assert.equal(run('shots.length'),0);step(.4);assert.equal(run('shots[0].kind'),'heavycannon');assert.equal(run('getMoves(fighters[0]).length'),3);
-setup(4);run('fighters[0].hp=0;endRound()');assert.equal(run('cardDraft.options.join()'),'vitality,force,haste');run("selectAbilityCard('vitality')");step(2.3);assert.equal(run('fighters[0].maxHp'),175);run('fighters[0].hp=0;endRound()');run("selectAbilityCard('vitality')");step(2.3);assert.equal(run('fighters[0].maxHp'),210);run('fighters[0].hp=0;endRound()');assert.equal(run('finished'),true);assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),2);
+setup(4);run('fighters[0].hp=0;endRound()');assert.equal(run('cardDraft.options.join()'),'vitality,force,haste');run("selectAbilityCard('vitality')");step(2.3);assert.equal(run('fighters[0].maxHp'),155);run('fighters[0].hp=0;endRound()');run("selectAbilityCard('vitality')");step(2.3);assert.equal(run('fighters[0].maxHp'),190);run('fighters[0].hp=0;endRound()');assert.equal(run('finished'),true);assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),2);
 setup(0);run("loadouts[0]=['force','haste'];spawnRound();useTestMap();fighters[0].x=100;fighters[1].x=175;fighters[0].y=fighters[1].y=350;attack(0,0)");assert(Math.abs(run('fighters[1].hp')-112.4)<.001);assert(Math.abs(run('heroSpeed(fighters[0])')-224.25)<.001);
 setup(0);run("$('mode').value='ai';fighters[1].hp=0;endRound()");assert.equal(run('loadouts[1].length'),1);assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),0);
 setupMap('grove',5,'quick');run('fighters[0].hp=0;endRound()');assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),0);run('start()');assert.equal(run('loadouts[0].length+loadouts[1].length'),0);
@@ -236,3 +229,15 @@ const perRoundMapRNG=Math.random;
 run("$('map').value='grove';$('format').value='series'");setup(0);const mapSequence=['grove'];for(let r=1;r<=4;r++){Math.random=()=>((r+.1)/6);run(`fighters[${r%2}].hp=0;endRound();if(cardDraft)selectAbilityCard('skip')`);step(2.3);const expected=run(`Object.keys(MAPS)[${r}]`);assert.equal(run('mapId'),expected);assert(run('walls===MAPS[mapId].walls'));mapSequence.push(run('mapId'))}assert.equal(new Set(mapSequence).size,5);assert.equal(run('roundNumber'),5);run('fighters[1].hp=0;endRound()');assert.equal(run('finished'),true);const finalSeriesMap=run('mapId');step(3);assert.equal(run('mapId'),finalSeriesMap);
 for(const owners of [[0],[1],[0,1]]){setup(5,5);sandbox.homeOwners=owners;run('loadouts=[[],[]];for(const i of homeOwners)loadouts[i]=["my_home"]');let waterCount=0;for(let j=0;j<100;j++){let calls=0;Math.random=()=>calls++===0?j/100:.2;run('nextCardMap()');if(run('mapId')==='harbor')waterCount++}assert.equal(waterCount,60)}Math.random=perRoundMapRNG;
 console.log('PASS: actual best-of-five uses five separately rolled maps; final round does not reroll; exact 60/100 My Home water rolls for either or both players.');
+// Olympic Team uses real athlete state; the opponent remains a stationary damage target.
+function setupTeam(){run("$('format').value='series';$('map').value='grove'");setup(4);run('useTestMap()')}
+setupTeam();assert.equal(run('fighters[0].hp'),120);assert.equal(run('teamState(fighters[0]).members.map(m=>m.hp).join()'),'40,40,40');assert.equal(run('getMoves(fighters[0]).map(m=>m[0]).join()'),'Sprint,Energy Drink,Switch');assert.equal(run('new Set(ATHLETES.map(a=>a.skin)).size'),3);run('attack(0,1)');assert.equal(run('fighters[0].hp'),115);assert.equal(run('teamState(fighters[0]).members[0].hp'),35);assert.equal(run('heroSpeed(fighters[0])'),337.5);step(.25);run('attack(0,0)');step(.35);assert.equal(run('fighters[1].hp'),113);run('attack(0,2)');assert.equal(run('teamState(fighters[0]).active'),1);assert.equal(run('getMoves(fighters[0])[0][0]'),'Splash');const runnerCD=run('teamState(fighters[0]).members[0].cd[0]');assert(runnerCD>3);run('attack(0,2)');assert.equal(run('teamState(fighters[0]).active'),1);run('switchAthlete(fighters[0]);switchAthlete(fighters[0])');assert.equal(run('teamState(fighters[0]).members[0].hp'),35);assert.equal(run('fighters[0].cd[0]'),runnerCD);
+setupTeam();run('teamState(fighters[0]).members[0].hp=5;syncTeam(fighters[0]);attack(0,1)');assert.equal(run('teamState(fighters[0]).members[0].hp'),5);assert.equal(run('fighters[0].cd[1]'),0);
+setupTeam();run('applyDamage(fighters[0],1000)');assert.equal(run('fighters[0].hp'),80);assert.equal(run('teamState(fighters[0]).active'),1);run('applyDamage(fighters[0],1000)');assert.equal(run('fighters[0].hp'),40);assert.equal(run('teamState(fighters[0]).active'),2);run('applyDamage(fighters[0],1000)');assert.equal(run('fighters[0].hp'),0);step(.01);assert.equal(run('roundOver'),true);run('if(cardDraft)selectAbilityCard("skip");spawnRound();useTestMap()');assert.equal(run('fighters[0].hp'),120);assert.equal(run('teamState(fighters[0]).members.every(m=>m.hp===40)'),true);
+setupTeam();run('switchAthlete(fighters[0]);attack(0,0)');step(.8);assert.equal(run('fighters[1].hp'),128);assert(run('fighters[1].x>300'));run('fighters[0].anim=0;attack(0,1);hit(fighters[1],fighters[0],20)');assert.equal(run('fighters[0].hp'),120);assert(run('fighters[0].dodge>0'));
+setupTeam();run("switchAthlete(fighters[0]);mapId='harbor';walls=MAPS.harbor.walls;fighters[0].x=600;fighters[0].y=350");assert.equal(run('terrainSpeed(fighters[0])'),1);assert.equal(run('heroSpeed(fighters[0])'),320);
+setupTeam();run('switchAthlete(fighters[0]);switchAthlete(fighters[0]);attack(0,0)');step(.4);assert.equal(run('fighters[1].hp'),137);assert.equal(run('fighters[1].athletics.bleed'),1);
+setupTeam();run('switchAthlete(fighters[0]);switchAthlete(fighters[0]);attack(0,1)');step(.25);assert(run('zones.some(z=>z.kind==="ice")'));assert.equal(run('terrainAt(fighters[0]).ice'),true);assert.equal(run('heroSpeed(fighters[0])'),360);run('attack(0,0)');step(.3);assert.equal(run('fighters[1].athletics.bleed'),3);assert.equal(run('fighters[1].hp'),137);
+setupTeam();run('addBleed(fighters[1],5)');step(1.01);assert.equal(run('fighters[1].hp'),139);step(2);assert.equal(run('fighters[1].hp'),137);assert.equal(run('fighters[1].athletics.bleed'),5);run('spawnRound();useTestMap()');assert.equal(run('fighters[1].athletics.bleed'),0);assert.equal(run('zones.length'),0);
+setupTeam();run("loadouts[0]=['vitality'];spawnRound();useTestMap();applyDamage(fighters[0],10);healFighter(fighters[0],5);render()");assert.equal(run('fighters[0].maxHp'),155);assert(Math.abs(run('fighters[0].hp')-150)<.001);assert.equal(run('validAthletics(fighters[0])'),true);
+console.log('PASS: Olympic Team female skin-tone variants, 3x40 HP, two moves plus Switch, personal HP/cooldown retention, energy cost/buff, auto death switch/final defeat/reset, Splash/Dive/water speed, strong ice dash/trails, permanent stacking Bleed and card/healing integration.');
