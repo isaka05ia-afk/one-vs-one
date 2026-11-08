@@ -345,7 +345,7 @@ All fighter attack names and attack-button tooltips are now in English, includin
 
 ### Laores card 5: Hydra
 
-**Hydra** is a tank with extra lives, not extra max HP. Head count starts at the actual round number (2 in round 2, 5 in round 5). A lethal hit consumes one extra head and revives Laores with 25% of its normal max HP plus 5 percentage points per elapsed round: 30% in round 2, 35% in round 3, 45% in round 5 (capped at 100% in very long drawn matches). With one head left, the next death ends the round. Heads visibly disappear when consumed and reset/grow at the next round. Ground and flight speed remain 20% lower. Attacks retain their damage/effects. Each head follows card colors and wizard hats.
+**Hydra** is a tank with extra lives, not extra max HP. Head count starts at the actual round number (2 in round 2, 5 in round 5). A lethal hit consumes one extra head and revives Laores with 25% of its normal max HP plus 1 percentage point per elapsed round: 26% in round 2, 27% in round 3, 29% in round 5 (capped at 100% in very long drawn matches). With one head left, the next death ends the round. Heads visibly disappear when consumed and reset/grow at the next round. Ground and flight speed remain 20% lower. Attacks retain their damage/effects. Each head follows card colors and wizard hats.
 
 All four other cards compose in either acquisition order. Toothless reduces max HP to 65%, and revives use that reduced max HP; speed modifiers multiply. Magic retains its control moves and hats; Lizard removes wings; No Time to Wait advances to Elder immediately while heads follow match rounds and aging continues. Hydra displays the Tank role. Three random unowned cards are offered from the full five-card pool, with the existing two-card ownership cap.
 
