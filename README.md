@@ -149,7 +149,7 @@ I bäst-av-fem får den som förlorar en rond välja ett av tre Ability Cards in
 Matchen väntar på valet; rondtid och miljöer står stilla. Mot bot väljer datorn sitt eget kort när den förlorar. I lokalt tvåspelarläge väljer den förlorande spelaren på samma skärm. Online är kortval och nästa rond auktoritativa hos värden: gästen får välja sina egna erbjudna kort, och värden väntar tills valet är bekräftat. Kort, uppgraderat maxliv, båtens liv, aktiva attacker och My Homes karta synkas till båda klienterna.
 
 ### Sailer
-Första valet erbjuder alltid dessa tre:
+Sailers ursprungliga tre kort:
 
 | Kort | Förändring | Avvägning |
 |---|---|---|
@@ -168,7 +168,7 @@ Kanonerna:
 
 Kortkombinationer beräknas från valen varje rond i stället för att skriva över grundkaraktären. Valordningen spelar ingen roll. **Capten + Time for Canons** ger den permanenta båten med exakt två skadeattacker, Cannonball och Grapeshot. Tredje attacken kommer aldrig tillbaka via kanonkortet. My Home kombineras både med båten och kanonerna.
 
-Ett Sailer-specialkort kan bara väljas en gång. Vid andra förlusten erbjuds de två återstående specialkorten och More HP som ett tredje val, så det alltid finns tre valbara kort.
+Ett Sailer-specialkort kan bara väljas en gång. Sailer har nu fem specialkort: tre olika, ännu inte ägda kort slumpas fram vid varje kortval. Hoppa över finns som alternativ utan att ta ett kort.
 
 ### Övriga fighters
 More HP ger +35 maxliv, More Damage ger +20 % attackskada och More Speed ger +15 % rörelsefart. De tre valen finns efter varje berättigad förlust. Grundkorten kan väljas två gånger, men tar då upp båda kortplatserna. Maxliv ökar additivt, skada/fart multiplicativt. Grundattackerna och cooldowns ändras inte.
@@ -177,3 +177,27 @@ Alla kort rensas vid ny match/ommatch. Uppgraderingar är per spelare och följe
 
 ### Korttester
 Tester täcker att bara förloraren får tre val, att nästa rond väntar, högst två kort, inga kort efter slutrond/Quick Match, samtliga Sailer-kortpar i båda ordningarna, båtens 50 HP/överskjutande skada/återställning/vattenfart, exakt 60 av 100 jämnt fördelade My Home-slumputfall, kanonernas ersatta attacklista och grundkortens statseffekter. Simulerade tvåklientstester täcker gästens kortval, avvisade felval, två knappar med Capten + kanoner, båtliv, uppgraderat maxliv och synkroniserad vattenkarta. Verkliga tvåenhetstester har samma tidigare verifieringsgräns.
+
+
+## Sailer: fem kort, slumpade erbjudanden och Hoppa över
+Sailer får nu tre slumpade kort från poolen My Home, Capten, Time for Canons, This Is a Real Ship och Drunken Man. Kort du redan äger utesluts. Erbjudandet innehåller tre unika kort. Det finns ingen tvingad More HP-ersättning för Sailer längre. Övriga fighters behåller sina tre grundkort.
+
+**Hoppa över kortvalet** fortsätter till nästa rond utan att ge ett kort. Att hoppa över tar inte en kortplats. Du får fortfarande högst två kort, med kortval efter de två första förlusterna; ett överhoppat val ger ingen extra chans efter matchens slut. Värden verifierar även gästens skip-begäran och draft-ID.
+
+### This Is a Real Ship
+Utan kanon- eller Capten-kombination blir Dinghy Ride dubbelt så stor i både bild och kollisions-/fångstområde. Maxräckvidden ökar från 420 till 840. Den går till den riktade slutplatsen utan styrning under färden, stannar vid väggar och har tillräcklig livstid för det längre avståndet. Den kan inte passera lika smala öppningar som den lilla jollen.
+
+- **Real Ship + Capten:** den permanenta båten behåller sin normala storlek men får 200 båt-HP i stället för 50. Med intakt båt är landfarten 30 % lägre: 215 × 0,7 = 150,5. I vatten är den fortfarande 315. När båten förstörs återgår Sailer till sin normala fart och till fots resten av ronden. Tredje attacken förblir borttagen.
+- **Real Ship + Time for Canons:** alla tidigare attacker ersätts av exakt en attack, Dreadnought Cannon. En stor kula går genom väggar, gör 85 skada, har 1000 räckvidd, 1 s uppladdning och 8 s cooldown. Den kan undvikas och reflekteras. Det finns inga andra attackknappar i denna kombination.
+- **Real Ship + My Home:** samma stora, ostyrbara jolle och 60 % vattenchans inför nästa rond.
+
+### Drunken Man
+Dubbel attackskada, med två separata nackdelar:
+- Var femte sekund kontrolleras styrningen. Om den är normal finns tills vidare **50 % chans** till omvänd rörelse i fem sekunder. Är rörelsen redan omvänd återgår den till normal vid nästa femsekundersgräns. Den vänds alltså inte automatiskt varje gång. Siktriktningen är oförändrad.
+- När en tillgänglig attack påbörjas finns **10 % risk** att attacken helt misslyckas och ersätts av **3 sekunders självstun**. Ingen projektil eller annan attackeffekt skapas. Attackens cooldown förbrukas, så man kan inte göra omedelbara nya försök.
+
+Risken att vända kontroller och risken att missa en attack är oberoende. De gäller även botar. Omvänd styrning påverkar även styrbar Dinghy Ride, men Real Ships jolle kan aldrig styras. Med Capten är den permanenta båtens rörelse omvänd när effekten är aktiv. Med Time for Canons gör kanonerna dubbel skada men kan misslyckas. My Home fungerar som vanligt.
+
+I onlineläget slumpar värden båda effekterna och synkar utfallet. Gästen skickar råa kontroller så att inversionen bara tillämpas en gång. HUD visar när rörelsen är omvänd. Alla tjugo ordnade par av Sailers fem kort har testats för kompatibel attacklista och båtliv.
+
+Nya tester täcker 3-av-5-erbjudanden, bortfiltrerade ägda kort, samtliga kortpar i båda ordningarna, ostyrbar större jolle, 200-HP-båt och land-/vattenfart, vägggenomträngande singelkanon, slumpad styrningsvändning och återgång, utebliven attack vid självstun, dubbel skada och skip. Simulerade onlinetester täcker de nya kombinationernas HUD, 200 båtliv, vägggenomträngning, skip samt auktoritativ styrningsvändning och självstun.
