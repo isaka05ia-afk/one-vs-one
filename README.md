@@ -332,3 +332,9 @@ Unit tests verify the order requirement, age floor, wound-preserving recovery, a
 The appearance is slimmer with dark scales, blue-gray wings and glowing green eyes. Laores now offers three random unowned cards from its four-card pool (plus Skip); at most two can be owned.
 
 Unit tests cover both pair orders with each card, HP/speed/flight and role, aging composition and unique random offers. Simulated online tests cover actual draft selection, reduced HP snapshots, Speedster HUD, movement and Magic/flight composition.
+
+**Toothless bomb attacks:** Toothless now replaces Flamethrower with **Plasma Bomb**, a fired blue-white plasma ball: 26 base damage growing with form, 520 maximum range, speed 380, 110-radius explosion and 7.5-second cooldown. It detonates once on collision with an enemy/summon or wall, or at the aimed/max distance, with a brief 0.12-second explosion warning. Explosion cover and dodge checks apply; no direct-hit plus explosion double damage. Aegis can reflect the travelling ball.
+
+With **I Studid Magic**, slot two becomes **Magic Bomb** instead of Gravity Well: 12 base damage growing with form, same projectile/radius, 8-second base cooldown and 0.8-second area stun with 3-second target stun immunity. Magic's per-round cooldown discount applies. Both card acquisition orders work; speed, HP and other move effects remain.
+
+Tests verify contact/max-range splash, one damage event, cover, reflection, magic stun and both acquisition orders; simulated online tests verify visible projectile snapshots, authoritative explosion damage and synchronized magic stun.
