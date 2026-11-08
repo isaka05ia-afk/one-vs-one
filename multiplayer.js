@@ -1,5 +1,5 @@
 'use strict';
-const NET_BUILD='arena-online-11';
+const NET_BUILD='arena-online-12';
 let onlineEpoch=0;
 const onlineOpponent=new Option('Kompisen väljer sin fighter','online-guest');$('opponent').add(onlineOpponent);
 const zeroRemote=()=>({x:0,y:0,aim:Math.PI,fire:false,auto:false,hasPointer:false,target:{x:135,y:550}});

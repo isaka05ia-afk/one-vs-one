@@ -283,3 +283,11 @@ Egg tackle: 12 damage, 0.3-second rush, 2.8-second cooldown. Fire Ball: 15/17/21
 Fly: zero damage, two seconds, 280/300/320 flight speed in forms 3–5, ten-second cooldown. Controlled with normal movement; crosses all interior walls and ignores ground terrain while airborne, with arena boundaries retained. Laores remains damageable. If flight expires inside a wall, it returns to its last safe ground position. Egg and each dragon form have distinct growing silhouettes, with wings and flight animation. Attack buttons show only unlocked moves.
 
 Unit and simulated online tests cover all five stages, agreed HP/speed, evolution after either player loses, no card draft for Laores, dynamic attack buttons, flamethrower interruption, obstacle flight without damage, safe landing and Elder snapshots. Real network/browser testing remains unverified in this environment.
+
+### Laores card 1: Lizard Have No Wings
+
+Laores now offers its first unique card after a lost round: **Lizard Have No Wings**, or Skip. Only this available card is shown; no placeholder generic cards. It cannot be selected twice, and further losses after owning it proceed without an empty draft.
+
+Fire damage gains +3 percentage points for each elapsed match round (+3% round 2, +6% round 3, +12% round 5). This stacks with the existing form growth and also applies to burn damage. Wings disappear visually. From round 3, Fly is replaced by **Inferno**: 65 base damage, 1000 range, 1-second aimed windup, 20-second cooldown. It is a single beam hit that stops at cover; dodge, guard, reflection and stun interruption still work. The first two moves and normal HP/speed progression remain. Round 2 still has only Fire Ball/Flamethrower.
+
+Unit and simulated online tests cover the one-card draft/skip, duplicate exclusion, damage growth, round-3 replacement, windup, cooldown, wall block, stun interruption and guest-authoritative damage snapshots.
