@@ -66,7 +66,7 @@ function free(x,y,r=R){return x>=r+22&&x<=W-r-22&&y>=r+22&&y<=H-r-22&&!walls.som
 function move(f,dx,dy){const steps=Math.max(1,Math.ceil(len(dx,dy)/7));for(let i=0;i<steps;i++){if(free(f.x+dx/steps,f.y))f.x+=dx/steps;if(free(f.x,f.y+dy/steps))f.y+=dy/steps;contactDamage(f)}}
 function sight(a,b){const d=distance(a,b),n=Math.ceil(d/10);for(let i=1;i<n;i++){const t=i/n;if(walls.some(w=>circleWall(a.x+(b.x-a.x)*t,a.y+(b.y-a.y)*t,3,w)))return false}return true}
 function spark(x,y,color,n=12){for(let i=0;i<n;i++)particles.push({x,y,vx:(Math.random()-.5)*180,vy:(Math.random()-.5)*180,life:.35,color})}
-function defenseFaces(f,origin){if(f.stun>0||f.grabbedBy>=0||f.boatOwner>=0)return false;const delta=angle(f,origin)-f.aim;return Math.abs(Math.atan2(Math.sin(delta),Math.cos(delta)))<1.22}
+function defenseFaces(f,origin){if(f.stun>0||f.grabbedBy>=0||f.boatOwner>=0)return false;const delta=angle(f,origin)-f.aim;return Math.abs(Math.atan2(Math.sin(delta),Math.cos(delta)))<(broadBlock(f)?1.5:1.22)}
 function applyDamage(f,amount){const before=f.shipHp||0,absorbed=Math.min(before,amount);f.shipHp=Math.max(0,before-absorbed);f.hp=Math.max(0,f.hp-(amount-absorbed));if(before>0&&f.shipHp===0){f.shipBroken=true;spark(f.x,f.y,'#d4a468',22);tone(130)}}
 function hit(a,b,damage,options={}){if(b.dodge>0)return false;if(!options.scaled)damage*=heroDamage(a);const frontal=!options.area&&defenseFaces(b,options.origin||a);if(b.reflect>0&&frontal&&!options.reflected){spark(b.x,b.y,roster[b.id].color,16);if(!options.projectile){hit(b,a,damage*.6,{reflected:true,area:true,scaled:true});beams.push({x:b.x,y:b.y,ex:a.x,ey:a.y,life:.15,color:roster[b.id].color})}return false}const blocked=b.guard>0&&frontal;applyDamage(b,damage*(blocked?.15:1));b.sinceHit=0;b.hurt=.14;spark(b.x,b.y,blocked?roster[b.id].color:roster[a.id].color);tone(blocked?180:330);return !blocked}
 function rawMovementInput(i){if(i===1&&$('mode').value==='online')return netSession?.remoteInput||{x:0,y:0};if(i===0){const x=Number(keys.has('d'))-Number(keys.has('a'))+touchMove.x,y=Number(keys.has('s'))-Number(keys.has('w'))+touchMove.y;const l=len(x,y);return l>1?{x:x/l,y:y/l}:{x,y}}return {x:Number(keys.has('arrowright'))-Number(keys.has('arrowleft')),y:Number(keys.has('arrowdown'))-Number(keys.has('arrowup'))}}
@@ -110,8 +110,9 @@ function bot(f,b,dt){const p=difficulty();f.aiThink-=dt;f.aiAction-=dt;
  if(f.aiAction<=0){let slot=-1;
  if(f.id===4&&f.danger&&f.cd[2]<=0)slot=2;
  else if(f.danger&&Math.random()<p.avoid)dodge(1);
+ else if(f.id===0&&hasCard(f,'jacket')&&f.danger&&f.cd[2]<=0){slot=2}
  else if(f.id===0&&(hasCard(f,'cheter')||hasCard(f,'gloves'))){slot=visible&&d<getMoves(f)[0][3]+100?f.cd.findIndex(cd=>cd<=0):-1}
- else if(f.id===0){slot=d<165&&f.cd[2]<=0?2:d<82&&f.cd[0]<=0?0:visible&&d<400?1:-1}
+ else if(f.id===0){slot=!hasCard(f,'jacket')&&d<165&&f.cd[2]<=0?2:d<82&&f.cd[0]<=0?0:visible&&d<400?1:-1}
  else if(f.id===1){const own=portals.filter(q=>q.owner===1);if(f.cd[2]<=0&&(own.length===0||own.length<doorLimit(f)&&own.every(p=>distance(p,f)>130)))slot=2;else if(hasCard(f,'magic'))slot=visible&&d<460&&f.cd[0]<=0?0:visible&&d<300?1:-1;else if(visible&&d<280&&f.cd[0]<=0)slot=0;else if(visible&&d<300)slot=1}
  else if(f.id===2){slot=d<160&&f.cd[1]<=0?1:visible&&d<520&&f.cd[2]<=0&&Math.random()<p.scanChance?2:visible&&d<440?0:-1}
  else if(f.id===3){slot=visible&&d<180&&f.cd[0]<=0?0:visible&&d<350&&f.cd[1]<=0?1:visible&&d<420?2:-1}

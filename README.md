@@ -244,3 +244,10 @@ The Essy Kid now offers **Cheter**, **Big Hands**, and **Gloves** instead of bas
 - **Cheter + Big Hands:** all three guns gain the size and range bonus.
 
 Summons use host-owned simulation and shared snapshots; guests cannot create or damage units independently. Tests cover every ordered pair, HP/destruction, distinct AI behaviors, cooldowns, bounded populations, expiry, round cleanup, remote card selection with two remaining choices, and synchronized large/flying summons. Online transport tests are simulated rather than a real network connection.
+
+The Essy Kid now has five unique cards, with three random unowned cards offered after a loss:
+
+- **New Jaket from Mom:** +150 max HP (300 total), 15% lower movement speed. Slot three becomes Jacket Block: 85% frontal damage reduction for 1.7 seconds, 7.2-second cooldown. Attacking or dodging cancels the block. With Cheter, two Guns remain; with Gloves, Boxer and Turret remain and the Bag summon is replaced by block. Big Hands widens the block angle and retains larger offensive moves. A visible brown jacket and block arc show the change.
+- **Det är sten sax påse:** all attack cooldowns ×0.75. Applies after Gun, summon or block replacements; jacket block becomes 5.4 seconds, Guns 0.75 seconds, summons 5.25/6.75/8.25 seconds. Does not shorten stun, summon lifetime, summon firing intervals or dodge cooldown.
+
+All 20 ordered Essy card pairs are tested. Simulated online tests cover jacket HP, movement speed, slot replacement, reduced block cooldown, card choices and active block synchronization.
