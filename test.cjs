@@ -45,3 +45,9 @@ setup(0);run('fighters[1].x=170;attack(0,2)');assert.equal(run('fighters[1].grab
 setup(0);run('fighters[1].x=170;fighters[1].dodge=.2;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),-1);
 setup(0);run('fighters[1].x=170;attack(0,2);fighters[0].stun=.4');step(.1);assert.equal(run('fighters[1].grabbedBy'),-1);assert.equal(run('fighters[1].hp'),110);
 console.log('PASS: JIMY punch melee/range/knockback; beam damage once, aim miss and wall stop; grab hold/action lock/release damage; dodge escape and stun interruption.');
+setup(2);run("rememberPointer({pointerType:'touch'});mouseAim=true;aimPoint={x:100,y:600};fighters[0].aim=-Math.PI/2;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),0);step(.6);assert(run('fighters[1].hp<110'));
+setup(2);run("inputMode='touch';touchAim.active=true;touchAim.x=0;touchAim.y=-1;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),-Math.PI/2);step(.6);assert.equal(run('fighters[1].hp'),110);run('touchAim.active=false;updatePlayerAim()');assert.equal(run('fighters[0].aim'),0);
+setup(4);run("inputMode='touch';fighters[1].x=260;fighters[1].y=410;attack(0,2)");assert(Math.abs(run('zones[0].x')-260)<.001);assert(Math.abs(run('zones[0].y')-410)<.001);
+setup(2);run("rememberPointer({pointerType:'mouse'});mouseAim=true;aimPoint={x:100,y:100};attack(0,0)");assert.equal(run('fighters[0].lockedAim'),-Math.PI/2);step(.5);assert.equal(run('fighters[1].hp'),110);
+setup(2);run("inputMode='touch';attack(0,0);fighters[1].y=500");const shotY=run('shots[0].vy');step(.3);assert.equal(shotY,0);assert.equal(run('shots[0].vy'),0);run("inputMode='mouse'");
+console.log('PASS: mobile tap auto aim overrides stale mouse, manual stick priority, release restores auto aim, blast target distance, desktop manual aim and non-homing projectiles.');
