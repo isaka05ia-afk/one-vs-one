@@ -247,7 +247,11 @@ Summons use host-owned simulation and shared snapshots; guests cannot create or 
 
 The Essy Kid now has five unique cards, with three random unowned cards offered after a loss:
 
-- **New Jaket from Mom:** +150 max HP (300 total), 15% lower movement speed. Slot three becomes Jacket Block: 85% frontal damage reduction for 1.7 seconds, 7.2-second cooldown. Attacking or dodging cancels the block. With Cheter, two Guns remain; with Gloves, Boxer and Turret remain and the Bag summon is replaced by block. Big Hands widens the block angle and retains larger offensive moves. A visible brown jacket and block arc show the change.
+- **New Jaket from Mom:** +150 max HP (300 total), 15% lower movement speed. Slot three becomes Jacket Block: 85% frontal damage reduction for 1.7 seconds, 7.2-second cooldown. Attacking or dodging cancels the block. With Cheter, two Guns remain; with Gloves, the first Bag instead receives the jacket and 150 HP (see below). Big Hands widens the block angle and retains larger offensive moves. A visible brown jacket and block arc show the change.
 - **Det är sten sax påse:** all attack cooldowns ×0.75. Applies after Gun, summon or block replacements; jacket block becomes 5.4 seconds, Guns 0.75 seconds, summons 5.25/6.75/8.25 seconds. Does not shorten stun, summon lifetime, summon firing intervals or dodge cooldown.
 
 All 20 ordered Essy card pairs are tested. Simulated online tests cover jacket HP, movement speed, slot replacement, reduced block cooldown, card choices and active block synchronization.
+
+### Jacket + Gloves: jacket handoff
+
+The first Bag cast each round transfers the jacket to a chasing, stunning Bag with 150 HP. The fighter loses 150 maximum HP and 150 current HP (minimum 1), loses the 15% movement penalty, and no longer wears the jacket. Other summons retain their normal HP. Later Bag casts create ordinary 5-HP Bag Catchers. Only one jacket Bag per round; destroying it does not return the jacket. It has no summon expiry and is protected from oldest-summon replacement, while still counting toward the three-summon limit. Damage, stun immunity, walls and round cleanup still apply. The next round restores the fighter's jacket and permits a fresh handoff. Host snapshots synchronize the transferred HP, speed, jacket appearance and 150-HP summon.
