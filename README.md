@@ -265,3 +265,21 @@ The first Bag cast each round transfers the jacket to a chasing, stunning Bag wi
 Unit tests verify trigger timing, interrupt/miss behavior, damage, recoil, pull, charge consumption and round reset. Simulated online tests verify all three combinations on the guest with authoritative host damage, movement and snapshots.
 
 No More Speed now retains Running Man at **50% of normal dash distance** (325 dash speed for the same 0.38-second duration), rather than applying the 90% walk-speed reduction to it. The 80% shorter attack cooldown remains (Running Man 0.64 seconds). Hotel and Family combinations inherit this; Magic still replaces Running Man, and Late + No More Speed retains its special Sonic rules.
+
+### Laores the Dragon replaces Flame Girl
+
+Laores evolves with the actual round number, independent of wins or losses. No Ability Cards or card draft for Laores yet. Quick Match starts and ends as an egg; draws still advance the round and evolution. Round five and later use Elder form.
+
+| Round | Form | HP | Ground speed | Moves |
+| --- | --- | --- | --- | --- |
+| 1 | Egg | 85 | 160 | Tackling only |
+| 2 | Hatchling | 100 | 200 | Fire Ball replaces tackle; Flamethrower unlocked |
+| 3 | Young dragon | 120 | 220 | Fire Ball, Flamethrower, Fly |
+| 4 | Adult dragon | 150 | 235 | Larger/stronger fire attacks, faster flight |
+| 5 | Elder Dragon | 185 | 245 | Strongest fire attacks and flight |
+
+Egg tackle: 12 damage, 0.3-second rush, 2.8-second cooldown. Fire Ball: 15/17/21/26 direct damage in forms 2–5, range 440/470/500/530, 1.5-second cooldown, usual burn. Flamethrower: one-second aimed channel, 4/5/6/7 damage per pulse at 0.2-second intervals, range 180/205/230/255, 6-second cooldown; stun/grab interrupts. Fire attacks respect cover and defense.
+
+Fly: zero damage, two seconds, 280/300/320 flight speed in forms 3–5, ten-second cooldown. Controlled with normal movement; crosses all interior walls and ignores ground terrain while airborne, with arena boundaries retained. Laores remains damageable. If flight expires inside a wall, it returns to its last safe ground position. Egg and each dragon form have distinct growing silhouettes, with wings and flight animation. Attack buttons show only unlocked moves.
+
+Unit and simulated online tests cover all five stages, agreed HP/speed, evolution after either player loses, no card draft for Laores, dynamic attack buttons, flamethrower interruption, obstacle flight without damage, safe landing and Elder snapshots. Real network/browser testing remains unverified in this environment.

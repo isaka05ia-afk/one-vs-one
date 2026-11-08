@@ -1,16 +1,16 @@
 const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
 const context=new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
 const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){}},setAttribute(){},append(){},add(){},addEventListener(){},getContext:()=>context,querySelector:()=>node(),getBoundingClientRect:()=>({left:0,top:0,width:1000,height:700}),value:'local',textContent:'',innerHTML:''});
-const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
+const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
 const run=code=>vm.runInContext(code,sandbox);
 run("function nextTestRound(){if(cardDraft)chooseAbilityCard(cardDraft.player,cardDraft.options[0],cardDraft.id);spawnRound()}");
 function setup(id=0,enemy=4){run(`selected=${id};$('mode').value='local';$('opponent').value='${enemy}';start();fighters[0].x=100;fighters[0].y=350;fighters[1].x=300;fighters[1].y=350;`)}
 function step(s){for(let t=0;t<s;t+=.01)run('update(.01)')}
 setup();run("keys.add('w');keys.add('d')");step(.2);assert(run('fighters[0].x>100&&fighters[0].y<350'));assert(Math.abs(run('distance(fighters[0],{x:100,y:350})')-39)<1);
 setup();run('fighters[0].x=400;fighters[0].y=280;move(fighters[0],250,0)');assert(run('fighters[0].x<430'));assert(run('free(fighters[0].x,fighters[0].y)'));
-setup(2);run('fighters[0].x=400;fighters[0].y=280;fighters[1].x=600;fighters[1].y=280;attack(0,0)');step(1);assert.equal(run('fighters[1].hp'),140);assert.equal(run('shots.length'),0);
-setup(2);run('fighters[0].aim=-Math.PI/2;attack(0,0)');step(.5);assert.equal(run('fighters[1].hp'),140);
-setup(2);run('attack(0,0)');step(.6);assert(run('fighters[1].hp<140'));assert(run('fighters[1].burn>0'));
+setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run('fighters[0].x=400;fighters[0].y=280;fighters[1].x=600;fighters[1].y=280;attack(0,0)');step(1);assert.equal(run('fighters[1].hp'),140);assert.equal(run('shots.length'),0);
+setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run('fighters[0].aim=-Math.PI/2;attack(0,0)');step(.5);assert.equal(run('fighters[1].hp'),140);
+setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run('attack(0,0)');step(.6);assert(run('fighters[1].hp<140'));assert(run('fighters[1].burn>0'));
 setup(1);run('attack(0,1)');step(.5);assert(run('fighters[1].stun>0'));step(1);assert.equal(run('fighters[1].stun'),0);
 setup();run("keys.add('d');dodge(0);hit(fighters[1],fighters[0],50)");assert.equal(run('fighters[0].hp'),150);step(.15);assert(run('fighters[0].x>180'));assert(run('fighters[0].dodgeCd>0'));
 setup(1);run('fighters[0].x=400;fighters[0].y=280;attack(0,0)');step(.5);assert(run('fighters[0].x<430'));
@@ -46,11 +46,11 @@ setup(0);run('fighters[1].x=170;attack(0,2)');assert.equal(run('fighters[1].grab
 setup(0);run('fighters[1].x=170;fighters[1].dodge=.2;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),-1);
 setup(0);run('fighters[1].x=170;attack(0,2);fighters[0].stun=.4');step(.1);assert.equal(run('fighters[1].grabbedBy'),-1);assert.equal(run('fighters[1].hp'),140);
 console.log('PASS: The Essy Kid punch melee/range/knockback; beam damage once, aim miss and wall stop; grab hold/action lock/release damage; dodge escape and stun interruption.');
-setup(2);run("rememberPointer({pointerType:'touch'});mouseAim=true;aimPoint={x:100,y:600};fighters[0].aim=-Math.PI/2;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),0);step(.6);assert(run('fighters[1].hp<140'));
-setup(2);run("inputMode='touch';touchAim.active=true;touchAim.x=0;touchAim.y=-1;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),-Math.PI/2);step(.6);assert.equal(run('fighters[1].hp'),140);run('touchAim.active=false;updatePlayerAim()');assert.equal(run('fighters[0].aim'),0);
+setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run("rememberPointer({pointerType:'touch'});mouseAim=true;aimPoint={x:100,y:600};fighters[0].aim=-Math.PI/2;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),0);step(.6);assert(run('fighters[1].hp<140'));
+setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run("inputMode='touch';touchAim.active=true;touchAim.x=0;touchAim.y=-1;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),-Math.PI/2);step(.6);assert.equal(run('fighters[1].hp'),140);run('touchAim.active=false;updatePlayerAim()');assert.equal(run('fighters[0].aim'),0);
 setup(3);run("inputMode='touch';fighters[1].x=260;fighters[1].y=410;attack(0,1)");step(.81);assert(Math.abs(run('zones[0].x')-260)<.001);assert(Math.abs(run('zones[0].y')-410)<.001);
-setup(2);run("rememberPointer({pointerType:'mouse'});mouseAim=true;aimPoint={x:100,y:100};attack(0,0)");assert.equal(run('fighters[0].lockedAim'),-Math.PI/2);step(.5);assert.equal(run('fighters[1].hp'),140);
-setup(2);run("inputMode='touch';attack(0,0);fighters[1].y=500");const shotY=run('shots[0].vy');step(.3);assert.equal(shotY,0);assert.equal(run('shots[0].vy'),0);run("inputMode='mouse'");
+setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run("rememberPointer({pointerType:'mouse'});mouseAim=true;aimPoint={x:100,y:100};attack(0,0)");assert.equal(run('fighters[0].lockedAim'),-Math.PI/2);step(.5);assert.equal(run('fighters[1].hp'),140);
+setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run("inputMode='touch';attack(0,0);fighters[1].y=500");const shotY=run('shots[0].vy');step(.3);assert.equal(shotY,0);assert.equal(run('shots[0].vy'),0);run("inputMode='mouse'");
 console.log('PASS: mobile tap auto aim overrides stale mouse, manual stick priority, release restores auto aim, blast target distance, desktop manual aim and non-homing projectiles.');
 setup(0);run('attack(0,1)');step(.3);assert.equal(run('fighters[1].hp'),140);assert.equal(run('beams.length'),0);run('fighters[1].y=420');step(.2);assert.equal(run('fighters[1].hp'),140);assert(run('beams.length')>0);
 setup(0);run('attack(0,1);fighters[0].stun=.6');step(.5);assert.equal(run('fighters[0].cast'),0);assert.equal(run('beams.length'),0);assert.equal(run('fighters[1].hp'),140);
@@ -78,7 +78,7 @@ setup(5);run('attack(0,2)');step(.6);run('nextTestRound()');assert.equal(run('bo
 console.log('PASS: Sailer health/speed, wide wave push and delay, wind pull and cover/dodge, boat windup/capture/action lock/transport/release, mobile destination, wall stop, sidestep and round cleanup.');
 assert(run("roster.every(f=>f.name!=='MS AI')"));assert.equal(run('roster[4].name'),'AEGIS');
 setup(4);run('attack(0,1);hit(fighters[1],fighters[0],20)');assert.equal(run('fighters[0].hp'),137);run('fighters[1].x=50;hit(fighters[1],fighters[0],20)');assert.equal(run('fighters[0].hp'),117);step(1.8);assert.equal(run('fighters[0].guard'),0);
-setup(2,4);run('attack(1,2);attack(0,0)');step(.8);assert.equal(run('fighters[1].hp'),140);assert(run('fighters[0].hp<=90'));assert(run('shots.every(s=>(s.reflections||0)<=1)'));
+setup(2,4);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run('attack(1,2);attack(0,0)');step(.8);assert.equal(run('fighters[1].hp'),140);assert(run('fighters[0].hp<=90'));assert(run('shots.every(s=>(s.reflections||0)<=1)'));
 setup(0,4);run('attack(1,2);attack(0,1)');step(.42);assert.equal(run('fighters[1].hp'),140);assert(Math.abs(run('fighters[0].hp')-134.4)<.001);
 setup(0,4);run('fighters[1].x=160;attack(1,2);attack(0,0)');assert.equal(run('fighters[1].hp'),140);assert(Math.abs(run('fighters[0].hp')-136.2)<.001);
 setup(4);run('attack(0,2);hit(fighters[1],fighters[0],20,{area:true})');assert.equal(run('fighters[0].hp'),120);
@@ -181,3 +181,12 @@ console.log('PASS: Big Iron recoil/damage/push; Clap third accepted attack, wind
 setup(1);run("fighters[0].x=100;fighters[1].x=900;fighters[0].y=fighters[1].y=350;attack(0,0)");step(.38);const fullRun=run('fighters[0].x')-100;
 for(const cards of [['no_speed'],['no_speed','hotel'],['family','no_speed']]){setup(1);sandbox.runCards=cards;run('loadouts[0]=runCards;spawnRound();fighters[0].x=100;fighters[1].x=900;fighters[0].y=fighters[1].y=350;attack(0,0)');step(.38);assert(Math.abs((run('fighters[0].x')-100)/fullRun-.5)<.001);assert.equal(run('heroSpeed(fighters[0])'),28.5);assert.equal(run('getMoves(fighters[0])[0][4]'),.64)}
 console.log('PASS: No More Speed retains Running Man at half normal distance with/without Hotel or Family, while keeping walk speed and cooldown penalties.');
+// Laores evolves from the actual round, never from its win/loss count.
+setup(2);run('roundNumber=0;spawnRound()');assert.equal(run('fighters[0].hp'),85);assert.equal(run('getMoves(fighters[0]).length'),1);run('fighters[0].x=100;fighters[1].x=220;fighters[0].y=fighters[1].y=350;attack(0,0)');step(.3);assert.equal(run('fighters[1].hp'),128);
+for(let r=1;r<=5;r++){run(`roundNumber=${r-1};spawnRound();render()`);assert.equal(run('fighters[0].stage'),r);assert.equal(run('fighters[0].hp'),[85,100,120,150,185][r-1]);assert.equal(run('heroSpeed(fighters[0])'),[160,200,220,235,245][r-1]);assert.equal(run('getMoves(fighters[0]).length'),Math.min(3,r));if(r>=2)assert.equal(run('getMoves(fighters[0])[0][1]'),'shot')}
+setup(2);run('roundNumber=0;spawnRound();fighters[0].hp=0;endRound()');assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),0);step(2.3);assert.equal(run('fighters[0].stage'),2);assert.equal(run('fighters[0].hp'),100);
+run('fighters[0].x=100;fighters[1].x=240;fighters[0].y=fighters[1].y=350;attack(0,1)');step(.45);assert(run('fighters[1].hp<140'));run('fighters[0].stun=1');step(.1);assert.equal(run('fighters[0].breath'),0);
+run('roundNumber=2;spawnRound();fighters[0].x=400;fighters[0].y=280;fighters[1].x=900;fighters[1].y=280;attack(0,2);keys.add("d")');step(.85);assert(run('fighters[0].x>600'));assert.equal(run('fighters[1].hp'),140);assert.equal(run('zones.length'),0);run('keys.clear()');step(1.2);assert.equal(run('fighters[0].fly'),0);assert(run('free(fighters[0].x,fighters[0].y)'));
+run('roundNumber=2;spawnRound();fighters[0].x=400;fighters[0].y=280;attack(0,2);move(fighters[0],80,0);fighters[0].fly=.01');assert.equal(run('free(fighters[0].x,fighters[0].y)'),false);step(.02);assert(run('free(fighters[0].x,fighters[0].y)'));assert.equal(run('fighters[0].x'),400);
+assert.equal(run('offeredCards(2,[]).length'),0);assert.equal(run("validLoadout(2,['vitality'])"),false);assert.equal(run('roster[2].name'),'LAORES THE DRAGON');
+console.log('PASS: Laores stages 1–5, agreed HP/speeds, 1/2/3 unlocked moves, egg contact, loss without card draft, flamethrower damage/interruption, harmless obstacle-crossing flight and safe landing.');
