@@ -1,6 +1,6 @@
 function path(c,points,fill){c.fillStyle=fill;c.beginPath();points.forEach((p,i)=>i?c.lineTo(...p):c.moveTo(...p));c.closePath();c.fill()}
 function drawFighter(c,f,time=0,preview=false){const d=roster[f.id],k=d.kind,attack=f.anim>0,walk=Math.sin(time*12)*(Math.abs(f.vx||0)>0?9:2);c.save();c.translate(f.x,f.y);c.scale(f.face||1,1);c.globalAlpha=f.dodge>0?.35:f.hurt>0?.6:1;c.shadowColor=d.color;c.shadowBlur=preview?16:6;
- if(k===4){c.shadowColor='#6fffe5';c.shadowBlur=14}if(k===3)c.scale(1.2,1.08);c.lineCap='round';c.strokeStyle=k===1?'#333043':'#27324b';c.lineWidth=14;c.beginPath();c.moveTo(-12,-43);c.lineTo(-20-walk,0);c.moveTo(12,-43);c.lineTo(19+walk,0);c.stroke();
+ if(k===4){c.shadowColor=d.color;c.shadowBlur=10}if(k===3)c.scale(1.2,1.08);c.lineCap='round';c.strokeStyle=k===1?'#333043':'#27324b';c.lineWidth=14;c.beginPath();c.moveTo(-12,-43);c.lineTo(-20-walk,0);c.moveTo(12,-43);c.lineTo(19+walk,0);c.stroke();
  path(c,[[-24,-94],[24,-94],[28,-40],[-27,-40]],k===0?'#4267b1':k===1?'#272432':'#202736');
  if(k===3){path(c,[[-35,-96],[-20,-110],[0,-97],[22,-111],[36,-94],[23,-42],[-24,-42]],'#56396d');path(c,[[-19,-88],[0,-75],[19,-88],[12,-53],[-12,-53]],'#df7cff');path(c,[[-21,-124],[-29,-153],[-9,-138],[0,-159],[9,-138],[28,-153],[20,-123]],'#efb5ff')}
  if(k===0){path(c,[[-23,-87],[0,-70],[23,-87],[17,-44],[-18,-44]],'#557fd0');c.fillStyle='#d5e5ff';c.font='bold 22px sans-serif';c.fillText('3',-7,-51)}
@@ -19,13 +19,12 @@ function drawFighter(c,f,time=0,preview=false){const d=roster[f.id],k=d.kind,att
  path(c,[[-16,-107],[0,-96],[16,-107],[10,-89],[-9,-89]],'#d3d8d5');c.strokeStyle='#a87340';c.lineWidth=6;c.beginPath();c.moveTo(32,-24);c.lineTo(attack?91:49,attack?-93:-145);c.stroke();path(c,attack?[[82,-83],[92,-112],[108,-106],[96,-78]]:[[39,-133],[43,-163],[59,-163],[58,-131]],'#e2bd7c');
  c.strokeStyle='#e5d3a5';c.lineWidth=4;c.beginPath();c.arc(-29,-65,12,0,7);c.stroke();
  }if(k===4){
- // Segmented robot armor, glass face, antennae and a pulsing AI core.
- c.fillStyle='#638b9b';c.fillRect(-26,-94,52,53);c.fillStyle='#172f40';c.fillRect(-20,-88,40,40);c.strokeStyle='#7dfae4';c.lineWidth=2;c.strokeRect(-20,-88,40,40);
- c.fillStyle='#a5c9d4';c.fillRect(-25,-140,50,41);c.fillStyle='#0a202d';c.fillRect(-20,-135,40,28);c.fillStyle='#6fffe5';c.fillRect(-14,-127,9,6);c.fillRect(5,-127,9,6);c.fillRect(-8,-115,16,2);
- c.strokeStyle='#9fc9d2';c.lineWidth=3;c.beginPath();c.moveTo(-16,-140);c.lineTo(-23,-153);c.moveTo(16,-140);c.lineTo(23,-153);c.stroke();c.fillStyle='#6fffe5';for(const x of [-23,23]){c.beginPath();c.arc(x,-154,4,0,7);c.fill()}
- c.fillStyle='#6fffe5';c.beginPath();c.arc(0,-69,9+Math.sin(time*5)*2,0,7);c.fill();c.fillStyle='#17384b';c.font='bold 10px monospace';c.fillText('AI',-6,-66);
- c.fillStyle='#9dbdc9';c.fillRect(-36,-90,18,14);c.fillRect(18,-90,18,14);c.fillRect(-28,-10,24,10);c.fillRect(7,-10,24,10);
- if(f.shield>0){c.strokeStyle='#6fffe5';c.lineWidth=3;c.beginPath();c.ellipse(0,-77,57,85,0,0,Math.PI*2);c.stroke()}
+ // Aegis: silver plate armor, gold trim, closed knight helmet and a mirror shield.
+ path(c,[[-29,-96],[-18,-109],[0,-99],[18,-109],[29,-96],[25,-43],[-25,-43]],'#a9b9c6');path(c,[[-18,-90],[0,-81],[18,-90],[12,-49],[-12,-49]],'#51677e');c.strokeStyle='#f0d58b';c.lineWidth=3;c.strokeRect(-19,-88,38,38);
+ path(c,[[-23,-137],[0,-150],[23,-137],[19,-105],[0,-96],[-19,-105]],'#becbd4');c.fillStyle='#182a3e';c.fillRect(-17,-126,34,7);c.fillStyle='#f0d58b';c.fillRect(-2,-143,4,42);
+ const raised=f.guard>0||f.reflect>0,sx=raised?45:33,sy=raised?-84:-58;
+ path(c,[[sx-22,sy-28],[sx+21,sy-28],[sx+25,sy+6],[sx,sy+32],[sx-25,sy+6]],f.reflect>0?'#e3faff':'#71899e');c.strokeStyle='#f0d58b';c.lineWidth=4;c.strokeRect(sx-18,sy-23,36,27);c.strokeStyle='#eaf8ff';c.lineWidth=2;c.beginPath();c.moveTo(sx-12,sy+3);c.lineTo(sx+13,sy-19);c.stroke();
+ if(raised){c.strokeStyle=f.reflect>0?'#ddfaff':'#f0d58b';c.lineWidth=5;c.beginPath();c.arc(0,-77,65,-1.3,1.3);c.stroke()}
  }if(attack){const type=d.moves[f.move||0][1];c.save();c.translate(73,-80);if(type==='stone'){path(c,[[-16,-18],[12,-24],[28,-7],[20,20],[-12,23],[-23,2]],'#a2a5ac');c.strokeStyle='#606979';c.lineWidth=2;c.strokeRect(-11,-10,16,17)}if(type==='scissors'){c.strokeStyle='#e6eeff';c.lineWidth=5;c.beginPath();c.moveTo(-8,0);c.lineTo(40,-25);c.moveTo(-8,0);c.lineTo(40,16);c.stroke()}if(type==='bag'){path(c,[[-20,-27],[23,-27],[30,25],[-25,25]],'#ca9b64');c.fillStyle='#684a32';c.fillRect(-13,-18,29,4)}c.restore()}
  if(k===3&&f.pose>0){c.strokeStyle='#f5b9ff';c.lineWidth=14;c.beginPath();c.moveTo(-23,-85);c.lineTo(-51,-116);c.lineTo(-43,-139);c.moveTo(23,-85);c.lineTo(51,-116);c.lineTo(43,-139);c.stroke();c.save();c.scale(f.face||1,1);c.fillStyle='#24152f';c.fillRect(-85,-194,170,27);c.fillStyle='#fff';c.font='bold 14px sans-serif';c.textAlign='center';c.fillText('I am overpowerd',0,-176);c.restore()}
  if(f.cast>0||f.armor>0){c.strokeStyle=f.armor>0?'#d8e5ff':d.color;c.lineWidth=4;c.beginPath();c.arc(0,-75,57+Math.sin(time*20)*5,0,Math.PI*2);c.stroke()}if(f.effect>0){c.strokeStyle=d.color;c.lineWidth=4;c.beginPath();c.ellipse(0,-77,48,84,0,0,7);c.stroke()}

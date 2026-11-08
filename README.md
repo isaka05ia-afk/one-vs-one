@@ -1,6 +1,6 @@
 # One vs One — Arena
 
-En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensioner, manuellt sikte, projektiler som kan missa och symmetriska väggar som skydd. Sex egna karaktärer. Datorn spelar alltid som Ms AI.
+En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensioner, manuellt sikte, projektiler som kan missa och symmetriska väggar som skydd. Sex egna karaktärer. Boten får en slumpad fighter inför varje ny match och behåller den under alla ronder.
 
 ## Spela
 Öppna index.html eller kör `python3 -m http.server 8080` och besök localhost:8080. Inga byggsteg behövs.
@@ -17,10 +17,10 @@ En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensi
 | Door Man | Speedster | 95 | 285 | Flanka, lås en riktad träff, rusa |
 | Flame Girl | DPS | 105 | 235 | Projektiler, eldspår, stor drake |
 | The Overpowerd | Burst-DPS | 125 | 185 | Obligatorisk pose och tydligt markerade attacker |
-| Ms AI | AI-robot | 110 | 225 | Datapuls, energisköld och orbitalt nedslag |
+| Aegis | Defender | 140 | 200 | Sköldslag, blockering framifrån och reflektion |
 | Sailer | Control | 170 | 175 | Bred våg, vind som drar och en fångande segeljolle |
 
-Alla attacker har separata synliga cooldowns. Sten är ett tungt närslag (23 skada, 60 räckvidd, 1,5 s cooldown). Sax laddar synligt i 0,4 sekunder och skjuter sedan en riktad stråle (26 skada, 400 räckvidd, 4,2 s cooldown), som stoppas av väggar. Påse är en grab på nära håll: håll fast i 0,55 s och kasta sedan för 22 skada (95 räckvidd, 7,2 s cooldown). Båda står still under greppet, den fångade kan inte attackera eller undvika, och stun på JIMY avbryter greppet. Missar och undanmanövrer ger ingen träff. Door Mans första attack är Running Man: rusa och tackla längs siktet (24 skada, 5,2 s cooldown). Andra attacken är Lock. Tredje förmågan är Dörrar: placera en dörr där du står (3 s cooldown). Han kan ha två egna dörrar, A och B, samtidigt; när båda finns kan han gå in i den ena och teleportera till den andra. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. The Overpowerd måste posera före varje attack, och poseringen avbryts av stun. Ms AI har en egen robotfigur med pansar, antenner och AI-kärna.
+Alla attacker har separata synliga cooldowns. Sten är ett tungt närslag (23 skada, 60 räckvidd, 1,5 s cooldown). Sax laddar synligt i 0,4 sekunder och skjuter sedan en riktad stråle (26 skada, 400 räckvidd, 4,2 s cooldown), som stoppas av väggar. Påse är en grab på nära håll: håll fast i 0,55 s och kasta sedan för 22 skada (95 räckvidd, 7,2 s cooldown). Båda står still under greppet, den fångade kan inte attackera eller undvika, och stun på JIMY avbryter greppet. Missar och undanmanövrer ger ingen träff. Door Mans första attack är Running Man: rusa och tackla längs siktet (24 skada, 5,2 s cooldown). Andra attacken är Lock. Tredje förmågan är Dörrar: placera en dörr där du står (3 s cooldown). Han kan ha två egna dörrar, A och B, samtidigt; när båda finns kan han gå in i den ena och teleportera till den andra. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. The Overpowerd måste posera före varje attack, och poseringen avbryts av stun. Aegis har silverrustning, guldkanter, riddarhjälm och en spegelsköld.
 
 ## Placering
 Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sikt till målet. Markeringar visar var en explosion ska träffa och hur lång tid som återstår. Undanmanöver ger 0,2 sekunder osårbarhet men passerar inte genom väggar. Datorn cirklar, håller avstånd, reagerar med fördröjning och försöker hitta vägar runt skydd. Den använder riktiga projektiler och kan missa.
@@ -69,4 +69,17 @@ Sailer har 170 HP, 175 rörelsefart och 3 s cooldown på undanmanöver. Han är 
 | Headwind | 4 | 390 | 5,8 s | Bred vindkon efter 0,35 s, drar upp till 170 närmare |
 | Dinghy Ride | 8 | 420 | 9 s | Jolle efter 0,45 s, fångar fienden längs rutten och transporterar till slutplatsen |
 
-På dator väljer muspekaren jollens slutplats: sikta förbi motståndaren för att fånga och transportera den. På mobil använder autosiktet riktningen mot fienden och låter jollen fortsätta förbi; högerspaken ger manuellt riktval. Jollen går rakt, stannar vid väggar och släpper passageraren vid destinationen. En fångad fiende kan inte röra sig, attackera, använda dörrar eller undvika under transporten. Man kan undvika eller gå åt sidan före fångsten. Våg och vind kräver fri sikt, och undanmanöver undviker träffen. Förflyttningseffekter ger kort immunitet mot ny kontroll: 0,65 s efter push/pull och 1,1 s efter jollens släpp. Boten är fortfarande Ms AI.
+På dator väljer muspekaren jollens slutplats: sikta förbi motståndaren för att fånga och transportera den. På mobil använder autosiktet riktningen mot fienden och låter jollen fortsätta förbi; högerspaken ger manuellt riktval. Jollen går rakt, stannar vid väggar och släpper passageraren vid destinationen. En fångad fiende kan inte röra sig, attackera, använda dörrar eller undvika under transporten. Man kan undvika eller gå åt sidan före fångsten. Våg och vind kräver fri sikt, och undanmanöver undviker träffen. Förflyttningseffekter ger kort immunitet mot ny kontroll: 0,65 s efter push/pull och 1,1 s efter jollens släpp. Boten kan också få Sailer som slumpad fighter.
+
+
+## Slumpad bot och Aegis
+Den gamla robotkaraktären har ersatts av Aegis. Boten kan slumpa vilken som helst av de sex nuvarande karaktärerna, även samma som spelaren. Slumpningen sker en gång per match. Botens rörelseavstånd och förmågeval anpassas efter karaktären: JIMY söker närstrid, Door Man rusar och placerar dörrar, Flame Girl håller avstånd, The Overpowerd poserar, Aegis försvarar sig och Sailer använder push/pull. De fyra svårighetsgraderna gäller alla botkaraktärer. Botens liv, skada och cooldowns följer samma karaktärsvärden som spelarens.
+
+Aegis har 140 HP, 200 fart och 2,6 s cooldown på undanmanöver.
+- Shield Bash: 14 skada på nära håll, knuffar undan fienden, 2,4 s cooldown.
+- Iron Guard: blockerar 85 % av skada framifrån i 1,7 s, 5,5 s cooldown. Blockering stoppar också attackens knuff/låsning.
+- Mirror Guard: 0,85 s reflektionsfönster, 7,5 s cooldown. Projektiler skickas tillbaka mot skytten; direkta slag och strålar kontras med 60 % av skadan. Projektiler reflekteras högst en gång för att undvika eviga studsar.
+
+Skölden täcker cirka 140° framför Aegis och följer siktet. Under blockering/reflektion går han med 55 % av normal fart. En ny attack eller undanmanöver avslutar skyddet. Stun, grab eller jolle avbryter försvaret. Slag bakifrån, markexplosioner, brännskada, grab och jollens fångst kan gå förbi skölden. Mobilens autosikte riktar skölden mot motståndaren; högerspaken eller musen ger manuellt riktval.
+
+Verifiering inkluderar nu alla sex slumpbara botkaraktärer, bibehållen fighter mellan ronder, frontal blockering, sårbarhet bakifrån, reflekterade projektiler/strålar/slag, markattackernas motspel och avbrutet försvar vid stun.
