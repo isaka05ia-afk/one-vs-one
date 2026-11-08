@@ -29,7 +29,7 @@ Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sik
 `node test.cjs` testar 18 förmågor, tvådimensionell rörelse, normaliserad diagonal fart, väggkollision, blockerade skott, manuellt sikte och missar, brännskada, stun, undanmanöver, sköld, posering, undvikande av explosioner, botens identitet och navigering, paus och renderingsanrop i en simulerad miljö. Test i riktig webbläsare och på fysisk mobil återstår.
 
 ## Publicering
-GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
+GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, doors.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
 
 
 ## Fyra svårighetsgrader
@@ -180,7 +180,7 @@ Tester täcker att bara förloraren får tre val, att nästa rond väntar, högs
 
 
 ## Sailer: fem kort, slumpade erbjudanden och Hoppa över
-Sailer får nu tre slumpade kort från poolen My Home, Capten, Time for Canons, This Is a Real Ship och Drunken Man. Kort du redan äger utesluts. Erbjudandet innehåller tre unika kort. Det finns ingen tvingad More HP-ersättning för Sailer längre. Övriga fighters behåller sina tre grundkort.
+Sailer får nu tre slumpade kort från poolen My Home, Capten, Time for Canons, This Is a Real Ship och Drunken Man. Kort du redan äger utesluts. Erbjudandet innehåller tre unika kort. Det finns ingen tvingad More HP-ersättning för Sailer längre. Övriga fighters, förutom Door Man som också har en egen kortpool, behåller sina tre grundkort.
 
 **Hoppa över kortvalet** fortsätter till nästa rond utan att ge ett kort. Att hoppa över tar inte en kortplats. Du får fortfarande högst två kort, med kortval efter de två första förlusterna; ett överhoppat val ger ingen extra chans efter matchens slut. Värden verifierar även gästens skip-begäran och draft-ID.
 
@@ -201,3 +201,33 @@ Risken att vända kontroller och risken att missa en attack är oberoende. De g�
 I onlineläget slumpar värden båda effekterna och synkar utfallet. Gästen skickar råa kontroller så att inversionen bara tillämpas en gång. HUD visar när rörelsen är omvänd. Alla tjugo ordnade par av Sailers fem kort har testats för kompatibel attacklista och båtliv.
 
 Nya tester täcker 3-av-5-erbjudanden, bortfiltrerade ägda kort, samtliga kortpar i båda ordningarna, ostyrbar större jolle, 200-HP-båt och land-/vattenfart, vägggenomträngande singelkanon, slumpad styrningsvändning och återgång, utebliven attack vid självstun, dubbel skada och skip. Simulerade onlinetester täcker de nya kombinationernas HUD, 200 båtliv, vägggenomträngning, skip samt auktoritativ styrningsvändning och självstun.
+
+
+## Door Man — fem Ability Cards
+Door Man får tre slumpade, ännu inte ägda kort från sin egen pool. Samma regler som Sailer gäller: högst två kort, kortval efter förlorad rond och möjlighet att hoppa över. Stat- och attackförändringar beräknas från båda korten, oberoende av valordning.
+
+| Kort | Effekt |
+|---|---|
+| Hottel | Upp till fem dörrar. Med minst två placerade dörrar går du ut ur en annan slumpad, ledig dörr |
+| I’m Late, Need to Run | Dubbel fart, halvt maxliv (95 → 47,5) och 50 % kortare attackcooldowns |
+| Magic | Running Man ersätts av Key Gun: 6 skada, 460 räckvidd, snabb projektil och 0,3 s cooldown |
+| I Have a Famely | Dörrarna blir gun rooms med en skjutande person i varje. Ingen teleport. Varje dörr har 10 HP |
+| No More Speed | 90 % lägre rörelsefart och 80 % kortare attackcooldowns |
+
+### De tre specialkombinationerna
+- **No More Speed + I Have a Famely:** dörrarna är spawners. Varje placerad dörr skapar exakt två rörliga skyttar med 10 HP var. Högst två dörrar och fyra skyttar. De kan skjutas, slås och träffas av områdesattacker. Att ersätta eller förstöra en spawner tar bort dess tillhörande skyttar, vilket förhindrar en obegränsad armé.
+- **I’m Late + No More Speed:** Sonic-form. Ingen fart tas bort av No More Speed; i stället får han 1200 fart och behåller kortets halva maxliv. Alla attacker och undanmanöver tas bort. Rörelseriktning, start och stopp har 0,1 s fördröjning. Kontakt medan han springer ger 18 skada, med 0,45 s spärr mellan träffarna. Kollisionskontrollen sker längs rörelsen så hög fart inte hoppar över motståndaren. Väggar och kartornas markeffekter gäller fortfarande.
+- **Hottel + Magic:** upp till fem slumpportaler och Key Gun. Andra spelarkaraktärer än Door Man som rör en dörr träffas av Lock-effekten: 7 skada och 0,7 s stun, med återhämtning innan ny fällträff. Andra Door Man-figurer är immuna mot just dörrfällan. Sköld/reflektion/undanmanöver ger vanliga motspel.
+
+### Övriga kombinationer och dörrregler
+Hottel + Family ger fem skjutande gun rooms, utan teleport. Magic + Family ger Key Gun och gun rooms. Magic + No More Speed ger 0,06 s cooldown på Key Gun men mycket låg fart. Late + Magic ger snabb skytt med halvt liv. Alla tio kortpar har särskilda förklaringar i kortvalet.
+
+Dörrarna placeras där spelaren står, med samma avståndskrav som tidigare. En ny dörr ersätter den äldsta när gränsen två/fem är nådd. Bara ägaren kan använda portalerna. Ingången väljer en annan fri utgång; blockerade utgångar används inte. Spelaren måste lämna utgångsdörren innan ny teleport, och stun/grab hindrar teleport. Family ersätter teleport helt.
+
+En familjedörrs skytt skjuter för 5 skada ungefär var 1,1 s, kräver fri sikt och har 450 räckvidd. Spawnerskyttar skjuter för 4 skada var 1,2 s och går mot motståndaren. Familjedörrar och skyttar har små synliga livstaplar. Minikartan visar dörrar och skyttar. Standardportaler är fortsatt inte förstörbara; 10 dörr-HP gäller Family-kortet.
+
+Attackcooldowns reduceras genom den sammansatta attacklistan. Kortare animationer tillåter faktiskt den högre eldtakten. No More Speed sänker även hastigheten på Running Man och vanlig undanmanöver; det ändrar inte undanmanöverns cooldown. I Sonic-form finns ingen undanmanöver. Kortens effekter gäller både människa och bot. Boten anpassar räckvidd för Key Gun och söker kontakt i Sonic-form.
+
+Nätverksspelet synkar upp till tio dörrar, familjeskyttar, deras HP och tillhörighet, fällor samt den fördröjda Sonic-rörelsen. Värden väljer slumpad hotellutgång och avgör alla träffar. Båda sidor behöver ladda om till samma version.
+
+Tester täcker alla tjugo ordnade Door Man-kortpar, fem dörrar/slumpad utgång/ersättning, faktiska Key Gun-cooldowns, halvt liv, 10-HP-dörrar, begränsade familjespawners, förstörelse, ingen teleport med Family, fällstun och andra Door Mans immunitet samt Sonic-formens tomma attacklista, styrfördröjning och kontaktskada. Simulerade tvåklientstester verifierar fem dörrar, fällor, skyttars liv/förstörelse och Sonic-formens HUD/kontaktskada. Den tidigare gränsen för riktiga WebRTC-/enhetstester kvarstår.

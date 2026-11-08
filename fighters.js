@@ -10,7 +10,7 @@ function drawFighter(c,f,time=0,preview=false){const d=roster[f.id],k=d.kind,att
  if(k!==1&&k!==4){c.fillStyle='#efbd99';c.beginPath();c.arc(0,-114,18,0,7);c.fill();c.fillStyle='#171d30';c.fillRect(-10,-118,5,4);c.fillRect(6,-118,5,4)}
  if(k===0){path(c,[[-20,-121],[-21,-135],[13,-138],[22,-126],[37,-123]],'#92b6fa');c.fillStyle='#d6e3ff';c.fillRect(-16,-126,37,5);c.fillStyle='#d75d6b';for(const x of [-34,attack?66:35]){c.beginPath();c.arc(x,attack&&x>0?-80:-54,13,0,7);c.fill()}}
  if(k===1){c.fillStyle='#9e7049';c.fillRect(-23,-151,46,59);c.strokeStyle='#e0b981';c.lineWidth=4;c.strokeRect(-23,-151,46,59);c.lineWidth=1;c.strokeRect(-16,-144,32,21);c.strokeRect(-16,-117,32,19);c.fillStyle='#ffe49c';c.beginPath();c.arc(12,-119,3,0,7);c.fill();c.fillStyle='#ffe49c';c.fillRect(-4,-63,10,4);c.beginPath();c.arc(3,-58,6,0,7);c.stroke()}
- if(k===2){path(c,[[-22,-107],[-24,-132],[-12,-126],[-7,-158],[5,-139],[18,-153],[25,-122],[17,-108],[9,-131],[-2,-122],[-12,-126]],'#ff702f');path(c,[[-10,-133],[0,-151],[6,-131],[15,-140],[12,-119]],'#ffdd72')}
+ if(k===1&&hasCard(f,'magic')){c.fillStyle='#2c3044';c.fillRect(28,-67,40,10);c.fillRect(33,-60,10,16);c.strokeStyle='#f3db89';c.lineWidth=3;c.beginPath();c.arc(70,-62,6,0,7);c.moveTo(75,-62);c.lineTo(86,-62);c.lineTo(86,-56);c.stroke()}if(k===2){path(c,[[-22,-107],[-24,-132],[-12,-126],[-7,-158],[5,-139],[18,-153],[25,-122],[17,-108],[9,-131],[-2,-122],[-12,-126]],'#ff702f');path(c,[[-10,-133],[0,-151],[6,-131],[15,-140],[12,-119]],'#ffdd72')}
  if(k===5){
  // Sailor silhouette: striped jersey, yellow coat, captain cap and a wooden oar.
  path(c,[[-28,-94],[-9,-91],[-13,-40],[-30,-42]],'#e5b24d');path(c,[[9,-91],[28,-94],[30,-42],[13,-40]],'#e5b24d');
