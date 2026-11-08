@@ -29,3 +29,16 @@ Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sik
 
 ## Publicering
 GitHub Pages: main / root. Alla filer inklusive fighters.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
+
+
+## Fyra svårighetsgrader
+Välj Lätt, Normal, Svår eller Expert före matchen. Normal är förvalt. Valet visas i matchens statusrad och gäller alla ronder. Inställningen är avstängd i lokalt tvåspelarläge.
+
+| Nivå | Reaktionstid | Spridning i siktet | Chans att försöka undvika upptäckt hot |
+|---|---:|---:|---:|
+| Lätt | 0,80 s | ±24° | 12 % |
+| Normal | 0,40 s | ±10° | 40 % |
+| Svår | 0,23 s | ±5° | 72 % |
+| Expert | 0,13 s | ±2° | 90 % |
+
+Nivåerna ändrar också hur ofta boten fattar attackbeslut, cirklar runt dig, använder sköld och orbitalt nedslag samt hur mycket den försöker förutsäga rörelse. Boten uppdaterar sin observerade position och upptäckta hot vid sin reaktionstid, inte varje bildruta. Liv, rörelsefart, skada och attackernas cooldowns är samma på alla nivåer. Svårighetsbalansen behöver fortsatt mänskligt speltest.

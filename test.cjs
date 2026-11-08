@@ -20,3 +20,19 @@ setup();run("$('mode').value='ai';$('opponent').value='1';start()");assert.equal
 for(let i=0;i<5;i++)for(let j=0;j<3;j++){setup(i);run(`attack(0,${j})`);step(2);run('render()');assert(run('fighters.every(f=>Number.isFinite(f.hp)&&f.hp>=0&&f.hp<=f.maxHp&&free(f.x,f.y))'))}
 setup();run("attack(0,0);paused=true");const cd=run('fighters[0].cd[0]'),x=run('fighters[0].x');step(.4);assert.equal(run('fighters[0].cd[0]'),cd);assert.equal(run('fighters[0].x'),x);
 console.log('PASS: 15 abilities, 2D movement, normalized diagonals, cover collision, blocked shots, aiming/misses, burn, lock, dodge immunity, dash collision, shields, pose delay, blast escape, bot identity/navigation, pause and rendering.');
+const originalRandom=Math.random;run('Math.random=()=>.75');
+const observations=[];
+for(const key of ['easy','normal','hard','expert']){
+ setup();run(`$('mode').value='ai';$('difficulty').value='${key}';start()`);
+ assert.equal(run('chosenDifficulty'),key);assert.equal(run('fighters[1].maxHp'),110);assert.equal(run('fighters[1].cd[0]'),0);
+ run('fighters[1].aiThink=0;fighters[1].aiAction=100;bot(fighters[1],fighters[0],.01)');
+ const reaction=run('fighters[1].aiThink');assert.equal(reaction,run('difficulty().reaction'));
+ const aim=run('fighters[1].botAim');run('fighters[0].y+=100;bot(fighters[1],fighters[0],.01)');assert.equal(run('fighters[1].botAim'),aim);
+ observations.push({reaction,error:run('difficulty().spread'),avoid:run('difficulty().avoid')});
+ run("$('difficulty').value='easy'");assert.equal(run('chosenDifficulty'),key);run('spawnRound()');assert.equal(run('chosenDifficulty'),key);
+}
+for(let i=1;i<4;i++){assert(observations[i].reaction<observations[i-1].reaction);assert(observations[i].error<observations[i-1].error);assert(observations[i].avoid>observations[i-1].avoid)}
+run("$('mode').value='local';syncOpponent()");assert.equal(nodes.difficulty.disabled,true);
+run("$('mode').value='ai';syncOpponent()");assert.equal(nodes.difficulty.disabled,false);
+Math.random=originalRandom;
+console.log('PASS: all four difficulty selections, default fallback, round persistence, reaction delay, increasing precision/avoidance, equal HP/cooldowns and local-mode disabling.');
