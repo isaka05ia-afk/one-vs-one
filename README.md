@@ -29,7 +29,7 @@ Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sik
 `node test.cjs` testar 18 förmågor, tvådimensionell rörelse, normaliserad diagonal fart, väggkollision, blockerade skott, manuellt sikte och missar, brännskada, stun, undanmanöver, sköld, posering, undvikande av explosioner, botens identitet och navigering, paus och renderingsanrop i en simulerad miljö. Test i riktig webbläsare och på fysisk mobil återstår.
 
 ## Publicering
-GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
+GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
 
 
 ## Fyra svårighetsgrader
@@ -141,3 +141,39 @@ Anslutningen använder WebRTC och publika STUN-tjänster från Cloudflare och Go
 Slumpad karta är nu det första och förvalda kartvalet. En ny match eller ommatch gör en ny slumpning; samma karta behålls under serieronderna. I onlineläge gör värden slumpningen vid start och skickar den faktiska kartan till gästen. Båda får därför alltid samma bana. Ett manuellt kartval finns kvar när ni vill spela en viss miljö.
 
 Sten/sax/påse-karaktären heter nu The Essy Kid och har ett E på hoodien. Påse har utökats från 95 till 145 räckvidd och från ungefär 74 till 115 graders träffkon. Skada, 0,55 s grepp och 7,2 s cooldown behålls. Gripet kräver fortfarande fri sikt och kan undvikas med undanmanöver. Botens avståndsbedömning använder den större grabben.
+
+
+## Ability Cards — comeback och nya spelstilar
+I bäst-av-fem får den som förlorar en rond välja ett av tre Ability Cards innan nästa rond startar. Kort gäller från nästa rond till matchens slut. Högst två kort per spelare: första och andra förlusten ger val, tredje förlusten avslutar matchen. Vinnaren får inget kort. Oavgjort ger inget kort. Quick Match har en enda rond och inget kortval efteråt.
+
+Matchen väntar på valet; rondtid och miljöer står stilla. Mot bot väljer datorn sitt eget kort när den förlorar. I lokalt tvåspelarläge väljer den förlorande spelaren på samma skärm. Online är kortval och nästa rond auktoritativa hos värden: gästen får välja sina egna erbjudna kort, och värden väntar tills valet är bekräftat. Kort, uppgraderat maxliv, båtens liv, aktiva attacker och My Homes karta synkas till båda klienterna.
+
+### Sailer
+Första valet erbjuder alltid dessa tre:
+
+| Kort | Förändring | Avvägning |
+|---|---|---|
+| My Home | Exakt 60 % chans till Flooded Harbor inför varje kommande rond | Övriga 40 % slumpas bland de fem andra kartorna; ingen direkt stridsbonus |
+| Capten | Börjar varje rond i en permanent rörlig båt med 50 egna HP, +40 fart på land och ytterligare +100 i vatten | Tredje attacken tas bort. När båten förstörs går han till fots resten av ronden |
+| Time for Canons | Ersätter kontrollattacker med Cannonball, Grapeshot och Deck Cannon | Smala skott med betydligt mindre AoE; förlorar vågens push, vindens pull och jollen |
+
+My Home överstyr även ett manuellt kartval från menyn. Om båda spelarna har My Home är chansen fortfarande 60 %, inte staplad. När ingen har kortet behålls kartan mellan ronderna som tidigare.
+
+Capten ger 215 fart på land och 315 i vatten jämfört med Sailers grundfart 175. Båtens 50 HP absorberar skada först, inklusive miljöskada; överskjutande skada träffar Sailer. Båten återställs vid nästa rond. Läkande källor reparerar den inte. Förlorad båt tar bort fartbonusen men ger inte tillbaka den tredje attacken. Sailer är fortfarande immun mot vattnets normala fartminskning.
+
+Kanonerna:
+- Cannonball: 30 skada, 550 räckvidd, 2,2 s cooldown. Smal projektil.
+- Grapeshot: tre täta projektiler med 12 skada vardera, 360 räckvidd, 5,8 s cooldown.
+- Deck Cannon: 42 skada, 620 räckvidd, 9,5 s cooldown och 0,65 s uppladdning. Ingen stor explosion.
+
+Kortkombinationer beräknas från valen varje rond i stället för att skriva över grundkaraktären. Valordningen spelar ingen roll. **Capten + Time for Canons** ger den permanenta båten med exakt två skadeattacker, Cannonball och Grapeshot. Tredje attacken kommer aldrig tillbaka via kanonkortet. My Home kombineras både med båten och kanonerna.
+
+Ett Sailer-specialkort kan bara väljas en gång. Vid andra förlusten erbjuds de två återstående specialkorten och More HP som ett tredje val, så det alltid finns tre valbara kort.
+
+### Övriga fighters
+More HP ger +35 maxliv, More Damage ger +20 % attackskada och More Speed ger +15 % rörelsefart. De tre valen finns efter varje berättigad förlust. Grundkorten kan väljas två gånger, men tar då upp båda kortplatserna. Maxliv ökar additivt, skada/fart multiplicativt. Grundattackerna och cooldowns ändras inte.
+
+Alla kort rensas vid ny match/ommatch. Uppgraderingar är per spelare och följer samma regler för människor och botar.
+
+### Korttester
+Tester täcker att bara förloraren får tre val, att nästa rond väntar, högst två kort, inga kort efter slutrond/Quick Match, samtliga Sailer-kortpar i båda ordningarna, båtens 50 HP/överskjutande skada/återställning/vattenfart, exakt 60 av 100 jämnt fördelade My Home-slumputfall, kanonernas ersatta attacklista och grundkortens statseffekter. Simulerade tvåklientstester täcker gästens kortval, avvisade felval, två knappar med Capten + kanoner, båtliv, uppgraderat maxliv och synkroniserad vattenkarta. Verkliga tvåenhetstester har samma tidigare verifieringsgräns.

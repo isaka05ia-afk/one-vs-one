@@ -1,8 +1,9 @@
 const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
 const context=new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
 const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){}},setAttribute(){},append(){},add(){},addEventListener(){},getContext:()=>context,querySelector:()=>node(),getBoundingClientRect:()=>({left:0,top:0,width:1000,height:700}),value:'local',textContent:'',innerHTML:''});
-const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
+const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
 const run=code=>vm.runInContext(code,sandbox);
+run("function nextTestRound(){if(cardDraft)chooseAbilityCard(cardDraft.player,cardDraft.options[0],cardDraft.id);spawnRound()}");
 function setup(id=0,enemy=4){run(`selected=${id};$('mode').value='local';$('opponent').value='${enemy}';start();fighters[0].x=100;fighters[0].y=350;fighters[1].x=300;fighters[1].y=350;`)}
 function step(s){for(let t=0;t<s;t+=.01)run('update(.01)')}
 setup();run("keys.add('w');keys.add('d')");step(.2);assert(run('fighters[0].x>100&&fighters[0].y<350'));assert(Math.abs(run('distance(fighters[0],{x:100,y:350})')-39)<1);
@@ -29,7 +30,7 @@ for(const key of ['easy','normal','hard','expert']){
  const reaction=run('fighters[1].aiThink');assert.equal(reaction,run('difficulty().reaction'));
  const aim=run('fighters[1].botAim');run('fighters[0].y+=100;bot(fighters[1],fighters[0],.01)');assert.equal(run('fighters[1].botAim'),aim);
  observations.push({reaction,error:run('difficulty().spread'),avoid:run('difficulty().avoid')});
- run("$('difficulty').value='easy'");assert.equal(run('chosenDifficulty'),key);run('spawnRound()');assert.equal(run('chosenDifficulty'),key);
+ run("$('difficulty').value='easy'");assert.equal(run('chosenDifficulty'),key);run('nextTestRound()');assert.equal(run('chosenDifficulty'),key);
 }
 for(let i=1;i<4;i++){assert(observations[i].reaction<observations[i-1].reaction);assert(observations[i].error<observations[i-1].error);assert(observations[i].avoid>observations[i-1].avoid)}
 run("$('mode').value='local';syncOpponent()");assert.equal(nodes.difficulty.disabled,true);
@@ -53,7 +54,7 @@ setup(2);run("inputMode='touch';attack(0,0);fighters[1].y=500");const shotY=run(
 console.log('PASS: mobile tap auto aim overrides stale mouse, manual stick priority, release restores auto aim, blast target distance, desktop manual aim and non-homing projectiles.');
 setup(0);run('attack(0,1)');step(.3);assert.equal(run('fighters[1].hp'),140);assert.equal(run('beams.length'),0);run('fighters[1].y=420');step(.2);assert.equal(run('fighters[1].hp'),140);assert(run('beams.length')>0);
 setup(0);run('attack(0,1);fighters[0].stun=.6');step(.5);assert.equal(run('fighters[0].cast'),0);assert.equal(run('beams.length'),0);assert.equal(run('fighters[1].hp'),140);
-setup(0);run('fighters[1].hp=0;endRound()');assert.equal(run('wins[0]'),1);assert.equal(run('finished'),false);run('spawnRound();fighters[1].hp=0;endRound()');assert.equal(run('wins[0]'),2);assert.equal(run('finished'),false);run('spawnRound();fighters[1].hp=0;endRound()');assert.equal(run('wins[0]'),3);assert.equal(run('finished'),true);
+setup(0);run('fighters[1].hp=0;endRound()');assert.equal(run('wins[0]'),1);assert.equal(run('finished'),false);run('nextTestRound();fighters[1].hp=0;endRound()');assert.equal(run('wins[0]'),2);assert.equal(run('finished'),false);run('nextTestRound();fighters[1].hp=0;endRound()');assert.equal(run('wins[0]'),3);assert.equal(run('finished'),true);
 setup(0);run('endRound()');assert.equal(run('wins[0]+wins[1]'),0);
 console.log('PASS: Sax charge delay, sidestep and stun interruption; best of five continues after two wins, ends at three, and draws award no points.');
 function placeDoor(x,y,i=0){run(`fighters[${i}].x=${x};fighters[${i}].y=${y};fighters[${i}].cd[2]=0;fighters[${i}].anim=0;attack(${i},2)`)}
@@ -62,7 +63,7 @@ setup(1);placeDoor(100,350);assert.equal(run('portals.length'),1);assert.equal(r
 run('fighters[0].x=740');step(.01);run('fighters[0].x=800');step(.01);assert.equal(run('fighters[0].x'),100);step(1);assert.equal(run('fighters[0].x'),100);run('fighters[0].x=160');step(.01);run('fighters[0].x=100');step(.01);assert.equal(run('fighters[0].x'),800);
 placeDoor(800,600);assert.equal(run('portals.length'),2);assert(run('portals.some(p=>p.slot===0&&p.y===600)'));assert(run('!portals.some(p=>p.x===100)'));placeDoor(810,600);assert.equal(run('portals.length'),2);assert.equal(run('fighters[0].cd[2]'),0);
 setup(1);placeDoor(100,350);placeDoor(800,350);run('fighters[0].x=740');step(.01);run('fighters[0].x=800;fighters[0].stun=.5');step(.1);assert.equal(run('fighters[0].x'),800);step(.5);assert.equal(run('fighters[0].x'),100);
-setup(1);placeDoor(100,350);placeDoor(800,350);run('fighters[0].x=740');step(.01);run('fighters[0].x=800;fighters[1].x=100');step(.1);assert.equal(run('fighters[0].x'),800);run('fighters[1].x=250');step(.01);assert.equal(run('fighters[0].x'),100);run('render();spawnRound()');assert.equal(run('portals.length'),0);
+setup(1);placeDoor(100,350);placeDoor(800,350);run('fighters[0].x=740');step(.01);run('fighters[0].x=800;fighters[1].x=100');step(.1);assert.equal(run('fighters[0].x'),800);run('fighters[1].x=250');step(.01);assert.equal(run('fighters[0].x'),100);run('render();nextTestRound()');assert.equal(run('portals.length'),0);
 setup(1,1);placeDoor(100,350);placeDoor(800,350);placeDoor(100,600,1);placeDoor(800,600,1);assert.equal(run('portals.filter(p=>p.owner===0).length'),2);assert.equal(run('portals.filter(p=>p.owner===1).length'),2);
 console.log('PASS: Running Man first attack and damage; two linked doors, walking teleport both directions, no bounce, oldest replacement, placement spacing, stun/blocked exit protection, round cleanup and separate owner pairs.');
 setup(5);assert.equal(run('fighters[0].maxHp'),170);assert(run('roster[5].speed<roster[0].speed'));run('attack(0,0)');step(.15);assert.equal(run('shots.length'),0);step(.6);assert.equal(run('fighters[1].hp'),131);assert(run('fighters[1].x>400'));
@@ -73,7 +74,7 @@ setup(5);run("inputMode='mouse';mouseAim=true;aimPoint={x:500,y:350};attack(0,2)
 setup(5);run("inputMode='touch';attack(0,2)");step(.5);assert.equal(run('boats[0].tx'),520);run("inputMode='mouse'");
 setup(5);run('fighters[0].x=400;fighters[0].y=280;fighters[1].x=600;fighters[1].y=280;attack(0,2)');step(1);assert.equal(run('boats.length'),0);assert.equal(run('fighters[1].boatOwner'),-1);assert.equal(run('fighters[1].hp'),140);
 setup(5);run('attack(0,2)');step(.6);run('fighters[1].y=480');step(1.5);assert.equal(run('fighters[1].boatOwner'),-1);assert.equal(run('fighters[1].hp'),140);
-setup(5);run('attack(0,2)');step(.6);run('spawnRound()');assert.equal(run('boats.length'),0);assert.equal(run('controlFx.length'),0);assert(run('fighters.every(f=>f.boatOwner===-1)'));
+setup(5);run('attack(0,2)');step(.6);run('nextTestRound()');assert.equal(run('boats.length'),0);assert.equal(run('controlFx.length'),0);assert(run('fighters.every(f=>f.boatOwner===-1)'));
 console.log('PASS: Sailer health/speed, wide wave push and delay, wind pull and cover/dodge, boat windup/capture/action lock/transport/release, mobile destination, wall stop, sidestep and round cleanup.');
 assert(run("roster.every(f=>f.name!=='MS AI')"));assert.equal(run('roster[4].name'),'AEGIS');
 setup(4);run('attack(0,1);hit(fighters[1],fighters[0],20)');assert.equal(run('fighters[0].hp'),137);run('fighters[1].x=50;hit(fighters[1],fighters[0],20)');assert.equal(run('fighters[0].hp'),117);step(1.8);assert.equal(run('fighters[0].guard'),0);
@@ -85,7 +86,7 @@ setup(4);run('attack(0,2);fighters[0].stun=.5');step(.1);assert.equal(run('fight
 setup(4);run('fighters[1].x=175;attack(0,0)');assert.equal(run('fighters[1].hp'),126);assert(run('fighters[1].x>175'));
 const savedRandom=Math.random;
 for(let id=0;id<6;id++){
- run(`Math.random=()=>${(id+.1)/6};$('mode').value='ai';start()`);assert.equal(run('fighters[1].id'),id);assert.equal(run('fighters[1].maxHp'),run(`roster[${id}].hp`));run('spawnRound()');assert.equal(run('fighters[1].id'),id);
+ run(`Math.random=()=>${(id+.1)/6};$('mode').value='ai';start()`);assert.equal(run('fighters[1].id'),id);assert.equal(run('fighters[1].maxHp'),run(`roster[${id}].hp`));run('nextTestRound()');assert.equal(run('fighters[1].id'),id);
  step(4);assert(run('fighters.every(f=>free(f.x,f.y)&&Number.isFinite(f.hp))'));
 }
 Math.random=savedRandom;
@@ -101,7 +102,7 @@ setupMap('dunes');run('fighters[0].x=800;fighters[0].y=550;mapClock=0');assert.e
 setupMap('factory');run('fighters[0].x=500;fighters[0].y=550');const beltY=run('fighters[0].y');step(.2);assert(run('fighters[0].y')>beltY+15);
 setupMap('harbor',0,'quick');run('fighters[1].hp=0;endRound()');assert.equal(run('finished'),true);assert.equal(run('wins[0]'),1);step(3);assert.equal(run('finished'),true);
 setupMap('grove',0,'quick');run('endRound()');assert.equal(run('finished'),true);assert.equal(run('wins[0]+wins[1]'),0);
-setupMap('grove',0,'series');run('fighters[1].hp=0;endRound()');assert.equal(run('finished'),false);run('spawnRound()');assert.equal(run('mapId'),'grove');assert.equal(run('mapClock'),0);
+setupMap('grove',0,'series');run('fighters[1].hp=0;endRound()');assert.equal(run('finished'),false);run('nextTestRound()');assert.equal(run('mapId'),'grove');assert.equal(run('mapClock'),0);
 setupMap('harbor');run("$('mode').value='ai';fighters[0].x=1400;fighters[0].y=900;updateCamera()");assert(run('camera.x>0&&camera.y>0'));const point=run('pointerPosition({clientX:500,clientY:350})');assert.equal(point.x,run('camera.x+500/camera.scale'));assert.equal(point.y,run('camera.y+350/camera.scale'));
 console.log('PASS: six distinct maps, enlarged world, valid spawns and cross-map paths; water slow/Sailer immunity/bridges; ice momentum; healing; lava warning/damage; reversing wind; conveyors; quick win/draw end in one round; series/map persistence; camera aim coordinates.');
 run("$('map').value='grove';$('format').value='series';inputMode='mouse'");
@@ -116,9 +117,21 @@ setup(3);run("keys.add('d');attack(0,0);fighters[0].stun=.5");step(.2);assert.eq
 console.log('PASS: Running Man cooldown 3.2 s; keyboard/touch boat steering, passenger follows turns, owner action lock, heading retained and camera follows; Overpowerd pose movement, retargeted blast, mobile turning and real stun cancellation.');
 assert.equal(run('roster[0].name'),'THE ESSY KID');
 const randomBeforeMapTest=Math.random;
-for(let i=0;i<6;i++){run(`Math.random=()=>${(i+.1)/6};$('map').value='random';$('mode').value='local';$('opponent').value='4';start()`);assert.equal(run('mapId'),run(`Object.keys(MAPS)[${i}]`));const kept=run('mapId');run('spawnRound()');assert.equal(run('mapId'),kept)}
+for(let i=0;i<6;i++){run(`Math.random=()=>${(i+.1)/6};$('map').value='random';$('mode').value='local';$('opponent').value='4';start()`);assert.equal(run('mapId'),run(`Object.keys(MAPS)[${i}]`));const kept=run('mapId');run('nextTestRound()');assert.equal(run('mapId'),kept)}
 Math.random=randomBeforeMapTest;run("$('map').value='grove';inputMode='mouse'");
 setup(0);run('fighters[1].x=240;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),0);assert.equal(run('roster[0].moves[2][4]'),7.2);
 setup(0);run('fighters[1].x=180;fighters[1].y=470;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),0);
 setup(0);run('fighters[0].x=200;fighters[0].y=100;fighters[0].aim=Math.PI/2;fighters[1].x=200;fighters[1].y=230;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),-1);
 console.log('PASS: The Essy Kid rename, larger and wider bag grab with unchanged cooldown, wall protection, all six random map outcomes and map persistence within rounds.');
+run("$('map').value='grove';$('format').value='series';inputMode='mouse'");
+setup(5);run('fighters[0].hp=0;endRound()');assert.equal(run('cardDraft.player'),0);assert.equal(run('cardDraft.options.join()'),'my_home,capten,canons');const draftRound=run('roundNumber');step(4);assert.equal(run('roundNumber'),draftRound);run('spawnRound()');assert.equal(run('roundNumber'),draftRound);assert.equal(run("chooseAbilityCard(0,'force',cardDraft.id)"),false);run("selectAbilityCard('capten')");step(2.3);assert.equal(run('fighters[0].shipHp'),50);assert.equal(run('getMoves(fighters[0]).length'),2);assert.equal(run('heroSpeed(fighters[0])'),215);run('attack(0,2)');assert.equal(run('boats.length'),0);
+run('fighters[0].hp=0;endRound()');assert.equal(run('cardDraft.options.length'),3);assert(run("!cardDraft.options.includes('capten')&&cardDraft.options.includes('canons')"));run("selectAbilityCard('canons')");step(2.3);assert.equal(run('loadouts[0].length'),2);assert.equal(run('getMoves(fighters[0]).map(m=>m[1]).join()'),'cannon,grape');run('fighters[0].x=100;fighters[1].x=300;fighters[0].y=fighters[1].y=350;attack(0,0)');step(.5);assert.equal(run('fighters[1].hp'),110);
+for(const pair of [['capten','canons'],['canons','capten'],['my_home','capten'],['capten','my_home'],['my_home','canons'],['canons','my_home']]){setup(5);sandbox.pair=pair;run('loadouts[0]=pair.slice();spawnRound();render()');assert.equal(run('getMoves(fighters[0]).length'),pair.includes('capten')?2:3);assert.equal(run('fighters[0].shipHp'),pair.includes('capten')?50:0);if(pair.includes('canons'))assert.equal(run('getMoves(fighters[0])[0][1]'),'cannon')}
+setup(5);run("loadouts[0]=['capten'];spawnRound();applyDamage(fighters[0],60)");assert.equal(run('fighters[0].shipHp'),0);assert.equal(run('fighters[0].hp'),160);assert.equal(run('heroSpeed(fighters[0])'),175);assert.equal(run('getMoves(fighters[0]).length'),2);run('spawnRound()');assert.equal(run('fighters[0].shipHp'),50);run("mapId='harbor';walls=MAPS.harbor.walls;fighters[0].x=600;fighters[0].y=350");assert.equal(run('heroSpeed(fighters[0])'),315);assert.equal(run('terrainSpeed(fighters[0])'),1);
+setup(5);run("loadouts[0]=['my_home']");const savedCardRandom=Math.random;let harborRolls=0;for(let i=0;i<100;i++){let calls=0;Math.random=()=>calls++===0?i/100:.2;run('nextCardMap()');if(run('mapId')==='harbor')harborRolls++}Math.random=savedCardRandom;assert.equal(harborRolls,60);
+run("$('map').value='grove'");setup(5);run("loadouts[0]=['canons'];spawnRound();fighters[0].x=100;fighters[0].y=350;attack(0,2)");step(.3);assert.equal(run('shots.length'),0);step(.4);assert.equal(run('shots[0].kind'),'heavycannon');assert.equal(run('getMoves(fighters[0]).length'),3);
+setup(0);run('fighters[0].hp=0;endRound()');assert.equal(run('cardDraft.options.join()'),'vitality,force,haste');run("selectAbilityCard('vitality')");step(2.3);assert.equal(run('fighters[0].maxHp'),185);run('fighters[0].hp=0;endRound()');run("selectAbilityCard('vitality')");step(2.3);assert.equal(run('fighters[0].maxHp'),220);run('fighters[0].hp=0;endRound()');assert.equal(run('finished'),true);assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),2);
+setup(0);run("loadouts[0]=['force','haste'];spawnRound();fighters[0].x=100;fighters[1].x=175;fighters[0].y=fighters[1].y=350;attack(0,0)");assert(Math.abs(run('fighters[1].hp')-112.4)<.001);assert(Math.abs(run('heroSpeed(fighters[0])')-224.25)<.001);
+setup(0);run("$('mode').value='ai';fighters[1].hp=0;endRound()");assert.equal(run('loadouts[1].length'),1);assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),0);
+setupMap('grove',5,'quick');run('fighters[0].hp=0;endRound()');assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),0);run('start()');assert.equal(run('loadouts[0].length+loadouts[1].length'),0);
+console.log('PASS: loss-only three-card draft blocks next round; two-card cap; all Sailer pair orders; Capten removes slot 3 and absorbs overflow damage; boat repair and water speed; exact 60/100 My Home outcomes; narrow cannon replacement; generic HP/damage/speed; AI choice; Quick Match/no post-final draft; reset.');
