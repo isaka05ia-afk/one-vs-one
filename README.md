@@ -13,13 +13,13 @@ En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensi
 ## Fighters
 | Fighter | Klass | Liv | Fart | Spelstil |
 |---|---|---:|---:|---|
-| JIMY 3 | Tank | 150 | 195 | Korta avstånd, breda saxklipp, kast |
+| JIMY 3 | Tank | 150 | 195 | Närslag, riktad stråle, grab och kast |
 | Door Man | Speedster | 95 | 285 | Flanka, lås en riktad träff, rusa |
 | Flame Girl | DPS | 105 | 235 | Projektiler, eldspår, stor drake |
 | The Overpowerd | Burst-DPS | 125 | 185 | Obligatorisk pose och tydligt markerade attacker |
 | Ms AI | AI-robot | 110 | 225 | Datapuls, energisköld och orbitalt nedslag |
 
-Alla attacker har separata synliga cooldowns. Sten är en långsam, tung projektil. Sax är två korta konträffar. Påse fångar på nära håll. Door Mans Dörrportal skjuter en nyckel genom en liten portal, Lock är en riktad stunprojektil och Running Man rusar längs siktet. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. The Overpowerd måste posera före varje attack, och poseringen avbryts av stun. Ms AI har en egen robotfigur med pansar, antenner och AI-kärna.
+Alla attacker har separata synliga cooldowns. Sten är ett tungt närslag (23 skada, 100 räckvidd, 1,5 s cooldown). Sax skjuter en riktad stråle (26 skada, 400 räckvidd, 4,2 s cooldown), som stoppas av väggar. Påse är en grab på nära håll: håll fast i 0,55 s och kasta sedan för 22 skada (95 räckvidd, 7,2 s cooldown). Båda står still under greppet, den fångade kan inte attackera eller undvika, och stun på JIMY avbryter greppet. Missar och undanmanövrer ger ingen träff. Door Mans Dörrportal skjuter en nyckel genom en liten portal, Lock är en riktad stunprojektil och Running Man rusar längs siktet. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. The Overpowerd måste posera före varje attack, och poseringen avbryts av stun. Ms AI har en egen robotfigur med pansar, antenner och AI-kärna.
 
 ## Placering
 Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sikt till målet. Markeringar visar var en explosion ska träffa och hur lång tid som återstår. Undanmanöver ger 0,2 sekunder osårbarhet men passerar inte genom väggar. Datorn cirklar, håller avstånd, reagerar med fördröjning och försöker hitta vägar runt skydd. Den använder riktiga projektiler och kan missa.

@@ -7,7 +7,7 @@ function setup(id=0,enemy=4){run(`selected=${id};$('mode').value='local';$('oppo
 function step(s){for(let t=0;t<s;t+=.01)run('update(.01)')}
 setup();run("keys.add('w');keys.add('d')");step(.2);assert(run('fighters[0].x>100&&fighters[0].y<350'));assert(Math.abs(run('distance(fighters[0],{x:100,y:350})')-39)<1);
 setup();run('fighters[0].x=400;fighters[0].y=280;move(fighters[0],250,0)');assert(run('fighters[0].x<430'));assert(run('free(fighters[0].x,fighters[0].y)'));
-setup();run('fighters[0].x=400;fighters[0].y=280;fighters[1].x=600;fighters[1].y=280;attack(0,0)');step(1);assert.equal(run('fighters[1].hp'),110);assert.equal(run('shots.length'),0);
+setup(2);run('fighters[0].x=400;fighters[0].y=280;fighters[1].x=600;fighters[1].y=280;attack(0,0)');step(1);assert.equal(run('fighters[1].hp'),110);assert.equal(run('shots.length'),0);
 setup(2);run('fighters[0].aim=-Math.PI/2;attack(0,0)');step(.5);assert.equal(run('fighters[1].hp'),110);
 setup(2);run('attack(0,0)');step(.6);assert(run('fighters[1].hp<110'));assert(run('fighters[1].burn>0'));
 setup(1);run('attack(0,1)');step(.5);assert(run('fighters[1].stun>0'));step(1);assert.equal(run('fighters[1].stun'),0);
@@ -36,3 +36,12 @@ run("$('mode').value='local';syncOpponent()");assert.equal(nodes.difficulty.disa
 run("$('mode').value='ai';syncOpponent()");assert.equal(nodes.difficulty.disabled,false);
 Math.random=originalRandom;
 console.log('PASS: all four difficulty selections, default fallback, round persistence, reaction delay, increasing precision/avoidance, equal HP/cooldowns and local-mode disabling.');
+setup(0);run('fighters[1].x=180;attack(0,0)');assert.equal(run('fighters[1].hp'),87);assert.equal(run('shots.length'),0);assert(run('fighters[1].x>180'));
+setup(0);run('fighters[1].x=300;attack(0,0)');assert.equal(run('fighters[1].hp'),110);assert.equal(run('shots.length'),0);
+setup(0);run('attack(0,1)');assert.equal(run('fighters[1].hp'),84);assert.equal(run('beams.length'),1);assert.equal(run('shots.length'),0);step(.4);assert.equal(run('fighters[1].hp'),84);assert.equal(run('beams.length'),0);
+setup(0);run('fighters[1].y=410;attack(0,1)');assert.equal(run('fighters[1].hp'),110);
+setup(0);run('fighters[0].x=400;fighters[0].y=280;fighters[1].x=600;fighters[1].y=280;attack(0,1)');assert.equal(run('fighters[1].hp'),110);assert(run('beams[0].ex<=450'));
+setup(0);run('fighters[1].x=170;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),0);assert.equal(run('fighters[1].hp'),110);run("keys.add('arrowright');dodge(1);attack(1,0)");assert.equal(run('fighters[1].dodge'),0);assert.equal(run('fighters[1].cd[0]'),0);step(.2);assert.equal(run('fighters[1].hp'),110);assert(run('fighters[1].x<170'));step(.4);assert.equal(run('fighters[1].grabbedBy'),-1);assert.equal(run('fighters[1].hp'),88);assert(run('fighters[1].x>200'));
+setup(0);run('fighters[1].x=170;fighters[1].dodge=.2;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),-1);
+setup(0);run('fighters[1].x=170;attack(0,2);fighters[0].stun=.4');step(.1);assert.equal(run('fighters[1].grabbedBy'),-1);assert.equal(run('fighters[1].hp'),110);
+console.log('PASS: JIMY punch melee/range/knockback; beam damage once, aim miss and wall stop; grab hold/action lock/release damage; dodge escape and stun interruption.');
