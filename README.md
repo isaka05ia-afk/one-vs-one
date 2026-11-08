@@ -30,3 +30,16 @@ Settings → Pages → Deploy from a branch → main → / (root). Ett privat re
 
 ## Verifiering
 `node test.cjs` testar de 12 attackerna, fördröjningen under posering, cooldown, stun och att hopp undviker Dooms Day med en simulerad spelmiljö. Det ersätter inte test på en fysisk telefon. Google Fonts är valfritt och har reservtypsnitt.
+
+
+## Uppdatering 2 — klasser och rörlighet
+- JIMY 3: Tank, 140 HP, 240 fart. Sten har 0,38 s uppladdning och tillfällig rustning, Sax ger tre 9-skadeträffar, Påse kastar en oblockerande motståndare. Sten: 22 skada / 2,2 s cooldown; Sax: 27 totalt / 1,5 s.
+- Door Man: Speedster, 90 HP, 370 fart, dubbelhopp. Portalen byter sida utan gratisskada, Lock har synlig uppladdning, Running Man är en rusning med kollisionsbaserad träff.
+- Flame Girl: DPS, 100 HP, 300 fart. Fire Ball ger brännskada, Fire Fly lyfter och rusar framåt, Flame Dragon laddas i 0,65 s och lämnar en kort markexplosion vid träff.
+- The Overpowerd: Burst-DPS, 115 HP, 225 fart. Behåller sin obligatoriska pose före varje attack. Punch knuffar; I Can Win markerar motståndarens plats och exploderar efter 0,6 s; Dooms Day skickar tre markerade markexplosioner framåt (10 + 10 + 18 skada).
+- Shift / mellanslag eller touchknappen Undvik ger 0,24 s osårbar rörelse. Håll vänster/höger för riktning; utan riktning rullar man bakåt. Spelare 2 använder 0. Cooldown: Tank 2,4 s, Speedster 1,2 s, DPS 1,8 s, Burst-DPS 2,6 s.
+- Luftburna fighters kan passera över varandra. Undanmanöver och rusning kan passera igenom. Hopp triggas av ett knapptryck, inte automatiskt när knappen hålls.
+- Vid timeout jämförs kvarvarande andel HP, eftersom klasserna har olika maxliv.
+- Datorn håller avstånd som passar klassen och försöker hoppa eller undvika hot. Balansvärdena är ett första speltestbart pass.
+
+Verifierat med simulerad spelmiljö: 12 attacker, klassliv, fördröjningar, kombo, kast, portal, dubbelhopp, stun, osårbarhet, passage, brännskada och undvikande av markerad explosion. Fysisk mobil och riktig webbläsare återstår.
