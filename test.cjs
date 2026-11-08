@@ -12,7 +12,7 @@ setup(2);run('fighters[0].aim=-Math.PI/2;attack(0,0)');step(.5);assert.equal(run
 setup(2);run('attack(0,0)');step(.6);assert(run('fighters[1].hp<110'));assert(run('fighters[1].burn>0'));
 setup(1);run('attack(0,1)');step(.5);assert(run('fighters[1].stun>0'));step(1);assert.equal(run('fighters[1].stun'),0);
 setup();run("keys.add('d');dodge(0);hit(fighters[1],fighters[0],50)");assert.equal(run('fighters[0].hp'),150);step(.15);assert(run('fighters[0].x>180'));assert(run('fighters[0].dodgeCd>0'));
-setup(1);run('fighters[0].x=400;fighters[0].y=280;attack(0,2)');step(.5);assert(run('fighters[0].x<430'));
+setup(1);run('fighters[0].x=400;fighters[0].y=280;attack(0,0)');step(.5);assert(run('fighters[0].x<430'));
 setup(4);run('attack(0,1);hit(fighters[1],fighters[0],20)');assert.equal(run('fighters[0].hp'),103);
 setup(3);run('fighters[1].x=220;attack(0,0)');step(.5);assert.equal(run('fighters[1].hp'),110);step(.4);assert.equal(run('fighters[1].hp'),78);
 setup(4);run('mouseAim=true;aimPoint={x:300,y:350};attack(0,2)');assert.equal(run('fighters[1].hp'),110);run('fighters[1].y=500');step(1);assert.equal(run('fighters[1].hp'),110);
@@ -56,3 +56,12 @@ setup(0);run('attack(0,1);fighters[0].stun=.6');step(.5);assert.equal(run('fight
 setup(0);run('fighters[1].hp=0;endRound()');assert.equal(run('wins[0]'),1);assert.equal(run('finished'),false);run('spawnRound();fighters[1].hp=0;endRound()');assert.equal(run('wins[0]'),2);assert.equal(run('finished'),false);run('spawnRound();fighters[1].hp=0;endRound()');assert.equal(run('wins[0]'),3);assert.equal(run('finished'),true);
 setup(0);run('endRound()');assert.equal(run('wins[0]+wins[1]'),0);
 console.log('PASS: Sax charge delay, sidestep and stun interruption; best of five continues after two wins, ends at three, and draws award no points.');
+function placeDoor(x,y,i=0){run(`fighters[${i}].x=${x};fighters[${i}].y=${y};fighters[${i}].cd[2]=0;fighters[${i}].anim=0;attack(${i},2)`)}
+setup(1);assert.equal(run('roster[1].moves[0][1]'),'dash');run('attack(0,0)');step(.35);assert.equal(run('fighters[1].hp'),86);assert.equal(run('shots.length'),0);
+setup(1);placeDoor(100,350);assert.equal(run('portals.length'),1);assert.equal(run('fighters[1].hp'),110);step(.1);assert.equal(run('fighters[0].x'),100);placeDoor(800,350);assert.equal(run('portals.length'),2);step(.1);assert.equal(run('fighters[0].x'),800);
+run('fighters[0].x=740');step(.01);run('fighters[0].x=800');step(.01);assert.equal(run('fighters[0].x'),100);step(1);assert.equal(run('fighters[0].x'),100);run('fighters[0].x=160');step(.01);run('fighters[0].x=100');step(.01);assert.equal(run('fighters[0].x'),800);
+placeDoor(800,600);assert.equal(run('portals.length'),2);assert(run('portals.some(p=>p.slot===0&&p.y===600)'));assert(run('!portals.some(p=>p.x===100)'));placeDoor(810,600);assert.equal(run('portals.length'),2);assert.equal(run('fighters[0].cd[2]'),0);
+setup(1);placeDoor(100,350);placeDoor(800,350);run('fighters[0].x=740');step(.01);run('fighters[0].x=800;fighters[0].stun=.5');step(.1);assert.equal(run('fighters[0].x'),800);step(.5);assert.equal(run('fighters[0].x'),100);
+setup(1);placeDoor(100,350);placeDoor(800,350);run('fighters[0].x=740');step(.01);run('fighters[0].x=800;fighters[1].x=100');step(.1);assert.equal(run('fighters[0].x'),800);run('fighters[1].x=250');step(.01);assert.equal(run('fighters[0].x'),100);run('render();spawnRound()');assert.equal(run('portals.length'),0);
+setup(1,1);placeDoor(100,350);placeDoor(800,350);placeDoor(100,600,1);placeDoor(800,600,1);assert.equal(run('portals.filter(p=>p.owner===0).length'),2);assert.equal(run('portals.filter(p=>p.owner===1).length'),2);
+console.log('PASS: Running Man first attack and damage; two linked doors, walking teleport both directions, no bounce, oldest replacement, placement spacing, stun/blocked exit protection, round cleanup and separate owner pairs.');
