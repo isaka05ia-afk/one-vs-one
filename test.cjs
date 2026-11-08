@@ -1,0 +1,9 @@
+const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
+const context=new Proxy({createLinearGradient:()=>({addColorStop(){}})},{get:(o,k)=>o[k]||(()=>{})});
+const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){}},setAttribute(){},append(){},add(){},getContext:()=>context,querySelector:()=>node(),value:'local',textContent:'',innerHTML:''});const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);vm.runInContext(fs.readFileSync(__dirname+'/game.js','utf8'),sandbox);
+function check(code){return vm.runInContext(code,sandbox)}
+check("selected=3;$('opponent').value='0';$('mode').value='local';start();fighters[0].x=400;fighters[1].x=500;attack(0,0)");assert.equal(check('fighters[1].hp'),100);assert.equal(check('fighters[0].pending'),0);check('update(.5)');assert.equal(check('fighters[1].hp'),100);check('update(.6)');assert.equal(check('fighters[1].hp'),73);assert(check('fighters[0].cd[0]')>0);check('attack(0,0)');assert.equal(check('fighters[1].hp'),73);
+check('spawnRound();fighters[0].x=400;fighters[1].x=500;attack(0,2);fighters[1].y=280;update(1.5)');assert.equal(check('fighters[1].hp'),100);
+check("selected=1;$('opponent').value='0';spawnRound();fighters[0].x=400;fighters[1].x=500;attack(0,1)");assert(check('fighters[1].stun')>0);check('update(1)');assert.equal(check('fighters[1].stun'),0);
+for(let i=0;i<4;i++)for(let j=0;j<3;j++){check(`selected=${i};$('opponent').value='0';spawnRound();fighters[0].x=400;fighters[1].x=500;attack(0,${j});update(1.5);render(1)`);assert(check('fighters.every(f=>Number.isFinite(f.hp)&&f.hp>=0&&f.hp<=100)'))}
+console.log('PASS: 12 attacks, pose delay, cooldown, stun expiry, jump dodge and canvas rendering.');
