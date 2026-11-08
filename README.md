@@ -88,7 +88,7 @@ Verifiering inkluderar nu alla sex slumpbara botkaraktärer, bibehållen fighter
 ## Sex större kartor och Quick Match
 Arenorna är nu 1600 × 1100 i stället för 1000 × 700, ungefär 2,5 gånger större till ytan. En följkamera och minikarta gör det möjligt att behålla läsbara figurer på mobil. Lokalt tvåspelarläge använder en gemensam kamera som zoomar ut för att visa båda spelarna. Musens sikte räknas om för kamerans position och zoom.
 
-Slumpad karta är förvalt: en av de sex kartorna väljs när en ny match startar. Du kan även välja en bestämd karta före matchen. Kartans beskrivning visas vid valet, och matchens statusrad visar aktuell markeffekt.
+Slumpad karta är förvalt: en av de sex kartorna väljs när en ny match startar. Du kan även välja en bestämd karta för första ronden. Varje följande rond får en ny slumpad karta. Kartans beskrivning visas vid valet, och matchens statusrad visar aktuell markeffekt.
 
 | Karta | Miljö | Spelförändring |
 |---|---|---|
@@ -101,7 +101,7 @@ Slumpad karta är förvalt: en av de sex kartorna väljs när en ny match starta
 
 Alla kartor har olika murplacering, färger och tydliga markeringar för sin mekanik. Spawnplatserna har fri mark och båda sidor är förbundna med gångbara rutter. Miljöeffekterna gäller både spelare och bot. Sailer är immun mot vattnets fartminskning; han påverkas fortfarande av is, vind, lava och transportband.
 
-Matchlängd väljs separat från motståndare, svårighetsgrad och karta. Quick Match slutar efter en rond, även om den blir oavgjord. Bäst av fem fortsätter tills någon vunnit tre ronder; oavgjorda ronder ger ingen poäng. Karta, svårighetsgrad och botens slumpade fighter behålls mellan ronderna. Nya ronder återställer miljöns cykler och alla placerade dörrar/effekter.
+Matchlängd väljs separat från motståndare, svårighetsgrad och karta. Quick Match slutar efter en rond, även om den blir oavgjord. Bäst av fem fortsätter tills någon vunnit tre ronder; oavgjorda ronder ger ingen poäng. Svårighetsgrad och botens slumpade fighter behålls mellan ronderna. Kartan lottas på nytt inför varje rond. Nya ronder återställer miljöns cykler och alla placerade dörrar/effekter.
 
 Tester täcker sex kartor, giltiga startplatser och gångbara rutter över varje karta, vatten/Sailers immunitet/broar, isens glidning, läkning, lavavarning och skada, vindriktning, transportband, Quick Match vid vinst/oavgjort, fortsatt seriespel och kamerans siktkoordinater. Fysisk mobil och riktig webbläsare återstår att verifiera.
 
@@ -117,7 +117,7 @@ Det finns nu ett WebRTC-läge för två enheter. Ingen registrering, separat sig
 
 ### Anslut
 1. Båda öppnar samma uppdaterade speladress och väljer **Online · privat match** och varsin fighter.
-2. Värden väljer karta och Quick Match eller bäst av fem, trycker **Skapa match · bli host**, väntar tills värdkoden är klar och skickar hela koden.
+2. Värden väljer första kartan och Quick Match eller bäst av fem, trycker **Skapa match · bli host**, väntar tills värdkoden är klar och skickar hela koden.
 3. Kompisen väljer **Gå med i match**, klistrar in värdkoden och trycker **Skapa svarskod**. Kompisen skickar tillbaka hela svarskoden.
 4. Värden klistrar in svarskoden och trycker **Anslut med svarskoden**.
 5. När båda är anslutna trycker värden **Starta onlinematch**.
@@ -355,3 +355,12 @@ Unit tests cover Hydra heads/HP/speed, all eight ordered Hydra pairs, five-card 
 
 
 Hydra revive tests verify all lives in rounds 2–5, per-round recovery percentages, no max-HP bonus, final death, head reset and Toothless composition. Revive clears disabling states, safely releases grabs/boats, lands if necessary, and grants a 0.3-second stationary recovery window to prevent instant repeated life loss. Cooldowns do not reset. Simulated online tests verify a lethal-hit revival, remaining head count/HP snapshots, final-life defeat and next-round reset.
+
+
+### New map lottery each round
+
+Every non-final round transition now rerolls from all six maps, even if a specific starting map was chosen. Maps may repeat because each lottery is independent. The first-map selector still controls the initial round; Quick Match has no additional lottery. The new map is chosen when the next round spawns, after any card choices, and clears/restarts terrain cycles and entities as usual.
+
+With **My Home** on either or both players, each new-round lottery has exactly 60% chance of Flooded Harbor. The remaining 40% is split among the five non-water maps. Two holders do not stack the probability. The host performs the lottery and sends the resulting map to the guest.
+
+Unit tests exercise five actual series rounds with five controlled outcomes, no extra map change after the final round, and exactly 60/100 water rolls for either/both My Home holders. Simulated online tests verify five actual round maps match between host and guest. Existing combat tests explicitly select their fixture maps so environmental differences do not change their intended checks.
