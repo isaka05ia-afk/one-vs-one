@@ -263,3 +263,5 @@ The first Bag cast each round transfers the jacket to a chasing, stunning Bag wi
 - **You Can’t Touch Me — Jacket + Det är sten sax påse:** a successful frontal block charges the next Stone punch with +15 damage (38 total) and stronger 85-unit knockback. One charge maximum; further blocks do not stack it. The next punch consumes it even on a miss/dodge/block. Other attacks leave the charge intact. Rear/area damage does not charge it. The charge resets per round and has a visible indicator.
 
 Unit tests verify trigger timing, interrupt/miss behavior, damage, recoil, pull, charge consumption and round reset. Simulated online tests verify all three combinations on the guest with authoritative host damage, movement and snapshots.
+
+No More Speed now retains Running Man at **50% of normal dash distance** (325 dash speed for the same 0.38-second duration), rather than applying the 90% walk-speed reduction to it. The 80% shorter attack cooldown remains (Running Man 0.64 seconds). Hotel and Family combinations inherit this; Magic still replaces Running Man, and Late + No More Speed retains its special Sonic rules.

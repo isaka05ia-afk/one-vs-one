@@ -14,7 +14,7 @@ const CARD_DEFS={
  late:{name:"I’m Late, Need to Run",icon:'»',color:'#91e4ff',description:'Dubbel rörelsefart, halvt maxliv och 50 % kortare attackcooldowns.'},
  magic:{name:'Magic',icon:'✦',color:'#e5b4ff',description:'Running Man ersätts av Key Gun: snabba nyckelskott. Lock och dörrarna behålls. Med Hottel bedövar dörrarna andra karaktärer som rör dem.'},
  family:{name:'I Have a Famely',icon:'♟',color:'#ffa98a',description:'Dörrarna slutar teleportera. I varje dörr står en person och skjuter. Varje dörr har 10 HP. Med No More Speed blir de spawners med två 10-HP-skyttar per dörr.'},
- no_speed:{name:'No More Speed',icon:'⌛',color:'#e6df98',description:'90 % lägre rörelsefart men 80 % kortare attackcooldowns. Med I’m Late: inga attacker, extrem fart, 0,1 s styrfördröjning och kontaktskada.'},
+ no_speed:{name:'No More Speed',icon:'⌛',color:'#e6df98',description:'90 % lägre rörelsefart men 80 % kortare attackcooldowns. Running Man fungerar med halva sträckan. Med I’m Late: inga attacker, extrem fart, 0,1 s styrfördröjning och kontaktskada.'},
  vitality:{name:'More HP',icon:'+',color:'#90e7a7',description:'+35 maxliv från nästa rond. Kan väljas två gånger.'},
  force:{name:'More Damage',icon:'✦',color:'#ff9c8b',description:'+20 % attackskada från nästa rond. Kan väljas två gånger.'},
  haste:{name:'More Speed',icon:'»',color:'#bba5ff',description:'+15 % rörelsefart från nästa rond. Kan väljas två gånger.'}
