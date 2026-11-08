@@ -3,7 +3,7 @@ function drawFighter(c,f,time=0,preview=false){const d=roster[f.id],k=d.kind,att
  if(k===4){c.shadowColor=d.color;c.shadowBlur=10}if(k===3)c.scale(1.2,1.08);c.lineCap='round';c.strokeStyle=k===1?'#333043':'#27324b';c.lineWidth=14;c.beginPath();c.moveTo(-12,-43);c.lineTo(-20-walk,0);c.moveTo(12,-43);c.lineTo(19+walk,0);c.stroke();
  path(c,[[-24,-94],[24,-94],[28,-40],[-27,-40]],k===0?'#4267b1':k===1?'#272432':'#202736');
  if(k===3){path(c,[[-35,-96],[-20,-110],[0,-97],[22,-111],[36,-94],[23,-42],[-24,-42]],'#56396d');path(c,[[-19,-88],[0,-75],[19,-88],[12,-53],[-12,-53]],'#df7cff');path(c,[[-21,-124],[-29,-153],[-9,-138],[0,-159],[9,-138],[28,-153],[20,-123]],'#efb5ff')}
- if(k===0){path(c,[[-23,-87],[0,-70],[23,-87],[17,-44],[-18,-44]],'#557fd0');c.fillStyle='#d5e5ff';c.font='bold 22px sans-serif';c.fillText('3',-7,-51)}
+ if(k===0){path(c,[[-23,-87],[0,-70],[23,-87],[17,-44],[-18,-44]],'#557fd0');c.fillStyle='#d5e5ff';c.font='bold 22px sans-serif';c.fillText('E',-7,-51)}
  if(k===1){path(c,[[-15,-94],[0,-75],[15,-94]],'#f2e5d5');path(c,[[0,-82],[-5,-65],[0,-47],[5,-65]],'#b391fa')}
  if(k===2){path(c,[[-23,-91],[-8,-72],[-20,-44],[12,-44],[22,-80],[9,-93],[3,-64]],'#ff7845');if(f.fly>0){path(c,[[-20,-81],[-95,-132],[-65,-66],[-32,-55]],'#ffac51');path(c,[[20,-81],[95,-132],[65,-66],[32,-55]],'#ffac51')}}
  c.strokeStyle=k===1?'#373341':k===0?'#557fd0':'#f1b18b';c.lineWidth=12;c.beginPath();c.moveTo(-23,-85);c.lineTo(-34,-55+walk);c.moveTo(23,-85);c.lineTo(attack?67:35,attack?-80:-55-walk);c.stroke();

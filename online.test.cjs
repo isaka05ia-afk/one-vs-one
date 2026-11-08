@@ -33,8 +33,8 @@ async function advance(h,g,seconds){for(let i=0;i<seconds*100;i++){now.ms+=10;h.
  g.run('leaveOnlineGame()');await flush();assert.equal(g.run('running'),false);assert.equal(g.nodes.selection.hidden,false);await new Promise(r=>setTimeout(r,120));await flush();assert.equal(h.run('netSession.peer.connected'),false);assert.equal(h.run('paused'),true);assert.equal(h.run('finished'),true);
  h.run('leaveOnlineGame()');await new Promise(r=>setTimeout(r,120));
 
- async function reconnect(hostId,guestId,format='quick'){
-  h.run(`selected=${hostId};$('mode').value='online';$('map').value='grove';$('format').value='${format}';syncOpponent()`);g.run(`selected=${guestId};$('mode').value='online';syncOpponent();chooseOnlineGuest()`);
+ async function reconnect(hostId,guestId,format='quick',map='grove'){
+  h.run(`selected=${hostId};$('mode').value='online';$('map').value='${map}';$('format').value='${format}';syncOpponent()`);g.run(`selected=${guestId};$('mode').value='online';syncOpponent();chooseOnlineGuest()`);
   await h.run('createOnlineHost()');g.nodes.netIn.value=h.nodes.netOut.value;await g.run('applyOnlineCode()');h.nodes.netIn.value=g.nodes.netOut.value;await h.run('applyOnlineCode()');await flush();h.run('beginOnlineMatch()');await flush();assert.equal(g.run('fighters[1].id'),guestId)
  }
  async function closePair(){g.run('leaveOnlineGame()');await flush();h.run('leaveOnlineGame()');await new Promise(r=>setTimeout(r,110))}
@@ -50,5 +50,7 @@ async function advance(h,g,seconds){for(let i=0;i<seconds*100;i++){now.ms+=10;h.
  await reconnect(1,0);
  h.run('fighters[0].x=600;fighters[1].x=450;fighters[0].y=fighters[1].y=350');await advance(h,g,.1);g.run("inputMode='touch';playerAttack(1)");await advance(h,g,.2);assert.equal(h.run('fighters[0].hp'),95);h.run('fighters[0].y=420');await advance(h,g,.5);assert.equal(h.run('fighters[0].hp'),95);
  h.run('fighters[0].x=525;fighters[0].y=350');await advance(h,g,.1);g.run('playerAttack(2)');await advance(h,g,.1);assert.equal(h.run('fighters[0].grabbedBy'),1);await advance(h,g,.6);assert.equal(h.run('fighters[0].grabbedBy'),-1);assert.equal(h.run('fighters[0].hp'),73);await closePair();
- console.log('PASS: code compression/roundtrip/errors; full offer-answer lobby handshake; host start/ack; two-player input and snapshots; client authority isolation; remote Sailer attacks and boat steering; pause/resume; Quick Match and rematch; stale messages; disconnect cleanup. Remote Door Man portals/rush, series rounds, Overpowerd pose steering, Aegis reflection and JIMY charge/grab also pass. Transport was simulated, not a real network.');
+
+ const randomBeforeOnlineMap=Math.random;h.run('Math.random=()=>0');await reconnect(0,5,'quick','random');assert.equal(h.run('netSession.config.map'),'random');assert.equal(h.run('mapId'),'grove');assert.equal(g.run('mapId'),'grove');h.run('Math.random=()=>.999;start()');await flush();assert.equal(h.run('mapId'),'factory');assert.equal(g.run('mapId'),'factory');assert.equal(g.run('fighters[0].id'),0);Math.random=randomBeforeOnlineMap;await closePair();
+ console.log('PASS: code compression/roundtrip/errors; full offer-answer lobby handshake; host start/ack; two-player input and snapshots; client authority isolation; remote Sailer attacks and boat steering; pause/resume; Quick Match and rematch; stale messages; disconnect cleanup. Remote Door Man portals/rush, series rounds, Overpowerd pose steering, Aegis reflection and The Essy Kid charge/grab and synchronized random map/rematch also pass. Transport was simulated, not a real network.');
 })().catch(e=>{console.error(e);process.exitCode=1});

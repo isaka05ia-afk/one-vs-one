@@ -44,7 +44,7 @@ setup(0);run('fighters[0].x=400;fighters[0].y=280;fighters[1].x=600;fighters[1].
 setup(0);run('fighters[1].x=170;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),0);assert.equal(run('fighters[1].hp'),140);run("keys.add('arrowright');dodge(1);attack(1,0)");assert.equal(run('fighters[1].dodge'),0);assert.equal(run('fighters[1].cd[0]'),0);step(.2);assert.equal(run('fighters[1].hp'),140);assert(run('fighters[1].x<170'));step(.4);assert.equal(run('fighters[1].grabbedBy'),-1);assert.equal(run('fighters[1].hp'),118);assert(run('fighters[1].x>200'));
 setup(0);run('fighters[1].x=170;fighters[1].dodge=.2;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),-1);
 setup(0);run('fighters[1].x=170;attack(0,2);fighters[0].stun=.4');step(.1);assert.equal(run('fighters[1].grabbedBy'),-1);assert.equal(run('fighters[1].hp'),140);
-console.log('PASS: JIMY punch melee/range/knockback; beam damage once, aim miss and wall stop; grab hold/action lock/release damage; dodge escape and stun interruption.');
+console.log('PASS: The Essy Kid punch melee/range/knockback; beam damage once, aim miss and wall stop; grab hold/action lock/release damage; dodge escape and stun interruption.');
 setup(2);run("rememberPointer({pointerType:'touch'});mouseAim=true;aimPoint={x:100,y:600};fighters[0].aim=-Math.PI/2;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),0);step(.6);assert(run('fighters[1].hp<140'));
 setup(2);run("inputMode='touch';touchAim.active=true;touchAim.x=0;touchAim.y=-1;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),-Math.PI/2);step(.6);assert.equal(run('fighters[1].hp'),140);run('touchAim.active=false;updatePlayerAim()');assert.equal(run('fighters[0].aim'),0);
 setup(3);run("inputMode='touch';fighters[1].x=260;fighters[1].y=410;attack(0,1)");step(.81);assert(Math.abs(run('zones[0].x')-260)<.001);assert(Math.abs(run('zones[0].y')-410)<.001);
@@ -114,3 +114,11 @@ setup(3);run("mouseAim=true;aimPoint={x:300,y:350};attack(0,1);aimPoint={x:140,y
 setup(3);run("inputMode='touch';fighters[1].x=220;attack(0,0);fighters[1].x=100;fighters[1].y=480");step(.81);assert.equal(run('fighters[1].hp'),108);
 setup(3);run("keys.add('d');attack(0,0);fighters[0].stun=.5");step(.2);assert.equal(run('fighters[0].x'),100);assert.equal(run('fighters[0].pose'),0);run("inputMode='mouse'");
 console.log('PASS: Running Man cooldown 3.2 s; keyboard/touch boat steering, passenger follows turns, owner action lock, heading retained and camera follows; Overpowerd pose movement, retargeted blast, mobile turning and real stun cancellation.');
+assert.equal(run('roster[0].name'),'THE ESSY KID');
+const randomBeforeMapTest=Math.random;
+for(let i=0;i<6;i++){run(`Math.random=()=>${(i+.1)/6};$('map').value='random';$('mode').value='local';$('opponent').value='4';start()`);assert.equal(run('mapId'),run(`Object.keys(MAPS)[${i}]`));const kept=run('mapId');run('spawnRound()');assert.equal(run('mapId'),kept)}
+Math.random=randomBeforeMapTest;run("$('map').value='grove';inputMode='mouse'");
+setup(0);run('fighters[1].x=240;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),0);assert.equal(run('roster[0].moves[2][4]'),7.2);
+setup(0);run('fighters[1].x=180;fighters[1].y=470;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),0);
+setup(0);run('fighters[0].x=200;fighters[0].y=100;fighters[0].aim=Math.PI/2;fighters[1].x=200;fighters[1].y=230;attack(0,2)');assert.equal(run('fighters[1].grabbedBy'),-1);
+console.log('PASS: The Essy Kid rename, larger and wider bag grab with unchanged cooldown, wall protection, all six random map outcomes and map persistence within rounds.');
