@@ -2,7 +2,7 @@
 const DRAGON_FORMS=['Ägg','Drakunge','Ung drake','Vuxen drake','Elder Dragon'];
 const DRAGON_HP=[85,100,120,150,185],DRAGON_SPEED=[160,200,220,235,245];
 function canRejuvenate(f){return f.id===2&&hasCard(f,'no_wait')&&hasCard(f,'studied')&&f.cards.indexOf('no_wait')<f.cards.indexOf('studied')}
-function rejuvenate(f){if(!canRejuvenate(f)||dragonAge(f)<=0)return false;const owner=fighters.indexOf(f);if(owner<0)return false;const before=f.maxHp;f.ageStart=(f.ageStart||roundNumber)+1;ageStartRounds[owner]=f.ageStart;f.maxHp=heroMaxHP(f.id,f.cards,f.jacketGiven,f.stage,f.ageStart);f.hp=Math.min(f.maxHp,f.hp+Math.max(0,f.maxHp-before));f.dodgeCd=12;f.guard=f.reflect=0;spark(f.x,f.y,'#9ff5cb',28);tone(720);return true}
+function rejuvenate(f){if(!canRejuvenate(f)||dragonAge(f)<=0)return false;const owner=fighters.indexOf(f);if(owner<0)return false;const before=f.maxHp;f.ageStart=(f.ageStart||roundNumber)+1;f.maxHp=heroMaxHP(f.id,f.cards,f.jacketGiven,f.stage,f.ageStart);f.hp=Math.min(f.maxHp,f.hp+Math.max(0,f.maxHp-before));f.dodgeCd=12;f.guard=f.reflect=0;spark(f.x,f.y,'#9ff5cb',28);tone(720);return true}
 function dragonAge(f,round=roundNumber){return hasCard(f,'no_wait')?Math.max(0,round-(f.ageStart||round)):0}
 function dragonAgeDamage(f){return Math.max(.25,1-.25*dragonAge(f))}
 function dragonStage(f){if(hasCard(f,'no_wait'))return 5;return Math.max(1,Math.min(5,f?.stage||1))}
