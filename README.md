@@ -1,53 +1,31 @@
-# One v One — Neon Duel demo
+# One vs One — Arena
 
-Fyra fighters med egna ritade utseenden och tre attacker var. Spel mot datorn på mobil och dator, eller två spelare på samma tangentbord. Ingen installation eller byggprocess behövs: öppna index.html.
+En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensioner, manuellt sikte, projektiler som kan missa och symmetriska väggar som skydd. Fem egna karaktärer. Datorn spelar alltid som Ms AI.
 
-## Kontroller
-Spelare 1: A/D, W hoppa, S blockera, J/K/L attacker. Spelare 2: pilar, nedåtpil blockera och 1/2/3 attacker. Mobil: touchknappar. Escape pausar. Bäst av tre ronder, 100 HP och 60 sekunder per rond.
+## Spela
+Öppna index.html eller kör `python3 -m http.server 8080` och besök localhost:8080. Inga byggsteg behövs.
 
-## Första balanspasset
-| Fighter | Attack | Skada | Cooldown |
-|---|---|---:|---:|
-| JIMY 3 | Sten | 18 | 1,6 s |
-| JIMY 3 | Sax | 12 | 0,95 s |
-| JIMY 3 | Påse | 23 | 4,5 s |
-| Door Man | Dörrportal | 14 | 3,4 s |
-| Door Man | Lock | 4 + 0,85 s stun | 5 s |
-| Door Man | Running Man | 20 | 2,8 s |
-| Flame Girl | Fire Ball | 15 | 1,8 s |
-| Flame Girl | Fire Fly | 17 | 3,2 s |
-| Flame Girl | Flame Dragon | 29 | 6,5 s |
-| The Overpowerd | Ower Powerd Punch | 27 | 3,5 s |
-| The Overpowerd | I Can Win | 21 | 5 s |
-| The Overpowerd | Dooms Day | 38 | 9 s |
+- Dator: WASD rörelse, musen siktar. Håll vänsterklick eller J för grundattack. K och L aktiverar specialförmågor. Shift eller mellanslag gör en undanmanöver i rörelseriktningen; om du står still används siktriktningen. Escape pausar.
+- Mobil: vänster analog spak rör dig; höger spak siktar och skjuter automatiskt så länge den hålls ut. De tre attackknapparna använder senaste siktriktningen. En egen knapp gör undanmanöver. Flera fingrar stöds.
+- Lokalt tvåspelarläge på dator: spelare 2 rör sig med pilar, använder 1/2/3 och undviker med 0. Spelare 2 har automatiskt riktat sikte mot spelare 1 för att kunna spela på samma tangentbord. Det finns inget onlineläge.
+- Först till två ronder. 90 sekunder per rond. Vid timeout vinner högst återstående andel av maxliv.
 
-Blockering minskar skadan med 78 %. Lock kan blockeras och ger 3,5 sekunders immunitet mot ny låsning. The Overpowerd rör sig långsammare och måste posera i 1,05 sekunder före de två första attackerna och 1,45 sekunder före Dooms Day. Han kan träffas under poseringen och Lock avbryter den. Dooms Day kan undvikas genom att hoppa eller lämna räckvidden. I Can Win är en kraftpuls, ingen automatisk vinst.
+## Fighters
+| Fighter | Klass | Liv | Fart | Spelstil |
+|---|---|---:|---:|---|
+| JIMY 3 | Tank | 150 | 195 | Korta avstånd, breda saxklipp, kast |
+| Door Man | Speedster | 95 | 285 | Flanka, lås en riktad träff, rusa |
+| Flame Girl | DPS | 105 | 235 | Projektiler, eldspår, stor drake |
+| The Overpowerd | Burst-DPS | 125 | 185 | Obligatorisk pose och tydligt markerade attacker |
+| Ms AI | AI-robot | 110 | 225 | Datapuls, energisköld och orbitalt nedslag |
 
-Pratbubblan visar alltid “I am overpowerd”. Med Ljud på används också webbläsarens talsyntes om den finns. Röststöd varierar mellan webbläsare.
+Alla attacker har separata synliga cooldowns. Sten är en långsam, tung projektil. Sax är två korta konträffar. Påse fångar på nära håll. Door Mans Dörrportal skjuter en nyckel genom en liten portal, Lock är en riktad stunprojektil och Running Man rusar längs siktet. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. The Overpowerd måste posera före varje attack, och poseringen avbryts av stun. Ms AI har en egen robotfigur med pansar, antenner och AI-kärna.
 
-## GitHub Pages
-Settings → Pages → Deploy from a branch → main → / (root). Ett privat repository kan kräva en betalplan för Pages. Spelet har inget onlineläge.
+## Placering
+Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sikt till målet. Markeringar visar var en explosion ska träffa och hur lång tid som återstår. Undanmanöver ger 0,2 sekunder osårbarhet men passerar inte genom väggar. Datorn cirklar, håller avstånd, reagerar med fördröjning och försöker hitta vägar runt skydd. Den använder riktiga projektiler och kan missa.
 
 ## Verifiering
-`node test.cjs` testar de 12 attackerna, fördröjningen under posering, cooldown, stun och att hopp undviker Dooms Day med en simulerad spelmiljö. Det ersätter inte test på en fysisk telefon. Google Fonts är valfritt och har reservtypsnitt.
+`node test.cjs` testar 15 förmågor, tvådimensionell rörelse, normaliserad diagonal fart, väggkollision, blockerade skott, manuellt sikte och missar, brännskada, stun, undanmanöver, sköld, posering, undvikande av explosioner, botens identitet och navigering, paus och renderingsanrop i en simulerad miljö. Test i riktig webbläsare och på fysisk mobil återstår.
 
-
-## Uppdatering 2 — klasser och rörlighet
-- JIMY 3: Tank, 140 HP, 240 fart. Sten har 0,38 s uppladdning och tillfällig rustning, Sax ger tre 9-skadeträffar, Påse kastar en oblockerande motståndare. Sten: 22 skada / 2,2 s cooldown; Sax: 27 totalt / 1,5 s.
-- Door Man: Speedster, 90 HP, 370 fart, dubbelhopp. Portalen byter sida utan gratisskada, Lock har synlig uppladdning, Running Man är en rusning med kollisionsbaserad träff.
-- Flame Girl: DPS, 100 HP, 300 fart. Fire Ball ger brännskada, Fire Fly lyfter och rusar framåt, Flame Dragon laddas i 0,65 s och lämnar en kort markexplosion vid träff.
-- The Overpowerd: Burst-DPS, 115 HP, 225 fart. Behåller sin obligatoriska pose före varje attack. Punch knuffar; I Can Win markerar motståndarens plats och exploderar efter 0,6 s; Dooms Day skickar tre markerade markexplosioner framåt (10 + 10 + 18 skada).
-- Shift / mellanslag eller touchknappen Undvik ger 0,24 s osårbar rörelse. Håll vänster/höger för riktning; utan riktning rullar man bakåt. Spelare 2 använder 0. Cooldown: Tank 2,4 s, Speedster 1,2 s, DPS 1,8 s, Burst-DPS 2,6 s.
-- Luftburna fighters kan passera över varandra. Undanmanöver och rusning kan passera igenom. Hopp triggas av ett knapptryck, inte automatiskt när knappen hålls.
-- Vid timeout jämförs kvarvarande andel HP, eftersom klasserna har olika maxliv.
-- Datorn håller avstånd som passar klassen och försöker hoppa eller undvika hot. Balansvärdena är ett första speltestbart pass.
-
-Verifierat med simulerad spelmiljö: 12 attacker, klassliv, fördröjningar, kombo, kast, portal, dubbelhopp, stun, osårbarhet, passage, brännskada och undvikande av markerad explosion. Fysisk mobil och riktig webbläsare återstår.
-
-
-## Uppdatering 3 — Ms AI
-Datorn använder alltid sin egen fighter: Ms AI, en turkos robot med skärmansikte, antenner, metallpansar och en pulserande AI-kärna. 110 HP, 285 fart, undanmanöver med 1,9 s cooldown.
-- Datapuls: snabb digital projektil, 13 skada, 1,7 s cooldown.
-- Brandvägg: energisköld i 1,8 s, minskar skada med 65 %, 5,5 s cooldown.
-- Orbital Scan: markerar spelarens position; efter 0,85 s träffar ett energinedslag marken, 24 skada, 6 s cooldown. Flytta dig, hoppa eller undvik.
-I läget Mot datorn är motståndaren låst till Ms AI. I lokalt tvåspelarläge går alla fem fighters att välja för båda spelarna. Ms AI försöker hålla avstånd, använda skydd vid lågt liv och skanna på distans.
+## Publicering
+GitHub Pages: main / root. Alla filer inklusive fighters.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.

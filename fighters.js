@@ -1,0 +1,27 @@
+function path(c,points,fill){c.fillStyle=fill;c.beginPath();points.forEach((p,i)=>i?c.lineTo(...p):c.moveTo(...p));c.closePath();c.fill()}
+function drawFighter(c,f,time=0,preview=false){const d=roster[f.id],k=d.kind,attack=f.anim>0,walk=Math.sin(time*12)*(Math.abs(f.vx||0)>0?9:2);c.save();c.translate(f.x,f.y);c.scale(f.face||1,1);c.globalAlpha=f.dodge>0?.35:f.hurt>0?.6:1;c.shadowColor=d.color;c.shadowBlur=preview?16:6;
+ if(k===4){c.shadowColor='#6fffe5';c.shadowBlur=14}if(k===3)c.scale(1.2,1.08);c.lineCap='round';c.strokeStyle=k===1?'#333043':'#27324b';c.lineWidth=14;c.beginPath();c.moveTo(-12,-43);c.lineTo(-20-walk,0);c.moveTo(12,-43);c.lineTo(19+walk,0);c.stroke();
+ path(c,[[-24,-94],[24,-94],[28,-40],[-27,-40]],k===0?'#4267b1':k===1?'#272432':'#202736');
+ if(k===3){path(c,[[-35,-96],[-20,-110],[0,-97],[22,-111],[36,-94],[23,-42],[-24,-42]],'#56396d');path(c,[[-19,-88],[0,-75],[19,-88],[12,-53],[-12,-53]],'#df7cff');path(c,[[-21,-124],[-29,-153],[-9,-138],[0,-159],[9,-138],[28,-153],[20,-123]],'#efb5ff')}
+ if(k===0){path(c,[[-23,-87],[0,-70],[23,-87],[17,-44],[-18,-44]],'#557fd0');c.fillStyle='#d5e5ff';c.font='bold 22px sans-serif';c.fillText('3',-7,-51)}
+ if(k===1){path(c,[[-15,-94],[0,-75],[15,-94]],'#f2e5d5');path(c,[[0,-82],[-5,-65],[0,-47],[5,-65]],'#b391fa')}
+ if(k===2){path(c,[[-23,-91],[-8,-72],[-20,-44],[12,-44],[22,-80],[9,-93],[3,-64]],'#ff7845');if(f.fly>0){path(c,[[-20,-81],[-95,-132],[-65,-66],[-32,-55]],'#ffac51');path(c,[[20,-81],[95,-132],[65,-66],[32,-55]],'#ffac51')}}
+ c.strokeStyle=k===1?'#373341':k===0?'#557fd0':'#f1b18b';c.lineWidth=12;c.beginPath();c.moveTo(-23,-85);c.lineTo(-34,-55+walk);c.moveTo(23,-85);c.lineTo(attack?67:35,attack?-80:-55-walk);c.stroke();
+ if(k!==1&&k!==4){c.fillStyle='#efbd99';c.beginPath();c.arc(0,-114,18,0,7);c.fill();c.fillStyle='#171d30';c.fillRect(-10,-118,5,4);c.fillRect(6,-118,5,4)}
+ if(k===0){path(c,[[-20,-121],[-21,-135],[13,-138],[22,-126],[37,-123]],'#92b6fa');c.fillStyle='#d6e3ff';c.fillRect(-16,-126,37,5);c.fillStyle='#d75d6b';for(const x of [-34,attack?66:35]){c.beginPath();c.arc(x,attack&&x>0?-80:-54,13,0,7);c.fill()}}
+ if(k===1){c.fillStyle='#9e7049';c.fillRect(-23,-151,46,59);c.strokeStyle='#e0b981';c.lineWidth=4;c.strokeRect(-23,-151,46,59);c.lineWidth=1;c.strokeRect(-16,-144,32,21);c.strokeRect(-16,-117,32,19);c.fillStyle='#ffe49c';c.beginPath();c.arc(12,-119,3,0,7);c.fill();c.fillStyle='#ffe49c';c.fillRect(-4,-63,10,4);c.beginPath();c.arc(3,-58,6,0,7);c.stroke()}
+ if(k===2){path(c,[[-22,-107],[-24,-132],[-12,-126],[-7,-158],[5,-139],[18,-153],[25,-122],[17,-108],[9,-131],[-2,-122],[-12,-126]],'#ff702f');path(c,[[-10,-133],[0,-151],[6,-131],[15,-140],[12,-119]],'#ffdd72')}
+ if(k===4){
+ // Segmented robot armor, glass face, antennae and a pulsing AI core.
+ c.fillStyle='#638b9b';c.fillRect(-26,-94,52,53);c.fillStyle='#172f40';c.fillRect(-20,-88,40,40);c.strokeStyle='#7dfae4';c.lineWidth=2;c.strokeRect(-20,-88,40,40);
+ c.fillStyle='#a5c9d4';c.fillRect(-25,-140,50,41);c.fillStyle='#0a202d';c.fillRect(-20,-135,40,28);c.fillStyle='#6fffe5';c.fillRect(-14,-127,9,6);c.fillRect(5,-127,9,6);c.fillRect(-8,-115,16,2);
+ c.strokeStyle='#9fc9d2';c.lineWidth=3;c.beginPath();c.moveTo(-16,-140);c.lineTo(-23,-153);c.moveTo(16,-140);c.lineTo(23,-153);c.stroke();c.fillStyle='#6fffe5';for(const x of [-23,23]){c.beginPath();c.arc(x,-154,4,0,7);c.fill()}
+ c.fillStyle='#6fffe5';c.beginPath();c.arc(0,-69,9+Math.sin(time*5)*2,0,7);c.fill();c.fillStyle='#17384b';c.font='bold 10px monospace';c.fillText('AI',-6,-66);
+ c.fillStyle='#9dbdc9';c.fillRect(-36,-90,18,14);c.fillRect(18,-90,18,14);c.fillRect(-28,-10,24,10);c.fillRect(7,-10,24,10);
+ if(f.shield>0){c.strokeStyle='#6fffe5';c.lineWidth=3;c.beginPath();c.ellipse(0,-77,57,85,0,0,Math.PI*2);c.stroke()}
+ }if(attack){const type=d.moves[f.move||0][1];c.save();c.translate(73,-80);if(type==='stone'){path(c,[[-16,-18],[12,-24],[28,-7],[20,20],[-12,23],[-23,2]],'#a2a5ac');c.strokeStyle='#606979';c.lineWidth=2;c.strokeRect(-11,-10,16,17)}if(type==='scissors'){c.strokeStyle='#e6eeff';c.lineWidth=5;c.beginPath();c.moveTo(-8,0);c.lineTo(40,-25);c.moveTo(-8,0);c.lineTo(40,16);c.stroke()}if(type==='bag'){path(c,[[-20,-27],[23,-27],[30,25],[-25,25]],'#ca9b64');c.fillStyle='#684a32';c.fillRect(-13,-18,29,4)}c.restore()}
+ if(k===3&&f.pose>0){c.strokeStyle='#f5b9ff';c.lineWidth=14;c.beginPath();c.moveTo(-23,-85);c.lineTo(-51,-116);c.lineTo(-43,-139);c.moveTo(23,-85);c.lineTo(51,-116);c.lineTo(43,-139);c.stroke();c.save();c.scale(f.face||1,1);c.fillStyle='#24152f';c.fillRect(-85,-194,170,27);c.fillStyle='#fff';c.font='bold 14px sans-serif';c.textAlign='center';c.fillText('I am overpowerd',0,-176);c.restore()}
+ if(f.cast>0||f.armor>0){c.strokeStyle=f.armor>0?'#d8e5ff':d.color;c.lineWidth=4;c.beginPath();c.arc(0,-75,57+Math.sin(time*20)*5,0,Math.PI*2);c.stroke()}if(f.effect>0){c.strokeStyle=d.color;c.lineWidth=4;c.beginPath();c.ellipse(0,-77,48,84,0,0,7);c.stroke()}
+ if(f.stun>0){c.fillStyle='#ffe49c';c.fillRect(-17,-98,34,27);c.strokeStyle='#ffe49c';c.lineWidth=4;c.beginPath();c.arc(0,-99,11,Math.PI,0);c.stroke();c.fillStyle='#54406a';c.fillRect(-2,-91,4,12)}
+ if(f.bagged>0){path(c,[[-31,-150],[31,-150],[39,-92],[-38,-92]],'#ca9b64');c.fillStyle='#684a32';c.fillRect(-17,-134,10,4);c.fillRect(9,-134,10,4)}
+ if(f.block){c.strokeStyle='#b8ecff';c.lineWidth=3;c.beginPath();c.ellipse(32,-75,17,53,0,0,Math.PI*2);c.stroke()}c.restore()}
