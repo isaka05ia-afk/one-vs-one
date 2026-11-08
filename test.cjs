@@ -1,7 +1,7 @@
 const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
 const context=new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
 const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){}},setAttribute(){},append(){},add(){},addEventListener(){},getContext:()=>context,querySelector:()=>node(),getBoundingClientRect:()=>({left:0,top:0,width:1000,height:700}),value:'local',textContent:'',innerHTML:''});
-const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['fighters.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
+const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
 const run=code=>vm.runInContext(code,sandbox);
 function setup(id=0,enemy=4){run(`selected=${id};$('mode').value='local';$('opponent').value='${enemy}';start();fighters[0].x=100;fighters[0].y=350;fighters[1].x=300;fighters[1].y=350;`)}
 function step(s){for(let t=0;t<s;t+=.01)run('update(.01)')}
@@ -90,3 +90,17 @@ for(let id=0;id<6;id++){
 }
 Math.random=savedRandom;
 console.log('PASS: Ms AI removed; Aegis frontal blocking, rear vulnerability, guard expiry, projectile/beam/melee reflection, area counterplay, stun interruption and shield bash; all six bot fighters and match-level random persistence.');
+function setupMap(map,id=0,format='series'){run(`$('map').value='${map}';$('format').value='${format}';selected=${id};$('mode').value='local';$('opponent').value='4';start()`)}
+assert.equal(run('Object.keys(MAPS).length'),6);assert(run('W>1000&&H>700'));
+for(const id of ['grove','harbor','frost','ember','dunes','factory']){setupMap(id);assert.equal(run('mapId'),id);assert(run('fighters.every(f=>free(f.x,f.y))'));run('render()');const reachable=run(`(()=>{const step=30,queue=[{x:135,y:550}],seen=new Set(['135,550']);for(let n=0;n<queue.length;n++){const f=queue[n];if(distance(f,{x:1465,y:550})<50)return true;for(const [dx,dy] of [[step,0],[-step,0],[0,step],[0,-step]]){const q={x:f.x+dx,y:f.y+dy},k=q.x+','+q.y;if(!seen.has(k)&&free(q.x,q.y)){seen.add(k);queue.push(q)}}}return false})()`);assert(reachable,id+' has no walkable route')}
+setupMap('harbor');run('fighters[0].x=600;fighters[0].y=350');assert.equal(run('terrainSpeed(fighters[0])'),.55);run('fighters[0].id=5');assert.equal(run('terrainSpeed(fighters[0])'),1);run('fighters[0].id=0;fighters[0].x=800;fighters[0].y=550');assert.equal(run('terrainSpeed(fighters[0])'),1);
+setupMap('frost');run("fighters[0].x=600;fighters[0].y=600;keys.add('d')");step(.5);run('keys.clear()');const beforeSlide=run('fighters[0].x');step(.2);assert(run('fighters[0].x')>beforeSlide+5);
+setupMap('grove');run('fighters[0].x=800;fighters[0].y=550;fighters[0].hp=100');step(1);assert.equal(run('fighters[0].hp'),100);step(1.5);assert(run('fighters[0].hp>100'));run('fighters[0].hp=fighters[0].maxHp');step(.5);assert.equal(run('fighters[0].hp'),150);
+setupMap('ember');run('fighters[0].x=500;fighters[0].y=550;mapClock=3.2');assert.equal(run('lavaPhase()'),'warning');step(.3);assert.equal(run('fighters[0].hp'),150);run('mapClock=4.6');step(.5);assert(run('fighters[0].hp<146'));assert.equal(run('fighters[0].guard'),0);
+setupMap('dunes');run('fighters[0].x=800;fighters[0].y=550;mapClock=0');assert.equal(run('sheltered(fighters[0])'),false);const windX=run('fighters[0].x');step(.2);assert(run('fighters[0].x')>windX);run('mapClock=8.1');assert(run('windVector().x<0'));
+setupMap('factory');run('fighters[0].x=500;fighters[0].y=550');const beltY=run('fighters[0].y');step(.2);assert(run('fighters[0].y')>beltY+15);
+setupMap('harbor',0,'quick');run('fighters[1].hp=0;endRound()');assert.equal(run('finished'),true);assert.equal(run('wins[0]'),1);step(3);assert.equal(run('finished'),true);
+setupMap('grove',0,'quick');run('endRound()');assert.equal(run('finished'),true);assert.equal(run('wins[0]+wins[1]'),0);
+setupMap('grove',0,'series');run('fighters[1].hp=0;endRound()');assert.equal(run('finished'),false);run('spawnRound()');assert.equal(run('mapId'),'grove');assert.equal(run('mapClock'),0);
+setupMap('harbor');run("$('mode').value='ai';fighters[0].x=1400;fighters[0].y=900;updateCamera()");assert(run('camera.x>0&&camera.y>0'));const point=run('pointerPosition({clientX:500,clientY:350})');assert.equal(point.x,run('camera.x+500/camera.scale'));assert.equal(point.y,run('camera.y+350/camera.scale'));
+console.log('PASS: six distinct maps, enlarged world, valid spawns and cross-map paths; water slow/Sailer immunity/bridges; ice momentum; healing; lava warning/damage; reversing wind; conveyors; quick win/draw end in one round; series/map persistence; camera aim coordinates.');

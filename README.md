@@ -8,7 +8,7 @@ En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensi
 - Dator: WASD rörelse, musen siktar. Håll vänsterklick eller J för grundattack. K och L aktiverar specialförmågor. Shift eller mellanslag gör en undanmanöver i rörelseriktningen; om du står still används siktriktningen. Escape pausar.
 - Mobil: vänster analog spak rör dig; höger spak siktar och skjuter automatiskt så länge den hålls ut. När högerspaken släpps siktar de tre attackknapparna automatiskt mot motståndarens nuvarande position. Håll ut högerspaken för manuellt sikte. En egen knapp gör undanmanöver. Flera fingrar stöds.
 - Lokalt tvåspelarläge på dator: spelare 2 rör sig med pilar, använder 1/2/3 och undviker med 0. Spelare 2 har automatiskt riktat sikte mot spelare 1 för att kunna spela på samma tangentbord. Det finns inget onlineläge.
-- Bäst av fem ronder, först till tre vinster. 90 sekunder per rond. Vid timeout vinner högst återstående andel av maxliv.
+- Välj bäst av fem ronder (först till tre vinster) eller Quick Match (exakt en rond). 90 sekunder per rond. Vid timeout vinner högst återstående andel av maxliv.
 
 ## Fighters
 | Fighter | Klass | Liv | Fart | Spelstil |
@@ -29,7 +29,7 @@ Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sik
 `node test.cjs` testar 18 förmågor, tvådimensionell rörelse, normaliserad diagonal fart, väggkollision, blockerade skott, manuellt sikte och missar, brännskada, stun, undanmanöver, sköld, posering, undvikande av explosioner, botens identitet och navigering, paus och renderingsanrop i en simulerad miljö. Test i riktig webbläsare och på fysisk mobil återstår.
 
 ## Publicering
-GitHub Pages: main / root. Alla filer inklusive fighters.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
+GitHub Pages: main / root. Alla filer inklusive maps.js och fighters.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
 
 
 ## Fyra svårighetsgrader
@@ -83,3 +83,24 @@ Aegis har 140 HP, 200 fart och 2,6 s cooldown på undanmanöver.
 Skölden täcker cirka 140° framför Aegis och följer siktet. Under blockering/reflektion går han med 55 % av normal fart. En ny attack eller undanmanöver avslutar skyddet. Stun, grab eller jolle avbryter försvaret. Slag bakifrån, markexplosioner, brännskada, grab och jollens fångst kan gå förbi skölden. Mobilens autosikte riktar skölden mot motståndaren; högerspaken eller musen ger manuellt riktval.
 
 Verifiering inkluderar nu alla sex slumpbara botkaraktärer, bibehållen fighter mellan ronder, frontal blockering, sårbarhet bakifrån, reflekterade projektiler/strålar/slag, markattackernas motspel och avbrutet försvar vid stun.
+
+
+## Sex större kartor och Quick Match
+Arenorna är nu 1600 × 1100 i stället för 1000 × 700, ungefär 2,5 gånger större till ytan. En följkamera och minikarta gör det möjligt att behålla läsbara figurer på mobil. Lokalt tvåspelarläge använder en gemensam kamera som zoomar ut för att visa båda spelarna. Musens sikte räknas om för kamerans position och zoom.
+
+Välj karta före matchen. Kartans beskrivning visas vid valet, och matchens statusrad visar aktuell markeffekt.
+
+| Karta | Miljö | Spelförändring |
+|---|---|---|
+| Verdant Ruins | Grönskande stenruiner | Källor läker 4 HP/s efter 2 s utan skada |
+| Flooded Harbor | Hamn med mycket vatten och träbroar | Vatten sänker farten med 45 %; broar är torra. Sailer behåller farten i vatten |
+| Frost Basin | Is och snö | Trög acceleration och glidande inbromsning på isen |
+| Ember Crater | Vulkankrater | Lavaventiler varnar i 1,5 s och blir sedan aktiva i 2 s; aktiv lava gör 10 skada/s |
+| Wind Dunes | Stormöken | Vindbyar pressar åt sidan, växlar riktning och blockeras av murar som ger lä |
+| Neon Foundry | Fabrik | Transportband flyttar spelare norrut, söderut och österut |
+
+Alla kartor har olika murplacering, färger och tydliga markeringar för sin mekanik. Spawnplatserna har fri mark och båda sidor är förbundna med gångbara rutter. Miljöeffekterna gäller både spelare och bot. Sailer är immun mot vattnets fartminskning; han påverkas fortfarande av is, vind, lava och transportband.
+
+Matchlängd väljs separat från motståndare, svårighetsgrad och karta. Quick Match slutar efter en rond, även om den blir oavgjord. Bäst av fem fortsätter tills någon vunnit tre ronder; oavgjorda ronder ger ingen poäng. Karta, svårighetsgrad och botens slumpade fighter behålls mellan ronderna. Nya ronder återställer miljöns cykler och alla placerade dörrar/effekter.
+
+Tester täcker sex kartor, giltiga startplatser och gångbara rutter över varje karta, vatten/Sailers immunitet/broar, isens glidning, läkning, lavavarning och skada, vindriktning, transportband, Quick Match vid vinst/oavgjort, fortsatt seriespel och kamerans siktkoordinater. Fysisk mobil och riktig webbläsare återstår att verifiera.
