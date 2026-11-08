@@ -43,3 +43,11 @@ Settings → Pages → Deploy from a branch → main → / (root). Ett privat re
 - Datorn håller avstånd som passar klassen och försöker hoppa eller undvika hot. Balansvärdena är ett första speltestbart pass.
 
 Verifierat med simulerad spelmiljö: 12 attacker, klassliv, fördröjningar, kombo, kast, portal, dubbelhopp, stun, osårbarhet, passage, brännskada och undvikande av markerad explosion. Fysisk mobil och riktig webbläsare återstår.
+
+
+## Uppdatering 3 — Ms AI
+Datorn använder alltid sin egen fighter: Ms AI, en turkos robot med skärmansikte, antenner, metallpansar och en pulserande AI-kärna. 110 HP, 285 fart, undanmanöver med 1,9 s cooldown.
+- Datapuls: snabb digital projektil, 13 skada, 1,7 s cooldown.
+- Brandvägg: energisköld i 1,8 s, minskar skada med 65 %, 5,5 s cooldown.
+- Orbital Scan: markerar spelarens position; efter 0,85 s träffar ett energinedslag marken, 24 skada, 6 s cooldown. Flytta dig, hoppa eller undvik.
+I läget Mot datorn är motståndaren låst till Ms AI. I lokalt tvåspelarläge går alla fem fighters att välja för båda spelarna. Ms AI försöker hålla avstånd, använda skydd vid lågt liv och skanna på distans.

@@ -20,3 +20,9 @@ setup(2);check('attack(0,0)');step(.4);assert(check('fighters[1].burn')>0);const
 setup(3);check('attack(0,1)');step(1.1);assert.equal(check('fighters[1].hp'),140);assert(check('zones.length')>0);check('fighters[1].x=850');step(.7);assert.equal(check('fighters[1].hp'),140);
 for(let i=0;i<4;i++)for(let j=0;j<3;j++){setup(i);check(`attack(0,${j})`);step(2);check('render(1)');assert(check('fighters.every(f=>Number.isFinite(f.hp)&&f.hp>=0&&f.hp<=f.maxHp)'))}
 console.log('PASS: all 12 attacks; class HP; windups; combo; grab; portal crossing; double jump; stun; dodge immunity and crossing; airborne crossing; burn; zone escape; cooldown.');
+setup(0);check("$('mode').value='ai';$('opponent').value='1';start()");assert.equal(check('fighters[1].id'),4);
+setup(4);check('attack(0,0)');step(.2);assert.equal(check('fighters[1].hp'),127);
+setup(4);check('attack(0,1);hit(fighters[1],fighters[0],20)');assert.equal(check('fighters[0].hp'),103);step(1.9);assert.equal(check('fighters[0].shield'),0);
+setup(4);check('attack(0,2)');step(.4);assert.equal(check('fighters[1].hp'),140);check('fighters[1].x=850');step(1);assert.equal(check('fighters[1].hp'),140);
+setup(4);check('attack(0,2)');step(1.3);assert.equal(check('fighters[1].hp'),116);check('render(1)');
+console.log('PASS: Ms AI forced in bot mode; Datapuls; Brandvägg reduction and expiry; Orbital Scan warning, dodge and damage.');
