@@ -29,7 +29,7 @@ Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sik
 `node test.cjs` testar 18 förmågor, tvådimensionell rörelse, normaliserad diagonal fart, väggkollision, blockerade skott, manuellt sikte och missar, brännskada, stun, undanmanöver, sköld, posering, undvikande av explosioner, botens identitet och navigering, paus och renderingsanrop i en simulerad miljö. Test i riktig webbläsare och på fysisk mobil återstår.
 
 ## Publicering
-GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, doors.js, dragon.js, olympic.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för Engin när webbläsaren stöder det.
+GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, doors.js, dragon.js, olympic.js, engin.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för Engin när webbläsaren stöder det.
 
 
 ## Fyra svårighetsgrader
@@ -418,3 +418,20 @@ Generic HP/damage/speed ability cards remain available. Host-authoritative beam 
 ### Engin orb self-damage
 
 Radioactive Orb now deals **100 fixed self-damage** on contact with its original caster, including after reflection. It disappears on that contact, can defeat Engin, and dodge avoids contact damage. Normal enemy damage remains 48. The original caster is protected only until the orb clears its initial muzzle overlap; a wall bounce arms self-contact immediately. This prevents instant launch damage while making close walls and chasing your own orb dangerous. Unit tests cover safe launch, catching the orb, wall return, lethal self-hit and dodge; simulated online checks synchronize the returned orb's self-damage and disappearance. Build arena-online-34 / cache v51.
+
+
+## Engin ability cards (arena-online-35 / cache v52)
+
+Engin now offers three unique cards after a lost round: Heavy Armor, Uranium V2 and Into the Veins. Owned cards are excluded, Skip still works and the existing two-card match limit applies. All three pairs compose in either acquisition order. `engin.js` must be shipped alongside the other scripts.
+
+- **Heavy Armor:** +100 maximum HP (225 alone), 15% slower movement, 25% lower damage for every attack except Radioactive Orb. A heavy steel breastplate and shoulder plates show the change.
+- **Uranium V2:** loses 1 HP/s while alive and untransformed, including during attacks. Reactor Beam doubles its width and multiplies damage by 1.6 (160 base total), with 22 units/s backward recoil during channel. Explosion damage ×1.5 and radius ×1.3. Orb damage ×1.5 (72), radius ×1.5 (27), original-caster self-hit 125. Cracked reactor glass and leaking radioactive droplets are visible.
+- **Into the Veins:** maximum HP ×0.75 (93.75 alone), movement ×1.3. Blue-tinted skin, fur and glowing veins/slangs replace the ordinary appearance. Reactor Rush replaces the beam (26 base damage, 0.35 s rush, 5 s cooldown). Explosion charges in 0.55 s and costs 8 HP. Radioactive Breath replaces the orb (wide 230-range cone, 8 base damage per 0.2 s pulse for 1 s, 7 s cooldown). Channel locks other attacks and dodge; stun/grab interrupts breath.
+
+**Heavy Armor + V2:** 225 HP and 15% lower walk speed. Beam modifiers multiply to 1.2 (120 total); explosion ×1.125, orb stays ×1.5. HP leakage, recoil and hazardous terrain remain. **Heavy Armor + Veins:** 168.75 HP, walk speed 185 ×0.85 ×1.3 =204.425; armor reduces rush, breath and explosion damage.
+
+**V2 radioactive terrain:** holding the beam on the same impact area for 0.7 s creates a patch. Moving the impact over 36 units resets its dwell timer. Explosion always leaves its radius irradiated. Veins/V2 rush and breath also leave patches. Terrain lasts 4 s, damages either player for 4 HP/s, and shows a radiation symbol/countdown. Overlap never stacks damage; nearby patches refresh. Cover, dodge and being airborne protect from ground radiation. Pausing stops its timers/damage. Patches clear on the next round and the active patch count is bounded.
+
+**Into the Veins + Uranium V2: Overload.** Before transformation the player has Reactor Rush, Overload and Radioactive Breath. Overload is immediate, requires strictly more than 50 HP and pays exactly 50 HP, with no instant heal. It can activate once per round and replaces all three moves for the rest of that round. The large blue furry monster has 3 HP/s regeneration instead of the V2 leak, starting after 2 s and capped at its unchanged max HP. Other damage can defeat it before regen. The mutant has slow-turning Wild Rush (32 base damage, 0.5 s rush, 6 s cooldown), Mutant Slam (38 base damage, 175 base radius, 0.5 s warning, 7 s cooldown) and Mutant Leap (45 base damage, 430 max range, 0.75 s flight, 110 landing radius, 10 s cooldown). V2 damage/radius bonuses still apply. Slam and leap knock back and irradiate the ground. Leap marks its destination, crosses walls and lands on valid ground. A successful Wild Rush causes a visible 0.35 s forward rage commitment; stun cancels this commitment. Transforming starts the new move cooldowns at 1 s. No monster form, used flag, regen delay or radiation survives the round reset.
+
+Unit checks and simulated two-client transport tests cover actual loss drafts, owned exclusion, every ordered pair, HP/speed/damage values, V2 recoil/beam width/terrain, non-stacking hazards, Overload's HP gate/payment/delayed regen/death, synchronized mutant attacks/HUD, leap over cover, and round reset. Public signalling and real-network browser gameplay were not exercised in this environment.
