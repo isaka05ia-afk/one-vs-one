@@ -530,3 +530,29 @@ Alla sex karaktärer har exakt fem egna kortfamiljer. Generiska More HP/More Dam
 Boten väljer avstånd efter karaktärens faktiska attacker och kortkombination. Summons, Selfish-varianter, kontrollmagi, egen farlig orb, blockering och No Pain har särskilda beslutsregler. Ett rörelsefel vid väggar är rättat. Rekommendationer och kortvärden finns i `ai-strategies.js` och bygger på reproducerbara motortester. Se [STRATEGIES.md](STRATEGIES.md) och [AUDIT.md](AUDIT.md) för resultat och begränsningar.
 
 Kör `node test.cjs` och `node online.test.cjs` för regressioner. Kör `node audit.cjs --abilities` för förmågesvepet, `node audit.cjs` för jämförelsen, `node validate-tactics.cjs` för andra slumptal och fulla rundor, och `node build-tactics.cjs` för att skapa bottabellen och strategirapporten. Tester använder simulerad DOM/canvas; onlinetesterna använder simulerad transport. Visuell mobilupplevelse och riktiga internetanslutningar kräver webbläsartest.
+
+## Replacement arenas (simple canvas style)
+
+The current rotation contains exactly six arenas: **Breakwall Arena**, **Rival Court**,
+**Flooded Harbor**, **Frostfall**, **Portal Chamber**, and **The Labyrinth**.
+The earlier forest, volcano, desert and factory layouts have been replaced. Internal
+IDs `grove`, `harbor`, and `frost` remain stable for existing card/config references.
+No pixel-art prototype sheets are loaded by the game.
+
+- Breakwall: neutral stone cover and wide flanking lanes.
+- Rival Court: blue/red open halves, central marking, no cover.
+- Flooded Harbor: shallow water, dry dock crossings/platforms and cargo decoration.
+  Water slows ordinary fighters by 45%; Sailer remains immune. My Home retains its
+  60% chance of choosing this arena at each round reroll.
+- Frostfall: blue ice and white snow with ice blocks and a snowy central tree island.
+- Portal Chamber: three numbered/color-matched portal pairs available to everyone.
+  A fighter must leave the destination plate before teleporting again; carried or
+  grabbing fighters and boat pilots cannot trigger arena pads.
+- The Labyrinth: 2600 × 1600, versus 1600 × 1100 for the other arenas. Bots use
+  a navigation field around its long walls; the minimap fits the larger world.
+
+Arena size is derived from the map on round setup and guest snapshot import.
+Online protocol build 45 prevents mixing old and new arena definitions. Run
+`node maps.test.cjs` for arena topology, all mode spawn checks, portal re-entry,
+water immunity and bot navigation checks. Existing combat fixtures explicitly
+specify their walls instead of depending on the changed arena layouts.
