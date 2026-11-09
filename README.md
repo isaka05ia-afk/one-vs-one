@@ -458,3 +458,8 @@ The Olympic Team gets **Too Old**, a unique card in its random three-choice loss
 - **Baddie — The Power of Karen:** Complaint, a 14-damage cone shout at 210 range (0.25 s warning, 2.2 s cooldown). Get the Manager deals 4 damage at 260 range after a 0.35 s warning and stuns for 0.6 s, with 7 s cooldown. A successful stun empowers the next Complaint by 60%; it is consumed even if that shout misses. Stun immunity/guard/dodge/cover apply.
 
 Unit and simulated two-client transport tests cover loss drafts/owned exclusion, all ordered Selfish/Power/generic combinations, one baby/tether/HP/destruction/switch cleanup, catapult shots over cover, healing and damage, Sun charge/choice/consumption/interruption, tattoo healing, yoga-only HP and Karen control. Round reset clears babies, mats, sun empowerment and rage. Browser/network signalling was not exercised in this environment.
+
+
+### Aim during solar charge (arena-online-37 / cache v54)
+
+Sun Beam and Cruel Sun now follow live aim throughout their charge: mouse, manual right stick or mobile auto aim. Movement remains locked and enemy stun/grab still interrupts. The final direction locks when the attack fires; Cruel Sun does not home afterward. Guest aim is resolved by the host and the aiming warning follows the same direction. Unit and simulated online tests cover desktop/manual stick/auto aim retargeting and final shot direction.

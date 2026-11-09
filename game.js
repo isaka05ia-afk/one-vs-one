@@ -135,6 +135,7 @@ function update(dt){if(isGuest())return;if(!active()){if(running&&!paused&&round
  if(i===0)updatePlayerAim();else if($('mode').value==='online')f.aim=netSession.remoteInput.auto?angle(f,b):netSession.remoteInput.aim;else if($('mode').value==='local')f.aim=angle(f,b);
  let v=i===1&&$('mode').value==='ai'?bot(f,b,dt):movementInput(i);if(i===1&&$('mode').value==='ai'&&drunkInverted(f))v={x:-v.x,y:-v.y};const mag=len(v.x,v.y);if(mag>1)v=norm(v.x,v.y);v=delayedMotion(f,v);
  if(f.id===3){const channel=f.reactor?.left>0;if((channel||f.cast>0&&getMoves(f)[f.move]?.[1]==='reactorbeam')&&f.stun<=0){const delta=Math.atan2(Math.sin(f.aim-f.lockedAim),Math.cos(f.aim-f.lockedAim));f.lockedAim+=Math.max(-.7*dt,Math.min(.7*dt,delta))}updateReactor(i,dt);updateEngin(i,dt)}
+ if(isOldTeam(f)&&f.cast>0&&f.pending>=0&&['sunbeam','cruelsun'].includes(getMoves(f)[f.pending]?.[1])&&f.stun<=0&&f.grabbedBy<0&&f.boatOwner<0)f.lockedAim=f.aim;
  if(f.pose>0||f.cast>0){if(f.stun>0||f.grabbedBy>=0||f.boatOwner>=0){f.pose=f.cast=0;f.pending=-1;f.clapPending=false}else{f.pose=Math.max(0,f.pose-dt);f.cast=Math.max(0,f.cast-dt);if(f.pose===0&&f.cast===0&&f.pending>=0)execute(i,f.pending)}}
  if(f.combo>0){f.comboWait-=dt;if(f.stun>0)f.combo=0;else if(f.comboWait<=0){if(cone(f,b,145,.95))hit(f,b,11);f.combo=0}}
  if(f.burn>0){f.burn-=dt;f.burnTick-=dt;if(f.burnTick<=0){hit(b,f,2,{area:true});f.burnTick=.5}}
