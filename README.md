@@ -571,11 +571,32 @@ Two copies occupy both card slots and replace the ordinary build with an Evolve:
   Paper every 0.65 seconds. Each has 3 HP and a 12-second lifetime; maximum eight,
   replacing the oldest when full. There are no direct attack buttons.
 
-Only these three designed Evolves are enabled; the other card families still use
+All five Essy Kid Evolves are enabled; the other fighters still use
 unique cards until their Evolves are designed. Ordinary mixed pairs remain intact.
 Bots use long-range sniper spacing, switch giant attacks, and maintain the factory
-population. Round resets restore selection and cooldown state. Online build 46
+population. Round resets restore selection and cooldown state. Online build 47
 synchronizes duplicate loadouts and giant selection/cooldowns.
 
 Validation: `node evolve.test.cjs`, `node test.cjs`, `node online.test.cjs`.
 Online transport tests are simulated; real two-device network testing is separate.
+
+### Overprotected, Never Stop and rare Evolve offers
+
+- **Jacket ×2 / Overprotected:** 400 max HP, 55% less movement speed, weak Rock
+  (6 damage) and Scissors (5 damage). Jacket Block lasts 2 seconds, blocks 95%
+  from every direction including area attacks, and prevents voluntary movement.
+  Blocking arms one +50-damage Rock counter, consumed even on a miss. Block has
+  a 5-second cooldown. It does not heal and can be interrupted by control effects.
+- **Full Name ×2 / Never Stop:** ordinary three attacks with 90% shorter
+  cooldowns and a 0.08-second Scissors charge. Every accepted attack costs 5 HP,
+  including missed/interrupted attacks. The cost can kill the user.
+- **Rarity:** with one Essy card owned, a draft has exactly a 10% chance to offer
+  that card again as one of three distinct choices. Otherwise all three choices
+  are new cards. The first draft is unchanged; two cards remains the maximum.
+- **Cooldown nerfs:** ordinary Cheter Gun 1 → 1.6 seconds; Big Iron
+  (Cheter + Big Hands) 1.4 → 2.2 seconds. Full Name applies its usual 25% reduction.
+  Sniper, flying gun summons and Hand Factory are unchanged.
+
+Targeted Evolve tests cover both new kits, lethal self-cost, blocking/counters,
+immobile guard and the exact 10% offer threshold. Simulated online tests cover
+guest Overprotected HP/block/counter and Never Stop HP costs.
