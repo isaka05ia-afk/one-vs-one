@@ -161,7 +161,7 @@ Kortkombinationer beräknas från valen varje rond i stället för att skriva ö
 Ett Sailer-specialkort kan bara väljas en gång. Sailer har nu fem specialkort: tre olika, ännu inte ägda kort slumpas fram vid varje kortval. Hoppa över finns som alternativ utan att ta ett kort.
 
 ### Övriga fighters
-More HP ger +35 maxliv, More Damage ger +20 % attackskada och More Speed ger +15 % rörelsefart. De tre valen finns efter varje berättigad förlust. Grundkorten kan väljas två gånger, men tar då upp båda kortplatserna. Maxliv ökar additivt, skada/fart multiplicativt. Grundattackerna och cooldowns ändras inte.
+Från v59 är generiska HP-, skade- och fartkort borttagna. Varje karaktär använder endast sina fem egna kortfamiljer; inga upprepade kortfamiljer tillåts. Se STRATEGIES.md för den granskade kortuppsättningen och bottesterna.
 
 Alla kort rensas vid ny match/ommatch. Uppgraderingar är per spelare och följer samma regler för människor och botar.
 
@@ -170,7 +170,7 @@ Tester täcker att bara förloraren får tre val, att nästa rond väntar, högs
 
 
 ## Sailer: fem kort, slumpade erbjudanden och Hoppa över
-Sailer får nu tre slumpade kort från poolen My Home, Capten, Time for Canons, This Is a Real Ship och Drunken Man. Kort du redan äger utesluts. Erbjudandet innehåller tre unika kort. Det finns ingen tvingad More HP-ersättning för Sailer längre. Övriga fighters, förutom Door Man som också har en egen kortpool, behåller sina tre grundkort.
+Sailer får nu tre slumpade kort från poolen My Home, Capten, Time for Canons, This Is a Real Ship och Drunken Man. Kort du redan äger utesluts. Erbjudandet innehåller tre unika kort. Det finns ingen tvingad More HP-ersättning för Sailer längre. Från v59 har alla fighters egna pooler med fem kortfamiljer.
 
 **Hoppa över kortvalet** fortsätter till nästa rond utan att ge ett kort. Att hoppa över tar inte en kortplats. Du får fortfarande högst två kort, med kortval efter de två första förlusterna; ett överhoppat val ger ingen extra chans efter matchens slut. Värden verifierar även gästens skip-begäran och draft-ID.
 
@@ -376,7 +376,7 @@ Tests cover individual HP/cooldowns, energy cost/boost, manual and death switche
 
 ### Olympic card 1: Selfish
 
-Selfish opens a second, host-validated choice of Runner, Swimmer or Skater. Only the chosen athlete remains for the match, with the full team maximum HP (120 normally; vitality still applies). Switch disappears. Basic attacks gain 20% damage, 10% shorter cooldowns and 10% range; Swimmer's Dive lasts 0.96 s, Skater's Ice Trail emits for 4 s. Other generic stat cards compose. Only one Selfish variant may be owned. The draft stays paused through both stages; Skip can cancel before choosing, and bots complete both choices automatically.
+Selfish opens a second, host-validated choice of Runner, Swimmer or Skater. Only the chosen athlete remains for the match, with the full team maximum HP (120 normally; vitality still applies). Switch disappears. Basic attacks gain 20% damage, 10% shorter cooldowns and 10% range; Swimmer's Dive lasts 0.96 s, Skater's Ice Trail emits for 4 s. Generic stat cards were removed in v59. Only one Selfish variant may be owned. The draft stays paused through both stages; Skip can cancel before choosing, and bots complete both choices automatically.
 
 - **Runner — Never Happened:** 20-second cooldown, requires six seconds of history in the current round. Restores her own safe position, HP, burn/stun/immunity, Bleed and Energy Drink state from six seconds ago. No cooldowns, opponents, emitted attacks or terrain rewind. History is host-local and resets each round, while readiness and restored state synchronize normally.
 - **Swimmer — Pool:** one use per round, creates a 340-radius water pool near her position for the remainder of the round. Ordinary water/bridge rules apply to both players; Swimmer and Sailer retain their water advantages. Pool usage cannot be reset by waiting or forcing the cooldown. New rounds clear the pool and restore its use.
@@ -412,7 +412,7 @@ Engin is a 125-HP, 185-speed radioactive inventor (DPS). His orange overalls, da
 - **Over Powerd:** 0.9-second warning around the caster, then 62 area damage within 155 radius. Costs exactly 12 own HP on detonation, can defeat Engin, 10-second cooldown. Escaping, cover and dodge avoid enemy damage. Interrupting the charge prevents both explosion and HP cost.
 - **Radioactive Orb:** 48 damage, 170 speed, 18 radius, 8-second maximum life and 8-second cooldown. Reflects off two interior walls or arena boundaries; disappears on the third wall impact, an enemy hit or expiry. Swept movement prevents tunnelling.
 
-Generic HP/damage/speed ability cards remain available. Host-authoritative beam timers, charged attacks, explosion damage and orb bounces synchronize to guests. Unit and simulated transport tests cover movement lock, limited turn rate, channel damage/interruptions/cover, explosion cost/escape, and two bounces followed by destruction. Build arena-online-33 / cache v50.
+Generic HP/damage/speed cards were removed in v59. Host-authoritative beam timers, charged attacks, explosion damage and orb bounces synchronize to guests. Unit and simulated transport tests cover movement lock, limited turn rate, channel damage/interruptions/cover, explosion cost/escape, and two bounces followed by destruction. Build arena-online-33 / cache v50.
 
 
 ### Engin orb self-damage
@@ -439,7 +439,7 @@ Unit checks and simulated two-client transport tests cover actual loss drafts, o
 
 ## Too Old — Olympic Team (arena-online-36 / cache v53)
 
-The Olympic Team gets **Too Old**, a unique card in its random three-choice loss draft. It works in either acquisition order with each Selfish participant, So Much Power and generic HP/damage/speed cards. The two-card limit, Skip, relay health/cooldowns and automatic death switch still apply. Ship `oldteam.js` with the other scripts.
+The Olympic Team gets **Too Old**, a unique card in its random three-choice loss draft. It works in either acquisition order with each Selfish participant, So Much Power with the two-card limit; generic stat cards were removed in v59. The two-card limit, Skip, relay health/cooldowns and automatic death switch still apply. Ship `oldteam.js` with the other scripts.
 
 - **Mom (Summoner):** replaces Runner, 170 base speed. My Baby summons exactly one 30-HP baby (8 s cooldown); recasting with a living baby orders an immediate attack instead of creating another. The baby follows/attacks, has a visible umbilical cord and cannot be farther than 145 units from Mom. Walls, knockback, fast travel and teleporting cannot break the tether. It punches for 5 base damage (10 while ordered), with small knockback. Mom’s Orders aims its movement and gives it 3 s of faster movement/attacks (4.5 s cooldown). The baby is independently damageable by attacks/projectiles and disappears when Mom switches, dies or the next round begins. Damage/speed cards also improve its damage/movement.
 - **Yoga Instructor (Healer):** replaces Swimmer, 175 base speed. Deep Breath heals 6 active-member HP and deals 8 cone damage, 180 range, 4 s cooldown. Healing Circle creates a visible mat with 100 radius for 3 s, healing the owner’s currently active participant for 4 HP/s and hurting enemies for 3 HP/s, 9 s cooldown. Healing caps at the active participant's own maximum; walls/dodge/airborne states protect from mat damage.
@@ -447,7 +447,7 @@ The Olympic Team gets **Too Old**, a unique card in its random three-choice loss
 
 **Too Old + Selfish:** the chosen woman has all 120 team HP, +20% move damage, +10% move range and −10% basic cooldowns, with no Switch. Selection buttons use Mom/Yoga Instructor/Tattooed Baddie names when Too Old is already owned.
 
-- **Mom:** baby becomes a 45-HP catapult on wheels, still attached by its cord. It auto-launches toys over cover to an aimed landing point (8 base area damage, 50 radius, 1.5 s cadence). Loaded Catapult (third ability, 10 s cooldown) makes the next shot a 26-base-damage, 100-radius blast. Selfish damage and generic damage bonuses compose. Landing explosions obey cover.
+- **Mom:** baby becomes a 45-HP catapult on wheels, still attached by its cord. It auto-launches toys over cover to an aimed landing point (8 base area damage, 50 radius, 1.5 s cadence). Loaded Catapult (third ability, 10 s cooldown) makes the next shot a 26-base-damage, 100-radius blast. Selfish damage bonuses apply. Landing explosions obey cover.
 - **Yoga — Praise the Sun:** third ability (20 s cooldown) changes the two other buttons to Sun Beam and Cruel Sun. Choose one next attack, then both buttons return to healing moves. Sun Beam charges 0.8 s, stops at walls and deals 48 base damage at 650 base range; Cruel Sun charges 1 s and releases a slow 180-speed sun that explodes for 52 base damage in 120 radius on impact/expiry. Selfish damage/range bonuses apply. Charging locks movement; stun/grab interrupts it without consuming the empowerment, but the attempted attack cooldown is spent.
 - **Baddie — Tattoo Rage:** third ability, 14 s cooldown, 6 s duration. Tattoos visibly glow. Hits heal for 30% of actual enemy HP removed, capped at own maximum; misses, dodges and reflected hits provide no healing.
 
@@ -457,7 +457,7 @@ The Olympic Team gets **Too Old**, a unique card in its random three-choice loss
 - **Yoga:** large muscles give **only +30 personal maximum HP**. Total team HP becomes 150, split Mom 40 / Yoga 70 / Baddie 40. Her speed, damage, healing and moves are otherwise identical to ordinary Too Old Yoga.
 - **Baddie — The Power of Karen:** Complaint, a 14-damage cone shout at 210 range (0.25 s warning, 2.2 s cooldown). Get the Manager deals 4 damage at 260 range after a 0.35 s warning and stuns for 0.6 s, with 7 s cooldown. A successful stun empowers the next Complaint by 60%; it is consumed even if that shout misses. Stun immunity/guard/dodge/cover apply.
 
-Unit and simulated two-client transport tests cover loss drafts/owned exclusion, all ordered Selfish/Power/generic combinations, one baby/tether/HP/destruction/switch cleanup, catapult shots over cover, healing and damage, Sun charge/choice/consumption/interruption, tattoo healing, yoga-only HP and Karen control. Round reset clears babies, mats, sun empowerment and rage. Browser/network signalling was not exercised in this environment.
+Unit and simulated two-client transport tests cover loss drafts/owned exclusion, all ordered Selfish/Power combinations, one baby/tether/HP/destruction/switch cleanup, catapult shots over cover, healing and damage, Sun charge/choice/consumption/interruption, tattoo healing, yoga-only HP and Karen control. Round reset clears babies, mats, sun empowerment and rage. Browser/network signalling was not exercised in this environment.
 
 
 ### Aim during solar charge (arena-online-37 / cache v54)
@@ -476,7 +476,7 @@ Unit checks cover all layouts, two-player isolation, numpad/zero/Enter, labels, 
 
 ## Kids and No Pain, No Gain (arena-online-39 / cache v56)
 
-Olympians now have five unique cards: Selfish, So Much Power, Too Old, Kids and No Pain, No Gain. Existing generic cards remain compatible. Loss drafts offer three randomized choices, exclude owned unique cards, permit Skip and retain the two-card limit. `kids.js` and `pain.js` load before controls/game scripts. All character appearances and new attack names are implemented.
+Olympians now have five unique cards: Selfish, So Much Power, Too Old, Kids and No Pain, No Gain. Generic cards were removed in v59. Loss drafts offer three randomized choices, exclude owned unique cards, permit Skip and retain the two-card limit. `kids.js` and `pain.js` load before controls/game scripts. All character appearances and new attack names are implemented.
 
 **Kids** turns Runner into Sugar Rush, Swimmer into Water Fight and Skater into Lego Kid. Tag! is a strong 22-damage rush followed by a 2 s slow/weak energy dip. Candy boosts speed and Tag! for 4 s, then causes a 3 s dip; Candy cannot bypass its own dip. Water Gun deals 7 damage and pushes 80 units; Water Balloon deals 12 area damage and pushes 100. Lego Throw deals no direct damage, gives 2 permanent Bleed and 0.2 s stun, respecting dodge/guard/stun immunity. Lego Wall is a passable 160×34 strip lasting 6 s, giving the enemy 6 Bleed once per placement. Bleed still deals 0.2 HP/s per stack, persists until the round ends and can defeat its victim.
 
@@ -517,3 +517,12 @@ Engin now has five unique cards: Heavy Armor, Uranium V2, Into the Veins, Infect
 **Magic Technology + Infected:** a hidden timer rolls the next copy spawn 12–20 playing seconds ahead. A magical discharge announces a copy, with a short startup window. Max one live copy per Engin, lifetime 10 s; it cannot spawn copies. It has the same 87.5 max HP, base speed, Magic attacks/cooldowns/self-cost and Infected revival chance. It independently targets nearby characters/structures and can damage either player, including its creator; either player can also damage it. Its neutral Gravity Orb can return to itself. Copy damage, health, AI casts, beams/orbs, death/expiry and cleanup are host-authoritative and synchronized. Copies do not replace the two actual players or change round scoring. Pause stops their timers; next round clears them and all revival/Hunger/flight-wall state.
 
 Unit tests cover 60/95% probability boundaries, 10% health, protection/final defeat, V2 leak and Feral healing, pull/push, bounded self-homing/four bounces/self-damage/slow, flight crossing/ejection/attack blocking, hostile copy HP/costs/both-player damage/destruction/lifetime/no offspring and all twenty ordered pairs. Simulated two-client tests use real card drafts in both orders and verify authoritative revivals, Feral effects, flight safety, hostile copies and orb self-damage. Live browser/network signalling was not exercised in this environment.
+
+
+## Kortgranskning och botstrategier (v59)
+
+Alla sex karaktärer har exakt fem egna kortfamiljer. Generiska More HP/More Damage/More Speed är borttagna och avvisas även i multiplayer. Selfishs tre deltagarval är underalternativ till ett kort. Max två valda kort, tre slumpade alternativ och Skip behålls.
+
+Boten väljer avstånd efter karaktärens faktiska attacker och kortkombination. Summons, Selfish-varianter, kontrollmagi, egen farlig orb, blockering och No Pain har särskilda beslutsregler. Ett rörelsefel vid väggar är rättat. Rekommendationer och kortvärden finns i `ai-strategies.js` och bygger på reproducerbara motortester. Se [STRATEGIES.md](STRATEGIES.md) och [AUDIT.md](AUDIT.md) för resultat och begränsningar.
+
+Kör `node test.cjs` och `node online.test.cjs` för regressioner. Kör `node audit.cjs --abilities` för förmågesvepet, `node audit.cjs` för jämförelsen, `node validate-tactics.cjs` för andra slumptal och fulla rundor, och `node build-tactics.cjs` för att skapa bottabellen och strategirapporten. Tester använder simulerad DOM/canvas; onlinetesterna använder simulerad transport. Visuell mobilupplevelse och riktiga internetanslutningar kräver webbläsartest.
