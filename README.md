@@ -1,3 +1,5 @@
+> **Nytt i v60:** Träningsbana, håll/släpp-sikte och 1v1v1, 1v1v1v1, 2v2 samt 3v3 offline och online. Fyll lediga onlineplatser med valbara/slumpade botar. Se [MULTIPLAYER.md](MULTIPLAYER.md) för hur du spelar, regler och testgränser. Cache v60 / nätverksversion arena-online-43.
+
 # One vs One — Arena
 
 En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensioner, manuellt sikte, projektiler som kan missa och symmetriska väggar som skydd. Sex egna karaktärer. Boten får en slumpad fighter inför varje ny match och behåller den under alla ronder.
