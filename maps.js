@@ -14,7 +14,7 @@ function currentMap(){return MAPS[mapId]}
 function lavaPhase(){const t=mapClock%8;return t<3?'cool':t<4.5?'warning':t<6.5?'active':'cool'}
 function windVector(){const cycle=Math.floor(mapClock/8);return mapClock%8<5?{x:cycle%2?-75:75,y:0}:{x:0,y:0}}
 function sheltered(f){const wind=windVector();if(!wind.x)return true;return !sight({x:wind.x>0?24:W-24,y:f.y},f)}
-function terrainAt(f){const map=currentMap(),areas=map.areas.filter(a=>inArea(f,a)),bridge=map.bridges?.some(a=>inArea(f,a));return {water:areas.some(a=>a.kind==='water')&&!bridge,ice:areas.some(a=>a.kind==='ice')||typeof zones!=='undefined'&&zones.some(a=>a.kind==='ice'&&inArea(f,a)),heal:areas.some(a=>a.kind==='heal'),lava:areas.some(a=>a.kind==='lava'),belt:areas.find(a=>a.kind==='belt')}}
+function terrainAt(f){const map=currentMap(),areas=map.areas.filter(a=>inArea(f,a)),bridge=map.bridges?.some(a=>inArea(f,a));return {water:(areas.some(a=>a.kind==='water')||typeof zones!=='undefined'&&zones.some(a=>a.kind==='pool'&&inArea(f,a)))&&!bridge,ice:areas.some(a=>a.kind==='ice')||typeof zones!=='undefined'&&zones.some(a=>a.kind==='ice'&&inArea(f,a)),heal:areas.some(a=>a.kind==='heal'),lava:areas.some(a=>a.kind==='lava'),belt:areas.find(a=>a.kind==='belt')}}
 function terrainSpeed(f){return terrainAt(f).water&&f.id!==5&&!(isOlympic(f)&&teamState(f)?.active===1)?.55:1}
 function arenaDanger(f){return terrainAt(f).lava&&lavaPhase()!=='cool'}
 function hurtByArena(f,damage){if(f.dodge>0)return;applyDamage(f,damage);f.sinceHit=0;f.hurt=.12}
