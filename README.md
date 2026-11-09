@@ -29,7 +29,7 @@ Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sik
 `node test.cjs` testar 18 förmågor, tvådimensionell rörelse, normaliserad diagonal fart, väggkollision, blockerade skott, manuellt sikte och missar, brännskada, stun, undanmanöver, sköld, posering, undvikande av explosioner, botens identitet och navigering, paus och renderingsanrop i en simulerad miljö. Test i riktig webbläsare och på fysisk mobil återstår.
 
 ## Publicering
-GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, doors.js, dragon.js, olympic.js, oldteam.js, engin.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för Engin när webbläsaren stöder det.
+GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, doors.js, dragon.js, olympic.js, oldteam.js, engin.js, controls.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för Engin när webbläsaren stöder det.
 
 
 ## Fyra svårighetsgrader
@@ -463,3 +463,12 @@ Unit and simulated two-client transport tests cover loss drafts/owned exclusion,
 ### Aim during solar charge (arena-online-37 / cache v54)
 
 Sun Beam and Cruel Sun now follow live aim throughout their charge: mouse, manual right stick or mobile auto aim. Movement remains locked and enemy stun/grab still interrupts. The final direction locks when the attack fires; Cruel Sun does not home afterward. Guest aim is resolved by the host and the aiming warning follows the same direction. Unit and simulated online tests cover desktop/manual stick/auto aim retargeting and final shot direction.
+
+
+## Keyboard settings (arena-online-38 / cache v55)
+
+Open **Inställningar** in the menu or fight bar. Player 1, including either online player on their own device, can choose **1/2/3**, **Z/X/C** or **Auto**. Auto recognizes whichever of these groups is pressed and updates the on-screen attack labels; it does not fire abilities by itself. Player 2 on a shared keyboard has a separate **8/9/0** or **I/O/L** choice. Player 2 now dodges with **Enter**, so zero remains available for the third attack. Player 1 still uses WASD/mouse/Shift, and player 2 uses arrow keys/automatic aim. Mouse-held basic attacks and mobile controls remain available.
+
+Both choices save locally and are independent across online peers. Storage failures fall back to working in-memory preferences. Settings can be changed during play: opening them clears held inputs and pauses the match; close and select Fortsätt to resume. Inputs in text/select fields or with browser Ctrl/Alt/Meta modifiers do not attack. Number-row and numpad keys both work. Auto switching preserves held movement keys. Ship `controls.js` before `game.js`.
+
+Unit checks cover all layouts, two-player isolation, numpad/zero/Enter, labels, focus guards, pause/input clearing and saved preferences. Simulated two-client tests verify guest keyboard attacks, held-fire packets, Auto recognition and settings-driven pause without changing the host's preferences. Live browser/network signalling was not exercised.

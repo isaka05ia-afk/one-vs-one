@@ -14,3 +14,6 @@
 .skipCard{display:block;margin:18px auto 0;color:#b7c4d7;border-color:#62718b}.skipCard[hidden]{display:none}
 
 .roomCode{text-align:center;padding:18px;margin:12px 0;background:#183c40;border:1px solid #83dcd0;border-radius:14px}.roomCode span,.roomCode strong{display:block}.roomCode strong{font-size:3rem;letter-spacing:.3em;margin:10px 0;color:#baffd9}#netRoomCode{width:140px;padding:12px;font-size:1.6rem;letter-spacing:.2em;border:1px solid #607e92;border-radius:10px;background:#121c2d;color:white}#netManual{margin:16px 0}#netManual summary{cursor:pointer;padding:10px}
+
+/* Shared desktop controls settings, available before and during play. */
+#settingsDialog{width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;border:1px solid #687449;border-radius:14px;padding:24px;color:#f2f1f7;background:#171d2d;box-shadow:0 20px 90px #0009}#settingsDialog::backdrop{background:#080c18b8}#settingsDialog h2{font-size:38px;margin:0 0 22px}#settingsDialog label{font-size:14px}#settingsDialog .primary{width:100%;margin-top:10px}header #sound{margin-left:0}header #settingsOpen{margin-left:auto}.fightbar{flex-wrap:wrap;gap:8px}@media(max-width:650px){header{flex-wrap:wrap}header #settingsOpen{padding:9px}.fightbar #round{order:2;flex-basis:100%;text-align:center}}
