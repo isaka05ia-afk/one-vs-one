@@ -413,3 +413,8 @@ Engin is a 125-HP, 185-speed radioactive inventor (DPS). His orange overalls, da
 - **Radioactive Orb:** 48 damage, 170 speed, 18 radius, 8-second maximum life and 8-second cooldown. Reflects off two interior walls or arena boundaries; disappears on the third wall impact, an enemy hit or expiry. Swept movement prevents tunnelling.
 
 Generic HP/damage/speed ability cards remain available. Host-authoritative beam timers, charged attacks, explosion damage and orb bounces synchronize to guests. Unit and simulated transport tests cover movement lock, limited turn rate, channel damage/interruptions/cover, explosion cost/escape, and two bounces followed by destruction. Build arena-online-33 / cache v50.
+
+
+### Engin orb self-damage
+
+Radioactive Orb now deals **100 fixed self-damage** on contact with its original caster, including after reflection. It disappears on that contact, can defeat Engin, and dodge avoids contact damage. Normal enemy damage remains 48. The original caster is protected only until the orb clears its initial muzzle overlap; a wall bounce arms self-contact immediately. This prevents instant launch damage while making close walls and chasing your own orb dangerous. Unit tests cover safe launch, catching the orb, wall return, lethal self-hit and dodge; simulated online checks synchronize the returned orb's self-damage and disappearance. Build arena-online-34 / cache v51.

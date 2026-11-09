@@ -114,7 +114,12 @@ setup(3);run("useTestMap();attack(0,1);fighters[0].stun=.6");step(1);assert.equa
 setup(3);run("useTestMap();inputMode='touch';attack(0,2)");step(.95);assert.equal(run('fighters[1].hp'),92);assert.equal(run('shots.length'),0);
 setup(3);run("walls=[];fighters[1].y=700;shots=[{x:40,y:350,vx:-170,vy:0,r:18,life:8,owner:0,damage:48,kind:'radiorb',color:'#a8ff57',bounces:0}]");step(.02);assert.equal(run('shots[0].bounces'),1);assert(run('shots[0].vx>0'));run('shots[0].x=1560;shots[0].vx=170');step(.02);assert.equal(run('shots[0].bounces'),2);assert(run('shots[0].vx<0'));run('shots[0].x=40;shots[0].vx=-170');step(.02);assert.equal(run('shots.length'),0);
 setup(3);run("walls=[{x:180,y:250,w:20,h:200}];inputMode='touch';attack(0,0)");step(2.4);assert.equal(run('fighters[1].hp'),140);
-setup(3);run("walls=[{x:180,y:250,w:20,h:200}];inputMode='touch';attack(0,2)");step(.5);assert.equal(run('shots[0].bounces'),1);assert(run('shots[0].vx<0'));assert.equal(run('fighters[1].hp'),140);
+setup(3);run("walls=[{x:180,y:250,w:20,h:200}];inputMode='touch';attack(0,2)");step(.25);assert.equal(run('shots[0].bounces'),1);assert(run('shots[0].vx<0'));assert.equal(run('fighters[1].hp'),140);
+// Self-hit arms after leaving the muzzle overlap, or immediately after a wall bounce.
+setup(3);run("walls=[];inputMode='touch';fighters[1].y=700;touchAim.active=true;touchAim.x=1;touchAim.y=0;attack(0,2)");step(.02);assert.equal(run('fighters[0].hp'),125);assert.equal(run('shots[0].selfArmed'),false);step(.2);assert.equal(run('shots[0].selfArmed'),true);run('fighters[0].x=shots[0].x;fighters[0].y=shots[0].y');step(.01);assert.equal(run('fighters[0].hp'),25);assert.equal(run('shots.length'),0);
+setup(3);run("walls=[];inputMode='touch';fighters[1].y=700;touchAim.active=true;touchAim.x=-1;touchAim.y=0;attack(0,2)");step(.4);assert.equal(run('fighters[0].hp'),25);assert.equal(run('shots.length'),0);
+setup(3);run("walls=[];inputMode='touch';fighters[1].y=700;touchAim.active=true;touchAim.x=1;touchAim.y=0;attack(0,2)");step(.25);run('fighters[0].hp=80;fighters[0].x=shots[0].x;fighters[0].y=shots[0].y');step(.01);assert.equal(run('fighters[0].hp'),0);assert.equal(run('roundOver'),true);
+setup(3);run("walls=[];inputMode='touch';fighters[1].y=700;touchAim.active=true;touchAim.x=1;touchAim.y=0;attack(0,2)");step(.25);run('fighters[0].x=shots[0].x;fighters[0].y=shots[0].y;fighters[0].dodge=.2');step(.01);assert.equal(run('fighters[0].hp'),125);assert.equal(run('shots.length'),1);run('touchAim.active=false');
 run("inputMode='mouse'");
 console.log('PASS: Engin beam channel/movement lock/slow turn/damage/cover/interruption, overheat warning/self-cost/escape, orb damage/two wall bounces and rendering.');
 assert.equal(run('roster[0].name'),'THE ESSY KID');
