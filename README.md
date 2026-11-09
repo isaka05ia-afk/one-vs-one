@@ -627,7 +627,7 @@ The menu offers **Med Evolve / Utan Evolve** for ordinary games. With Evolve off
 normal three-card choices still work, but duplicate cards are never offered.
 
 **Evolve — Bäst av 3** is a match-length option compatible with 1v1, FFA and teams.
-Choose from the ten implemented Evolves; the selected Evolve determines the
+Choose from the fifteen implemented Evolves; the selected Evolve determines the
 character. Bots also choose an Evolve, and every loadout is fixed for the match.
 No between-round card drafts. First to two wins, with a three-round cap; score
 ties after three rounds are draws. Maps continue rerolling.
@@ -640,3 +640,41 @@ rule toggle, selections, public/controlled doors and evolving fighter state.
 Checks: `node door-evolve.test.cjs`, `node evolve.test.cjs`, `node test.cjs`,
 `node online.test.cjs`, `node party.test.cjs`, and team utility suites. Transport is
 simulated; real device-to-device network validation remains separate.
+
+## Sailer — five Evolves
+
+All five Sailer cards now support a repeat-card Evolve. The normal draft uses the
+existing 10% repeat-offer chance; Evolve mode exposes all fifteen implemented
+Evolves for The Essy Kid, Door Man and Sailer. Bot lobby choices use the same list.
+
+- **My Home ×2 — The Sea:** forces the exclusive **2400 × 1500** ocean arena
+  for everyone, every round, including the first round of Evolve mode. It is
+  hidden from ordinary map selection/random rotation. Small docks/islands give
+  dry footing with little cover. Sailer keeps ordinary 170 HP and damage, retains
+  water immunity and loses Dodge. A single My Home still gives 60% Harbor odds.
+- **Capten ×2 — I Am the Boat:** the boat is the character, with 280 HP and no
+  separate shell or surviving walking form. Water speed 300, land speed 110.
+  A 46-unit collision/hit radius and slow 1.5-radian/s turns are the risks. Wave,
+  Headwind and Ram remain; Ram deals 32 damage and pushes, with six-second cooldown.
+- **Canons ×2 — Naval Strike:** Precision Strike (42 damage, 75 radius, 1.1 s
+  warning, 5 s cooldown); Bombing Run (five 24-damage impacts in a line, 10 s
+  cooldown); Naval Barrage (seven staggered 25-damage impacts, 18 s cooldown).
+  Range 1400–1500; ignores cover, targets enemies, with visible warnings.
+- **Real Ship ×2 — Titanic:** Wave/Headwind plus a Titanic call (32 s cooldown).
+  Random left/right arrival, 2.5 s warning/horn and a marked central danger band.
+  The ship ignores terrain, can carry caster/allies/enemies sideways and deals
+  260 damage once per carried fighter on reaching the opposite edge. Escape
+  vertically into the top/bottom safe lanes; flight/dodge can avoid capture.
+  At most two ships can be active; round reset clears all ships and passengers.
+- **Drunken Man ×2 — Toxic Captain:** four times ordinary damage and green waves.
+  Host-authoritative movement rotation changes every 2.5 seconds. A compass
+  shows where Up moves. Aim remains reliable. No original-card self-stun; random
+  steering also affects dodge and boat piloting for players and bots.
+
+Protocol build 49 synchronizes exclusive Sea dimensions, boat stats, artillery,
+Titanic warning/carry/resolution and toxic rotation. `sailer-evolve.test.cjs` covers
+all five kits, bots, risk mechanics, large collision/projectile hitbox, exclusive
+map rules, delayed artillery through cover and Titanic damage to every team.
+Online and party suites cover all five guest kits, chosen artillery bots, shared
+Sea maps and Titanic warnings. Tests use simulated transport, not real internet
+routes; browser/device playtesting remains separate.
