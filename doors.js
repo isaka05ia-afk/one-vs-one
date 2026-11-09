@@ -2,7 +2,7 @@
 let actors=[],doorSerial=0;
 function removeDoor(id){portals=portals.filter(p=>p.id!==id);actors=actors.filter(a=>a.doorId!==id)}
 function placePortal(i){const f=fighters[i],slot=f.portalNext,old=portals.find(p=>p.owner===i&&p.slot===slot);if(old)removeDoor(old.id);const family=hasCard(f,'family');portals.push({id:++doorSerial,x:f.x,y:f.y,owner:i,slot,hp:family?10:0,maxHp:family?10:0,family,shootCd:.35,spawnCd:.2,spawned:0,trapCd:0});f.portalNext=(slot+1)%doorLimit(f);f.portalArmed=false;f.effect=.35;spark(f.x,f.y,roster[f.id].color,16)}
-function doorTargets(owner){return [...portals.filter(p=>p.owner!==owner&&p.family&&p.hp>0),...actors.filter(a=>a.owner!==owner&&a.hp>0)]}
+function doorTargets(owner){return [...babyTargets(owner),...portals.filter(p=>p.owner!==owner&&p.family&&p.hp>0),...actors.filter(a=>a.owner!==owner&&a.hp>0)]}
 function hitDoorTarget(owner,target,damage){if(target.hp<=0)return;target.hp=Math.max(0,target.hp-damage*heroDamage(fighters[owner]));spark(target.x,target.y,roster[fighters[owner].id].color,7);if(target.hp<=0&&target.family)removeDoor(target.id)}
 function hitDoorCone(owner,range,width,damage){const f=fighters[owner];for(const target of doorTargets(owner))if(cone(f,target,range,width))hitDoorTarget(owner,target,damage)}
 function hitDoorBeam(owner,reach,damage,size=1){const f=fighters[owner],x=Math.cos(f.lockedAim),y=Math.sin(f.lockedAim);for(const t of doorTargets(owner)){const along=(t.x-f.x)*x+(t.y-f.y)*y,across=Math.abs((t.x-f.x)*y-(t.y-f.y)*x);if(along>=0&&along<=reach+16&&across<14+9*size&&sight(f,t))hitDoorTarget(owner,t,damage)}}
