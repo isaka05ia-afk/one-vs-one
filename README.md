@@ -16,11 +16,11 @@ En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensi
 | The Essy Kid | Tank | 150 | 195 | Närslag, riktad stråle, grab och kast |
 | Door Man | Speedster | 95 | 285 | Flanka, lås en riktad träff, rusa |
 | Laores the Dragon | Evolution | 85–185 | 160–245 | Ägg till Elder Dragon; kort ändrar formen |
-| The Overpowerd | Burst-DPS | 125 | 185 | Obligatorisk pose och tydligt markerade attacker |
+| Engin | DPS | 125 | 185 | Stationär reaktorstråle, explosion med HP-kostnad och studsande energikula |
 | Olympic Team | Relay | 3 × 40 | 180–360 | Löpare, simmare och skridskoåkare med egna liv |
 | Sailer | Control | 170 | 175 | Bred våg, vind som drar och en fångande segeljolle |
 
-Alla attacker har separata synliga cooldowns. Sten är ett tungt närslag (23 skada, 60 räckvidd, 1,5 s cooldown). Sax laddar synligt i 0,4 sekunder och skjuter sedan en riktad stråle (26 skada, 400 räckvidd, 4,2 s cooldown), som stoppas av väggar. Påse är en grab på nära håll: håll fast i 0,55 s och kasta sedan för 22 skada (145 räckvidd, 7,2 s cooldown). Båda står still under greppet, den fångade kan inte attackera eller undvika, och stun på The Essy Kid avbryter greppet. Missar och undanmanövrer ger ingen träff. Door Mans första attack är Running Man: rusa och tackla längs siktet (24 skada, 3,2 s cooldown). Andra attacken är Lock. Tredje förmågan är Dörrar: placera en dörr där du står (3 s cooldown). Han kan ha två egna dörrar, A och B, samtidigt; när båda finns kan han gå in i den ena och teleportera till den andra. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. The Overpowerd måste posera före varje attack, och poseringen avbryts av stun. Aegis har silverrustning, guldkanter, riddarhjälm och en spegelsköld.
+Alla attacker har separata synliga cooldowns. Sten är ett tungt närslag (23 skada, 60 räckvidd, 1,5 s cooldown). Sax laddar synligt i 0,4 sekunder och skjuter sedan en riktad stråle (26 skada, 400 räckvidd, 4,2 s cooldown), som stoppas av väggar. Påse är en grab på nära håll: håll fast i 0,55 s och kasta sedan för 22 skada (145 räckvidd, 7,2 s cooldown). Båda står still under greppet, den fångade kan inte attackera eller undvika, och stun på The Essy Kid avbryter greppet. Missar och undanmanövrer ger ingen träff. Door Mans första attack är Running Man: rusa och tackla längs siktet (24 skada, 3,2 s cooldown). Andra attacken är Lock. Tredje förmågan är Dörrar: placera en dörr där du står (3 s cooldown). Han kan ha två egna dörrar, A och B, samtidigt; när båda finns kan han gå in i den ena och teleportera till den andra. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. Engin står still under Reactor Beam och avbryts av stun. Aegis har silverrustning, guldkanter, riddarhjälm och en spegelsköld.
 
 ## Placering
 Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sikt till målet. Markeringar visar var en explosion ska träffa och hur lång tid som återstår. Undanmanöver ger 0,2 sekunder osårbarhet men passerar inte genom väggar. Datorn cirklar, håller avstånd, reagerar med fördröjning och försöker hitta vägar runt skydd. Den använder riktiga projektiler och kan missa.
@@ -29,7 +29,7 @@ Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sik
 `node test.cjs` testar 18 förmågor, tvådimensionell rörelse, normaliserad diagonal fart, väggkollision, blockerade skott, manuellt sikte och missar, brännskada, stun, undanmanöver, sköld, posering, undvikande av explosioner, botens identitet och navigering, paus och renderingsanrop i en simulerad miljö. Test i riktig webbläsare och på fysisk mobil återstår.
 
 ## Publicering
-GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, doors.js, dragon.js, olympic.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för The Overpowerd när webbläsaren stöder det.
+GitHub Pages: main / root. Alla filer inklusive maps.js, fighters.js, cards.js, doors.js, dragon.js, olympic.js, peer.js och multiplayer.js måste ligga i samma mapp. Google Fonts är valfritt och har reservtypsnitt. Ljudknappen aktiverar enkla ljudeffekter och talsyntes för Engin när webbläsaren stöder det.
 
 
 ## Fyra svårighetsgrader
@@ -99,7 +99,7 @@ Tester täcker sex kartor, giltiga startplatser och gångbara rutter över varje
 ## Rörligare förmågor
 - Door Mans Running Man har nu 3,2 s cooldown (tidigare 5,2 s).
 - Sailers jolle kan styras under färden med WASD / mobilens vänsterspak; lokal spelare 2 använder pilarna. Sailer står still under fjärrstyrningen och kan inte attackera eller undvika samtidigt. Kameran följer jollen i enspelarläge. Jollen har mjuka svängar och samma begränsade körsträcka som tidigare; en fångad fiende följer med även genom svängen. Släpper du styrningen efter en sväng fortsätter jollen rakt. Ingen manuell styrning ger den ursprungliga färden till målpunkten.
-- The Overpowerd kan röra sig med 50 % fart och ändra attackriktning/markmål under sin obligatoriska pose. Han poserar fortfarande och säger sin replik före varje attack. Mus, högerspak och mobilens autosikte uppdaterar riktningen fram till avfyrningen. Motståndarens riktiga stun/grab stoppar fortfarande honom och avbryter poseringen.
+- Engin ersätter The Overpowerd. Reactor Beam låser rörelsen under laddning och kanalisering; stun/grab avbryter.
 
 
 ## Online — privat match med SMS-koder
@@ -115,7 +115,7 @@ Det finns nu ett WebRTC-läge för två enheter. Ingen registrering, separat sig
 Koderna är långa men kan kopieras eller delas med de inbyggda knapparna. De kan radbrytas i SMS; whitespace tas bort när koden läses. En svarskod gäller bara sin egen värdkod. Om ni börjar om måste båda använda det nya kodparet. Ni behöver inga kameror eller mikrofoner.
 
 ### Under matchen
-Båda använder WASD + mus / J/K/L/Shift eller mobilspakar och attackknappar. Gästens karaktär är den gröna **DU**-figuren i gästens vy. Kameran, egna livstapeln, attackknapparna och minikartan följer rätt spelare. Sailer kan styra jollen, Door Man kan placera och använda sitt dörrpar, The Overpowerd kan styra sin pose och Aegis kan reflektera även som gäst.
+Båda använder WASD + mus / J/K/L/Shift eller mobilspakar och attackknappar. Gästens karaktär är den gröna **DU**-figuren i gästens vy. Kameran, egna livstapeln, attackknapparna och minikartan följer rätt spelare. Sailer kan styra jollen, Door Man kan placera och använda sitt dörrpar, Engin kan styra sin reaktorstråle långsamt och Aegis kan reflektera även som gäst.
 
 Värden är auktoritativ för positioner, träffar, liv, cooldowns, miljöer och ronder. Gästen skickar normaliserade kontroller och attackönskemål, inte träffar eller livsvärden. Värden skickar tillstånd 20 gånger per sekund; gästen interpolerar figurernas rörelser. Start/inställningar/kontroller använder en tillförlitlig datakanal, tillståndsbilder en separat kanal med begränsad kö. Gamla meddelanden och meddelanden från föregående match ignoreras.
 
@@ -329,7 +329,7 @@ With **I Studid Magic**, slot two becomes **Magic Bomb** instead of Gravity Well
 
 Tests verify contact/max-range splash, one damage event, cover, reflection, magic stun and both acquisition orders; simulated online tests verify visible projectile snapshots, authoritative explosion damage and synchronized magic stun.
 
-All fighter attack names and attack-button tooltips are now in English, including card-based replacements. The Essy Kid uses **Rock**, **Scissors** and **Paper**; Door Man uses **Doors**; Laores starts with **Tackle**. Overpowerd's moves are spelled **Overpowered Punch** and **Doomsday**. Charge labels and named references in combat hints use the same names. Gameplay values and controls are unchanged. Syntax and existing unit/gameplay checks pass.
+All fighter attack names and attack-button tooltips are now in English, including card-based replacements. The Essy Kid uses **Rock**, **Scissors** and **Paper**; Door Man uses **Doors**; Laores starts with **Tackle**. Engin uses **Reactor Beam**, **Over Powerd** and **Radioactive Orb**. Charge labels and named references in combat hints use the same names. Gameplay values and controls are unchanged. Syntax and existing unit/gameplay checks pass.
 
 **Toothless without Studied Magic is entirely plasma-themed:** Fire Ball becomes **Plasma Bolt**, a blue-white bolt with the same direct damage/range/cooldown and no fire burn. Plasma Bomb remains slot two. Fly becomes **Plasma Flight**, retaining zero damage with a purely visual plasma trail. Lizard's Inferno becomes **Plasma Beam**, preserving charge, damage and cover rules with blue-white visuals. Egg tackle also has a plasma name if present. With Studied Magic, Magic Missile, Magic Bomb and Fly keep their magical behavior/names. Unit tests check no-burn bolt damage, plasma move names and harmless flight, and preserved magic variants; existing simulated online tests pass.
 
@@ -402,3 +402,14 @@ Replaces all three athlete dash abilities with stationary power/control moves. N
 - **Skater — Blade Wave** replaces Ice Dash: a cutting projectile, 4 damage, 460 range, 5.2-second cooldown, 0.25-second windup. One permanent Bleed stack normally; firing from ice increases projectile radius from 16 to 44 and applies three stacks. Ice Trail and Selfish Spin Cycle remain available as appropriate.
 
 Unit tests cover kick charge/interruption, unchanged low direct damage while drinking, doubled push, one-time wall slam, wide Wave, damage-free Whirlpool suction, ice-enhanced Blade Wave and all six ordered Selfish combinations. Simulated online tests obtain the card through a real draft and verify wall damage/position, wide projectile snapshots, vortex movement, Bleed and both Selfish acquisition orders preserving Pool.
+
+
+## Engin replaces The Overpowerd
+
+Engin is a 125-HP, 185-speed radioactive inventor (DPS). His orange overalls, dark skin, cracked green goggles, black hair, heavy boots, reactor backpack and three-clawed arm cannon have a dedicated sprite. Beam charging deploys boot anchors; overheating flashes the reactor red, vents steam and displays “It's getting hot!” (spoken when sound and speech synthesis are available).
+
+- **Reactor Beam:** 0.8-second visible charge, then a stationary 1.5-second channel, ten 10-damage pulses (100 base total), 720 range, 12-second cooldown. Turns at most 0.7 radians/second. Walls block the beam. Dodge/other attacks are locked during channel; enemy stun/grab/boat transport interrupts it.
+- **Over Powerd:** 0.9-second warning around the caster, then 62 area damage within 155 radius. Costs exactly 12 own HP on detonation, can defeat Engin, 10-second cooldown. Escaping, cover and dodge avoid enemy damage. Interrupting the charge prevents both explosion and HP cost.
+- **Radioactive Orb:** 48 damage, 170 speed, 18 radius, 8-second maximum life and 8-second cooldown. Reflects off two interior walls or arena boundaries; disappears on the third wall impact, an enemy hit or expiry. Swept movement prevents tunnelling.
+
+Generic HP/damage/speed ability cards remain available. Host-authoritative beam timers, charged attacks, explosion damage and orb bounces synchronize to guests. Unit and simulated transport tests cover movement lock, limited turn rate, channel damage/interruptions/cover, explosion cost/escape, and two bounces followed by destruction. Build arena-online-33 / cache v50.

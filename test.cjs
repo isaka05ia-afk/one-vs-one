@@ -17,7 +17,7 @@ setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run('at
 setup(1);run('attack(0,1)');step(.5);assert(run('fighters[1].stun>0'));step(1);assert.equal(run('fighters[1].stun'),0);
 setup();run("keys.add('d');dodge(0);hit(fighters[1],fighters[0],50)");assert.equal(run('fighters[0].hp'),150);step(.15);assert(run('fighters[0].x>180'));assert(run('fighters[0].dodgeCd>0'));
 setup(1);run('useTestMap();fighters[0].x=400;fighters[0].y=280;attack(0,0)');step(.5);assert(run('fighters[0].x<430'));
-setup(3);run('useTestMap();fighters[1].x=220;attack(0,0)');step(.5);assert.equal(run('fighters[1].hp'),140);step(.4);assert.equal(run('fighters[1].hp'),108);
+setup(3);run('useTestMap();fighters[1].x=220;attack(0,0)');step(.5);assert.equal(run('fighters[1].hp'),140);step(.4);assert(run('fighters[1].hp')<140);
 setup();run("$('mode').value='ai';$('opponent').value='1';start()");assert(run('fighters[1].id>=0&&fighters[1].id<roster.length'));step(8);assert(run('fighters.every(f=>free(f.x,f.y)&&Number.isFinite(f.hp))'));
 for(let i=0;i<6;i++)for(let j=0;j<3;j++){setup(i);run(`attack(0,${j})`);step(2);run('render()');assert(run('fighters.every(f=>Number.isFinite(f.hp)&&f.hp>=0&&f.hp<=f.maxHp&&free(f.x,f.y))'))}
 setup();run("attack(0,0);paused=true");const cd=run('fighters[0].cd[0]'),x=run('fighters[0].x');step(.4);assert.equal(run('fighters[0].cd[0]'),cd);assert.equal(run('fighters[0].x'),x);
@@ -49,7 +49,7 @@ setup(0);run('useTestMap();fighters[1].x=170;attack(0,2);fighters[0].stun=.4');s
 console.log('PASS: The Essy Kid punch melee/range/knockback; beam damage once, aim miss and wall stop; grab hold/action lock/release damage; dodge escape and stun interruption.');
 setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run("rememberPointer({pointerType:'touch'});mouseAim=true;aimPoint={x:100,y:600};fighters[0].aim=-Math.PI/2;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),0);step(.6);assert(run('fighters[1].hp<140'));
 setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run("inputMode='touch';touchAim.active=true;touchAim.x=0;touchAim.y=-1;attack(0,0)");assert.equal(run('fighters[0].lockedAim'),-Math.PI/2);step(.6);assert.equal(run('fighters[1].hp'),140);run('touchAim.active=false;updatePlayerAim()');assert.equal(run('fighters[0].aim'),0);
-setup(3);run("useTestMap();inputMode='touch';fighters[1].x=260;fighters[1].y=410;attack(0,1)");step(.81);assert(Math.abs(run('zones[0].x')-260)<.001);assert(Math.abs(run('zones[0].y')-410)<.001);
+setup(3);run("useTestMap();inputMode='touch';fighters[1].x=230;attack(0,1)");step(.95);assert.equal(run('fighters[0].hp'),113);assert.equal(run('fighters[1].hp'),78);
 setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run("rememberPointer({pointerType:'mouse'});mouseAim=true;aimPoint={x:100,y:100};attack(0,0)");assert.equal(run('fighters[0].lockedAim'),-Math.PI/2);step(.5);assert.equal(run('fighters[1].hp'),140);
 setup(2);run("fighters[0].stage=2;fighters[0].hp=fighters[0].maxHp=100");run("inputMode='touch';attack(0,0);fighters[1].y=500");const shotY=run('shots[0].vy');step(.3);assert.equal(shotY,0);assert.equal(run('shots[0].vy'),0);run("inputMode='mouse'");
 console.log('PASS: mobile tap auto aim overrides stale mouse, manual stick priority, release restores auto aim, blast target distance, desktop manual aim and non-homing projectiles.');
@@ -104,11 +104,19 @@ setup(1);run('attack(0,0)');assert.equal(run('fighters[0].cd[0]'),3.2);step(3.21
 setup(5);run("mouseAim=true;aimPoint={x:500,y:350};attack(0,2)");step(1);assert.equal(run('fighters[1].boatOwner'),0);const bodyBefore=run('fighters[0].y'),boatBefore=run('boats[0].y');run("keys.add('s');attack(0,0);dodge(0)");assert.equal(run('fighters[0].cd[0]'),0);assert.equal(run('fighters[0].dodge'),0);step(.15);assert.equal(run('fighters[0].y'),bodyBefore);assert(run('boats[0].y')>boatBefore+5);assert.equal(run('fighters[1].y'),run('boats[0].y'));const turned=run('boats[0].aim');run('keys.clear()');step(.1);assert.equal(run('boats[0].aim'),turned);step(1);assert.equal(run('fighters[1].boatOwner'),-1);assert.equal(run('boats.length'),0);
 setup(5);run("touchMove.y=1;attack(0,2)");step(.6);assert(run('boats[0].aim>0'));assert.equal(run('fighters[0].y'),350);run('touchMove.y=0');
 setup(5);run('attack(0,2)');step(.5);run("$('mode').value='ai';boats[0].x=1200;boats[0].y=700;updateCamera()");assert(run('camera.x>0'));
-setup(3);run("keys.add('d');attack(0,0)");step(.3);assert(run('fighters[0].pose>0'));assert(run('fighters[0].x>120&&fighters[0].x<135'));
-setup(3);run("mouseAim=true;aimPoint={x:300,y:350};attack(0,1);aimPoint={x:140,y:500}");step(.81);assert(Math.abs(run('zones[0].x')-140)<.01);assert(Math.abs(run('zones[0].y')-500)<.01);
-setup(3);run("useTestMap();inputMode='touch';fighters[1].x=220;attack(0,0);fighters[1].x=100;fighters[1].y=480");step(.81);assert.equal(run('fighters[1].hp'),108);
-setup(3);run("keys.add('d');attack(0,0);fighters[0].stun=.5");step(.2);assert.equal(run('fighters[0].x'),100);assert.equal(run('fighters[0].pose'),0);run("inputMode='mouse'");
-console.log('PASS: Running Man cooldown 3.2 s; keyboard/touch boat steering, passenger follows turns, owner action lock, heading retained and camera follows; Overpowerd pose movement, retargeted blast, mobile turning and real stun cancellation.');
+// Engin: stationary channel, slow turning, self-cost, interrupts, cover and wall bounces.
+setup(3);run("useTestMap();keys.add('d');inputMode='touch';attack(0,0)");step(.3);assert(run('fighters[0].cast>0'));assert.equal(run('fighters[0].x'),100);step(.6);assert(run('fighters[0].reactor.left>0'));assert.equal(run('fighters[0].x'),100);run('dodge(0);attack(0,2)');assert.equal(run('fighters[0].dodge'),0);assert.equal(run('shots.length'),0);step(1.5);assert.equal(run('fighters[1].hp'),40);step(.1);assert(run('fighters[0].x>100'));
+setup(3);run("useTestMap();inputMode='mouse';mouseAim=true;aimPoint={x:300,y:350};attack(0,0);aimPoint={x:100,y:550}");step(.5);assert(run('fighters[0].lockedAim<=.351'));assert(run('fighters[0].lockedAim>0'));
+setup(3);run("useTestMap();inputMode='touch';attack(0,0);fighters[0].stun=.5");step(.2);assert.equal(run('fighters[0].cast'),0);assert.equal(run('fighters[1].hp'),140);
+setup(3);run("useTestMap();inputMode='touch';attack(0,0)");step(.9);run('fighters[0].stun=.5');const beamHp=run('fighters[1].hp');step(.6);assert.equal(run('fighters[0].reactor.left'),0);assert.equal(run('fighters[1].hp'),beamHp);
+setup(3);run("useTestMap();inputMode='touch';fighters[1].x=230;attack(0,1)");step(.5);assert.equal(run('fighters[0].hp'),125);run('fighters[1].x=500');step(.5);assert.equal(run('fighters[0].hp'),113);assert.equal(run('fighters[1].hp'),140);
+setup(3);run("useTestMap();attack(0,1);fighters[0].stun=.6");step(1);assert.equal(run('fighters[0].hp'),125);assert.equal(run('zones.length'),0);
+setup(3);run("useTestMap();inputMode='touch';attack(0,2)");step(.95);assert.equal(run('fighters[1].hp'),92);assert.equal(run('shots.length'),0);
+setup(3);run("walls=[];fighters[1].y=700;shots=[{x:40,y:350,vx:-170,vy:0,r:18,life:8,owner:0,damage:48,kind:'radiorb',color:'#a8ff57',bounces:0}]");step(.02);assert.equal(run('shots[0].bounces'),1);assert(run('shots[0].vx>0'));run('shots[0].x=1560;shots[0].vx=170');step(.02);assert.equal(run('shots[0].bounces'),2);assert(run('shots[0].vx<0'));run('shots[0].x=40;shots[0].vx=-170');step(.02);assert.equal(run('shots.length'),0);
+setup(3);run("walls=[{x:180,y:250,w:20,h:200}];inputMode='touch';attack(0,0)");step(2.4);assert.equal(run('fighters[1].hp'),140);
+setup(3);run("walls=[{x:180,y:250,w:20,h:200}];inputMode='touch';attack(0,2)");step(.5);assert.equal(run('shots[0].bounces'),1);assert(run('shots[0].vx<0'));assert.equal(run('fighters[1].hp'),140);
+run("inputMode='mouse'");
+console.log('PASS: Engin beam channel/movement lock/slow turn/damage/cover/interruption, overheat warning/self-cost/escape, orb damage/two wall bounces and rendering.');
 assert.equal(run('roster[0].name'),'THE ESSY KID');
 const randomBeforeMapTest=Math.random;
 for(let i=0;i<6;i++){run(`Math.random=()=>${(i+.1)/6};$('map').value='random';$('mode').value='local';$('opponent').value='4';start()`);assert.equal(run('mapId'),run(`Object.keys(MAPS)[${i}]`));const kept=run('mapId');run('nextTestRound()');assert.equal(run('mapId'),kept)}
