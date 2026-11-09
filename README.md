@@ -383,3 +383,11 @@ Selfish opens a second, host-validated choice of Runner, Swimmer or Skater. Only
 - **Skater — Spin Cycle:** 9-second cooldown. A 110-radius circular slash on ordinary ground gives one Bleed stack. Starting on map ice or Ice Trail produces three pulses 0.3 s apart, each giving one stack if it hits (2 direct damage per pulse). Movement slows during the routine; stun/grab or dodge interrupts it. Cover and attack avoidance remain valid counterplay.
 
 Tests cover two-stage selection, locked solo HP, illegal double-Selfish rejection, Pool/reuse/reset/water, rewind history/HP/effects without cooldown/enemy rewinding, and one/three Spin Bleed pulses. Simulated online tests cover all three actual guest draft choices, solo state, Pool, own-HP rewind and triple ice Spin snapshots.
+
+### Four-digit multiplayer rooms
+
+The default online flow is now **Skapa match · få 4 siffror** → share the four digits → friend enters them and presses **Anslut med kod** → host starts. No answer code is needed. The host still runs the match and both players keep their tabs open. Room codes exist only while hosting; occupied codes are retried automatically and a room accepts one opponent.
+
+`quickpeer.js` loads pinned PeerJS 1.5.4 on demand from jsDelivr and uses the public PeerJS Cloud signalling service to discover peers. Game messages/snapshots still travel directly between players using WebRTC, with host authority unchanged. No account or server setup is required from the players. The manual offer/answer flow remains under **Reserv: manuella anslutningskoder** and does not require this signalling service. Library/service failures show a retry/fallback message without breaking offline play.
+
+Mocked PeerJS integration tests verify four-digit host/join/copy, ordinary lobby/start/gameplay protocol, invalid/missing codes, occupied-ID retries preserving the existing room, rejecting a third participant, disconnect cleanup, and CDN failure with manual fallback. Existing manual transport and all gameplay tests still pass. The public CDN/signalling service and real browser/network pairing could not be verified from this workspace because its network proxy is unavailable; test with two actual devices after deployment.
