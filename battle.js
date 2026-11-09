@@ -38,3 +38,7 @@ function aimEnemy(owner,range,width=.8){return combatEnemies(owner).find(b=>cone
 function autoAimEnemy(owner){const list=combatEnemies(owner);return list.find(b=>sight(fighters[owner],b))||enemyOf(owner)}
 
 function safeArenaPosition(point){if(free(point.x,point.y))return point;for(let r=20;r<=240;r+=20)for(let j=0;j<16;j++){const p={x:point.x+Math.cos(j*Math.PI/8)*r,y:point.y+Math.sin(j*Math.PI/8)*r};if(free(p.x,p.y))return p}return spawnPoint(0,2)}
+
+// Utility control affects teammates without causing friendly damage.
+function controlTargets(owner,origin=fighters[owner]){return fighters.filter((f,i)=>i!==owner&&f.hp>0).sort((a,b)=>distance(origin,a)-distance(origin,b))}
+function healthColor(index,viewer=localIndex()){return index===viewer?'#d8ff62':enemies(viewer,index)?'#ff799c':'#75c9ff'}

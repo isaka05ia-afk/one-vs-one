@@ -1,3 +1,5 @@
+> **Nytt i v61:** Jolle/grab/virvel och portaler fungerar med lagkamrater. Blå laglivmätare, 25 % lagkamratsskada från reaktorstrålar, delad terräng och Yoga-läkning. Laores skada: −20/−10/0/+15/+25 % i form 1–5. Inferno/Plasma Beam kan riktas om under uppladdning. Cache v61 / nätverksversion arena-online-44. Se [MULTIPLAYER.md](MULTIPLAYER.md).
+
 > **Nytt i v60:** Träningsbana, håll/släpp-sikte och 1v1v1, 1v1v1v1, 2v2 samt 3v3 offline och online. Fyll lediga onlineplatser med valbara/slumpade botar. Se [MULTIPLAYER.md](MULTIPLAYER.md) för hur du spelar, regler och testgränser. Cache v60 / nätverksversion arena-online-43.
 
 # One vs One — Arena

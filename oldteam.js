@@ -2,7 +2,7 @@
 const OLD_NAMES=['Mom','Yoga Instructor','Tattooed Baddie'];
 const OLD_MOVES=[[
  ['My Baby','mybaby',0,145,8,'Summon your only baby. It attacks nearby enemies and stays connected by an umbilical cord.'],['Mom’s Orders','momorders',0,145,4.5,'Order your baby toward the aimed position and speed it up.']
-],[['Deep Breath','yogabreath',8,180,4,'Heal yourself for 6 HP and breathe a short damaging puff.'],['Healing Circle','yogacircle',3,100,9,'A mat heals its owner’s active participant for 4 HP/s and damages enemies for 3 HP/s for 3 s.']],[['Heavy Punch','baddiepunch',18,80,1.4,'A heavy close-range punch.'],['Come Here','baddiegrab',5,160,6,'A short pull that brings an enemy into punching range.']]];
+],[['Deep Breath','yogabreath',8,180,4,'Heal yourself for 6 HP and breathe a short damaging puff.'],['Healing Circle','yogacircle',3,100,9,'A mat heals nearby allies for 4 HP/s and damages enemies for 3 HP/s for 3 s.']],[['Heavy Punch','baddiepunch',18,80,1.4,'A heavy close-range punch.'],['Come Here','baddiegrab',5,160,6,'A short pull that brings an enemy into punching range.']]];
 const OLD_THIRDS=[['Loaded Catapult','loadcatapult',0,0,10,'Load the baby catapult: its next toy is a large explosive shot.'],['Praise the Sun','praisethesun',0,0,20,'Your next attack can be a charged Sun Beam or Cruel Sun. Both buttons return to normal after one is fired.'],['Tattoo Rage','tattoorage',0,0,14,'Tattoos glow for 6 s. Close attacks heal you for 30% of HP damage dealt.']];
 function isOldTeam(f){return isOlympic(f)&&hasCard(f,'too_old')&&!hasCard(f,'kids')}
 function oldTeamState(f){const t=teamState(f);return t.old??={baby:null,sunReady:false,rage:0,karenReady:false}}

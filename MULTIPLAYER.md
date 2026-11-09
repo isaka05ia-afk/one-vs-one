@@ -1,4 +1,4 @@
-# Träning, sikte och flerspelarlägen · v60
+# Träning, sikte och flerspelarlägen · v61
 
 ## Spela
 
@@ -19,7 +19,7 @@ En utslagen spelare kan följa resten av ronden. Den sista levande spelaren/det 
 
 Quick Match är en rond utan kort. Övriga format spelas till tre rondvinster, med högst fem rundor. Om ingen nått tre efter fem rundor avgör antalet vinster; delad högstapoäng ger oavgjort. Lagkamrater får samma rondpoäng. Förlorande spelare väljer kort i turordning, botar väljer automatiskt. Alla behåller gränsen på två kort och kan hoppa över.
 
-Vanliga attacker, spawns och kontroll träffar fiender. Koner, strålar och explosioner kan träffa flera fiender. Yogas cirkel kan läka lagkamrater. Engins egna orber och egen radioaktivitet kan fortfarande skada honom; fientliga kopior fortsätter vara fientliga mot alla. Kids Pools regler gäller även vuxna lagkamrater.
+Vanliga skadeattacker och spawns träffar fiender. Jollen och Paper kan fånga och flytta lagkamrater utan skada. Whirlpool och Gravity Well kan dra även lagkamrater utan att skada dem. Vanliga portaldörrar delas inom laget; familjedörrar är fortfarande skjutplatser. Reaktorstrålen och Tractor Beam gör 25 % skada på lagkamrater; Tractor Beam drar bara fiender. Lagkamraters livmätare visas blå från varje spelares perspektiv. Koner, strålar och explosioner kan träffa flera fiender. Yogas cirkel kan läka lagkamrater. Engins egna orber och egen radioaktivitet kan fortfarande skada honom; fientliga kopior fortsätter vara fientliga mot alla. Kids Pools regler gäller även vuxna lagkamrater.
 
 ## Sikta före skott
 
@@ -50,3 +50,11 @@ node party.test.cjs
 Den gamla förmåge-/kort-/kontrollsviten och tvåklientssviten behålls. Nya tester omfattar alla format offline/online, sex separata klienter, botfyllning på/av, separat input/attack/kortbehörighet, utslagning och lagseger, seriella förlorarkort, rematch, botövertagande, snapshots med ägare över index 1, release-/dragsikte inklusive nätverksordningsfelet, No Pain, träning och säkra träningsstarter på alla sex kartor. Dessutom körs 174 femsekunders sexbotssimuleringar: grunduppsättningar, alla singelkort och alla lagliga ordnade kortpar.
 
 Testerna kör den riktiga spelmotorn med simulerad DOM/canvas. WebRTC/PeerJS-transporten är simulerad. Chromium kunde inte starta i denna miljö (`setsockopt: Operation not permitted`, SIGTRAP), så grafiskt mobiltest, faktisk FPS och anslutningar över riktiga internetnät har inte verifierats här. Strategirapporten från v59 avser dueller; den är ingen ny balansmätning av 3v3.
+
+## Laores balans och terräng · v61
+
+HP, fart, cooldowns och rundutveckling behålls. Attackskadan jämfört med v60 skalas till 80/90/100/115/125 procent i form 1–5, inklusive motsvarande magi-/plasmaattacker. No Time to Wait använder fortfarande Elder-formen direkt och behåller åldrandet. Inferno och Plasma Beam kan riktas om under sin ensekundsuppladdning, även via gästens mus/högerspak.
+
+Skapad is och skapade pooler använder samma terrängfråga som banans is och vatten, oavsett vem som skapade dem. Det ger vanlig glidning, skridskoåkarens isbonus och vatteneffekter även på lagkamrater; Sailer och simmaren behåller sina vattenundantag. Utgångna fläckar räknas inte. Yogas Healing Circle läker alla levande, markbundna lagkamraters aktiva karaktär inom fältet.
+
+Nya tester: `node teamplay.test.cjs` och `node teamplay-online.test.cjs`. De täcker lagkamraters transport, grepp, virvel, portaler, livfärg, reducerad reaktorträff, is-/vattenregler, lagläkning och riktning under laddning med fyra simulerade onlineklienter.
