@@ -1,7 +1,7 @@
 'use strict';
 const CARD_DEFS={
  selfish:{name:'Selfish',icon:'★',color:'#f0d58b',description:'Välj sedan Runner, Swimmer eller Skater. Bara hon stannar, med lagets hela HP, 20 % starkare attacker, 10 % kortare grundcooldowns och en ny tredje förmåga istället för Switch.'},
- selfish_runner:{name:'Selfish — Runner',icon:'»',color:'#ee8a8f',description:'Runner får hela lagets HP. Tredje förmågan Never Happened återställer hennes position, HP och effekter från 2 sekunder sedan. 20 s cooldown; återställer inga cooldowns.'},
+ selfish_runner:{name:'Selfish — Runner',icon:'»',color:'#ee8a8f',description:'Runner får hela lagets HP. Tredje förmågan Never Happened återställer hennes position, HP och effekter från 6 sekunder sedan. 20 s cooldown; återställer inga cooldowns.'},
  selfish_swimmer:{name:'Selfish — Swimmer',icon:'≈',color:'#8bcaff',description:'Swimmer får hela lagets HP. Pool skapar en gigantisk vattenpool som stannar resten av ronden. En användning per rond. Vanliga vattenregler gäller för alla.'},
  selfish_skater:{name:'Selfish — Skater',icon:'❄',color:'#b8efed',description:'Skater får hela lagets HP. Spin Cycle slår runt sig: 1 varv/1 Bleed normalt, 3 varv/upp till 3 Bleed om hon börjar på is. Egen Ice Trail räknas. 9 s cooldown.'},
  hydra:{name:'Hydra',icon:'♜',color:'#90cc99',description:'Tankdrake med extraliv, ingen extra max-HP. Ett huvud per rond. När du dör förlorar du ett huvud och återuppstår med 25 % maxliv +1 procentenhet per passerad rond. Sista huvudet kan dö. 20 % lägre fart.'},
