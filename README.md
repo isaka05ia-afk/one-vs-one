@@ -556,3 +556,26 @@ Online protocol build 45 prevents mixing old and new arena definitions. Run
 `node maps.test.cjs` for arena topology, all mode spawn checks, portal re-entry,
 water immunity and bot navigation checks. Existing combat fixtures explicitly
 specify their walls instead of depending on the changed arena layouts.
+
+## The Essy Kid — Evolve
+
+A second copy of Cheter, Big Hands or Gloves may be offered after owning the first.
+Two copies occupy both card slots and replace the ordinary build with an Evolve:
+
+- **Cheter ×2 / Sniper:** 75 HP, one 65-damage narrow projectile, 1200 range,
+  1500 projectile speed, 0.6-second charge and 3.5-second cooldown. Walls block it.
+- **Big Hands ×2 / Giant Hands:** three-times-sized Rock/Scissors/Paper with
+  50% increased damage. First button attacks; second button switches in order.
+  Each attack keeps its own 8/12/14-second cooldown while another is selected.
+- **Gloves ×2 / Hand Factory:** one button randomly creates Rock, Scissors or
+  Paper every 0.65 seconds. Each has 3 HP and a 12-second lifetime; maximum eight,
+  replacing the oldest when full. There are no direct attack buttons.
+
+Only these three designed Evolves are enabled; the other card families still use
+unique cards until their Evolves are designed. Ordinary mixed pairs remain intact.
+Bots use long-range sniper spacing, switch giant attacks, and maintain the factory
+population. Round resets restore selection and cooldown state. Online build 46
+synchronizes duplicate loadouts and giant selection/cooldowns.
+
+Validation: `node evolve.test.cjs`, `node test.cjs`, `node online.test.cjs`.
+Online transport tests are simulated; real two-device network testing is separate.
