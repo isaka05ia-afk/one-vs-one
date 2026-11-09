@@ -12,7 +12,7 @@ function dragonMoves(f){return baseDragonMoves(f).map(m=>{let move=[...m];if(has
 function hydraHeads(f){return f.id===2&&hasCard(f,'hydra')?Math.max(1,roundNumber-(f.headsLost||0)):1}
 function toothlessSpeedScale(f){return hasCard(f,'toothless')?1.5*(1+.05*(hasCard(f,'no_wait')?Math.max(4,roundNumber-1):Math.max(0,roundNumber-1))):1}
 function dragonFlightSpeed(f){return (280+(dragonStage(f)-3)*20)*(hasCard(f,'no_wait')?Math.max(120,245-25*dragonAge(f))/245:1)*toothlessSpeedScale(f)*(hasCard(f,'hydra')?.8:1)}
-function flying(f){return f?.id===2&&f.fly>0}
+function flying(f){return f?.id===2&&f.fly>0||f?.id===3&&magicFlight(f)}
 function landDragon(f){if(f.id!==2)return;if(!free(f.x,f.y)){f.x=f.groundX;f.y=f.groundY}f.fly=0}
 function drawWizardHat(c,x,y,clock=false){
  c.save();c.translate(x,y);

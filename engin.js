@@ -1,22 +1,25 @@
 'use strict';
-const ENGIN_CARDS=['heavy_armor','uranium_v2','veins'];
+const ENGIN_CARDS=['heavy_armor','uranium_v2','veins','infected','magic_tech'];
 function enginCombo(f){return f.id===3&&hasCard(f,'uranium_v2')&&hasCard(f,'veins')}
 function enginState(f){return f.reactor??={left:0,tick:0}}
 function enginMonster(f){return f.id===3&&enginState(f).monster===true}
 function enginBusy(f){const r=f.reactor;return f.id===3&&!!(r?.jump||r?.breath>0)}
-function enginMoveDamage(f,kind){let scale=hasCard(f,'heavy_armor')&&kind!=='radiorb'?.75:1;if(hasCard(f,'uranium_v2'))scale*=kind==='reactorbeam'?1.6:1.5;return scale}
+function enginMoveDamage(f,kind){let scale=hasCard(f,'heavy_armor')&&!['radiorb','gravityorb'].includes(kind)?.75:1;if(hasCard(f,'uranium_v2'))scale*=['reactorbeam','tractorbeam'].includes(kind)?1.6:1.5;return scale}
 function enginMoves(f){let moves=roster[3].moves.map(m=>[...m]);const veins=hasCard(f,'veins'),v2=hasCard(f,'uranium_v2');
  if(veins)moves=[['Reactor Rush','reactorrush',26,210,5,'Rush forward and strike.'],['Over Powerd','overheat',62,155,10,'Charge 0.55 s and explode. Costs 8 HP.'],['Radioactive Breath','radiobreath',8,230,7,'Breathe radiation in a wide cone for 1 s.']];
+ if(magicEngin(f))moves=MAGIC_ENGIN_MOVES.map(m=>[...m]);
  if(enginCombo(f))moves[1]=['Overload','overload',0,0,1,'Once per round. Requires over 50 HP and costs 50 HP. Transform until the round ends; regeneration starts after 2 s.'];
  if(enginMonster(f))moves=[['Wild Rush','wildrush',32,300,6,'A powerful rush with slow steering.'],['Mutant Slam','mutantslam',38,175,7,'Charge 0.5 s and slam the ground, knocking enemies away.'],['Mutant Leap','mutantleap',45,430,10,'Leap over obstacles to a marked landing point, dealing area damage and knockback.']];
- return moves.map(m=>{m[2]=Number((m[2]*enginMoveDamage(f,m[1])).toFixed(4));if(v2&&['overheat','mutantslam'].includes(m[1]))m[3]*=1.3;if(v2&&m[1]==='radiobreath')m[3]*=1.2;return m})
+ return moves.map(m=>{m[2]=Number((m[2]*enginMoveDamage(f,m[1])).toFixed(4));if(v2&&['overheat','mutantslam','repulsion'].includes(m[1]))m[3]*=1.3;if(v2&&m[1]==='radiobreath')m[3]*=1.2;return m})
 }
 function canEnginAttack(f,m){return f.id!==3||m[1]!=='overload'||enginCombo(f)&&!enginState(f).used&&f.hp>50}
-function prepareEngin(i,m){const f=fighters[i];if(f.id!==3)return false;const kind=m[1];if(kind==='reactorbeam'){f.cast=.8;return true}if(kind==='overheat'){f.cast=hasCard(f,'veins')?.55:.9;if(audioOn&&'speechSynthesis' in window){const line=new SpeechSynthesisUtterance("It's getting hot!");line.lang='en-US';window.speechSynthesis.speak(line)}return true}if(kind==='mutantslam'){f.cast=.5;return true}return false}
+function prepareEngin(i,m){const f=fighters[i];if(f.id!==3)return false;const kind=m[1];if(kind==='reactorbeam'||kind==='tractorbeam'){f.cast=.8;return true}if(kind==='repulsion'){f.cast=.9;return true}if(kind==='overheat'){f.cast=hasCard(f,'veins')?.55:.9;if(audioOn&&'speechSynthesis' in window){const line=new SpeechSynthesisUtterance("It's getting hot!");line.lang='en-US';window.speechSynthesis.speak(line)}return true}if(kind==='mutantslam'){f.cast=.5;return true}return false}
 function executeEngin(i,m,u){const f=fighters[i],r=enginState(f),kind=m?.[1];if(f.id!==3)return false;
- if(kind==='overload'){if(!canEnginAttack(f,m))return true;applyDamage(f,50);r.used=true;r.monster=true;r.regenDelay=2;r.left=r.breath=0;f.cd=[1,1,1];f.cast=f.rush=0;spark(f.x,f.y,'#81bfff',40);tone(110);return true}
- if(kind==='reactorbeam'){Object.assign(r,{left:1.5,tick:0,pulses:0,hold:0,markX:null,markY:null});return true}
- if(kind==='overheat'){applyDamage(f,hasCard(f,'veins')?8:12);zone(i,f.x,f.y,m[3],m[2],0,'overheat',.4);if(hasCard(f,'uranium_v2'))addRadiation(i,f.x,f.y,m[3]);spark(f.x,f.y,'#bcff5c',32);return true}
+ if(kind==='overload'){if(!canEnginAttack(f,m))return true;applyDamage(f,50,{cost:true});r.used=true;r.monster=true;r.regenDelay=2;r.left=r.breath=0;f.cd=[1,1,1];f.cast=f.rush=0;spark(f.x,f.y,'#81bfff',40);tone(110);return true}
+ if(kind==='reactorbeam'||kind==='tractorbeam'){Object.assign(r,{left:1.5,tick:0,pulses:0,hold:0,markX:null,markY:null});return true}
+ if(kind==='repulsion'){applyDamage(f,12,{cost:true});zone(i,f.x,f.y,m[3],m[2],0,'repulsion',.4);if(hasCard(f,'uranium_v2'))addRadiation(i,f.x,f.y,m[3]);return true}
+ if(kind==='gravityorb'){projectile(i,'gravityorb',m[2],m[3],170,hasCard(f,'uranium_v2')?27:18);Object.assign(shots[shots.length-1],{bounces:0,creator:i,selfArmed:false,selfDamage:hasCard(f,'uranium_v2')?125:100,color:'#c5a1ff'});return true}
+ if(kind==='overheat'){applyDamage(f,hasCard(f,'veins')?8:12,{cost:true});zone(i,f.x,f.y,m[3],m[2],0,'overheat',.4);if(hasCard(f,'uranium_v2'))addRadiation(i,f.x,f.y,m[3]);spark(f.x,f.y,'#bcff5c',32);return true}
  if(kind==='radiorb'){projectile(i,'radiorb',m[2],m[3],170,hasCard(f,'uranium_v2')?27:18);Object.assign(shots[shots.length-1],{bounces:0,creator:i,selfArmed:false,selfDamage:hasCard(f,'uranium_v2')?125:100});return true}
  if(kind==='radiobreath'){r.breath=1;r.breathTick=0;return true}
  if(kind==='reactorrush'||kind==='wildrush'){f.dx=u.x;f.dy=u.y;f.rush=kind==='wildrush'?.5:.35;f.rushHit=false;f.rushEntities=[];r.rushTrail=0;return true}
@@ -26,7 +29,7 @@ function executeEngin(i,m,u){const f=fighters[i],r=enginState(f),kind=m?.[1];if(
 }
 function safeEnginLanding(f,target){const d=distance(f,target),u=norm(target.x-f.x,target.y-f.y);for(let length=d;length>=0;length-=4){const x=f.x+u.x*length,y=f.y+u.y*length;if(free(x,y))return {x,y}}return {x:f.x,y:f.y}}
 function addRadiation(owner,x,y,r=70){if(!free(x,y,2))return;let patch=zones.find(z=>z.kind==='radiation'&&z.owner===owner&&distance(z,{x,y})<40);if(patch){patch.life=4;patch.r=Math.max(patch.r,r);return}const patches=zones.filter(z=>z.kind==='radiation');if(patches.length>=32)zones.splice(zones.indexOf(patches[0]),1);zone(owner,x,y,r,0,0,'radiation',4)}
-function updateEngin(i,dt){const f=fighters[i];if(f.id!==3)return;const r=enginState(f);r.frenzy=Math.max(0,(r.frenzy||0)-dt);if(f.stun>0)r.frenzy=0;if(f.hp<=0){r.left=r.breath=0;r.jump=null;return}
+function updateEngin(i,dt){const f=fighters[i];if(f.id!==3)return;updateEnginExtras(i,dt);const r=enginState(f);r.frenzy=Math.max(0,(r.frenzy||0)-dt);if(f.stun>0)r.frenzy=0;if(f.hp<=0){r.left=r.breath=0;r.jump=null;return}
  if(enginMonster(f)){const delay=r.regenDelay||0;r.regenDelay=Math.max(0,delay-dt);const healTime=Math.max(0,dt-delay);if(healTime>0)f.hp=Math.min(f.maxHp,f.hp+3*healTime)}else if(hasCard(f,'uranium_v2'))applyDamage(f,dt);if(f.hp<=0){r.left=r.breath=0;r.jump=null;return}
  if(r.jump){const j=r.jump;j.left=Math.max(0,j.left-dt);const progress=1-j.left/j.total;f.x=j.sx+(j.tx-j.sx)*progress;f.y=j.sy+(j.ty-j.sy)*progress;if(j.left<=0){const end=safeEnginLanding({x:j.sx,y:j.sy},{x:j.tx,y:j.ty});f.x=end.x;f.y=end.y;zone(i,f.x,f.y,j.radius,j.damage,0,'mutantleap',.4);addRadiation(i,f.x,f.y,j.radius);r.jump=null}spark(f.x,f.y,'#85baff',1)}
  if(r.breath>0){if(f.stun>0||f.grabbedBy>=0||f.boatOwner>=0||f.hp<=0)r.breath=0;else{r.breath=Math.max(0,r.breath-dt);r.breathTick-=dt;f.lockedAim=f.aim;if(r.breathTick<=0){r.breathTick+=.2;const m=getMoves(f)[2],b=fighters[1-i];hitDoorCone(i,m[3],.75,m[2]);if(cone(f,b,m[3],.75))hit(f,b,m[2]);controlFx.push({x:f.x,y:f.y,aim:f.aim,range:m[3],life:.22,kind:'radiobreath'});if(hasCard(f,'uranium_v2'))addRadiation(i,f.x+Math.cos(f.aim)*m[3]*.7,f.y+Math.sin(f.aim)*m[3]*.7)}}}
