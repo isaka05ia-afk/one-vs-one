@@ -681,8 +681,8 @@ routes; browser/device playtesting remains separate.
 
 ## Laores — five owned-round Evolves
 
-The five Dragon families now support duplicate-card Evolves, making **20** choices
-across four fighters in Evolve mode. Dragon Evolve growth counts rounds **owned**,
+The five Dragon families now support duplicate-card Evolves, making **25** choices
+across five fighters in Evolve mode. Dragon Evolve growth counts rounds **owned**,
 not the match round: an Evolve first used in match round four starts at its own
 round one. The start is stored by the host and synchronized per fighter.
 
@@ -693,7 +693,8 @@ Dragon Evolves, and the in-match status shows the owned-round number.
   (26/34/42 damage); Molten Breath deals 5/7/9 per pulse; Volcanic Inferno deals
   70/95/120 after 1.1 s charge. Owned round two adds splitting embers and burning
   ground; round three widens and strengthens attacks. HP 150/180/210; speed
-  170/150/130. No Fly or Dodge. Stationary during the charged beam.
+  170/150/130. No Fly or Dodge. Stationary during the charged beam. Aim turns at most 0.5 rad/s during
+  charge, then locks for the final 0.4 s so opponents can sidestep.
 - **Studied ×2 — Arcane Hunter:** Arcane Missile, Hunter Orb and Arcane Swarm.
   Homing turn rates grow per owned round; swarm fires 3/5/7 weak shots. Walls
   stop them, and they cannot home onto invisible Blue Flash. HP 110/120/130.
@@ -730,3 +731,34 @@ charge state, first-round Hydra extra-life validation and guaranteed Titanic gra
 Checks include `dragon-evolve.test.cjs`, all prior Evolve suites, ordinary gameplay,
 simulated duel/party transport, all fifteen Dragon bot/owned-round combinations
 and the prior team utility suites. Real browser/network testing is separate.
+
+
+## Engin — five Evolves
+
+All five Engin families now have Evolves, available through rare duplicate offers,
+training and the fixed-loadout best-of-three Evolve mode (25 choices total).
+
+- **Heavy Armor ×2 — Power Plant:** a destructible 220-HP central reactor supplies
+  warned arena-wide strikes. Engin has a harmless rush; a destroyed reactor takes
+  a stationary 2.2 s rebuild. Bots can attack the reactor.
+- **Uranium V2 ×2 — Living Atom Bomb:** slots are Atomic Beam, Doomsday, Nuclear
+  Orb. Damage 120/135/120, cooldowns 14/20/18 s and HP costs 28/42/14. Beam
+  charge 1.8 s, slow turning and final 0.5 s aim lock. Doomsday warns for 2.3 s;
+  the orb has a visible 3.5 s countdown and can hurt its creator. Bots flee it.
+- **Into the Veins ×2 — Uranium Addict:** a blue monster with rush, leap and
+  injection. Fuel lasts 10 s, enabling 6 HP/s regeneration. Injection self-stuns
+  for 1.2 s; empty fuel reduces speed/damage and drains 2 HP/s. Rage affects steering.
+- **Infected ×2 — Never Dead:** 1 HP and 98% revive chance per death, with 0.55 s
+  protection. Each death adds 8% damage and 2 speed, capped after 25 deaths for
+  this match. Zombie Swipe, Shamble Rush and Over Power; failed revive ends its life.
+- **Magic Technology ×2 — Broken Timeline:** records every Engin round from match
+  start, even before acquiring magic. Later rounds replay earlier movements,
+  sampled projectile paths and beam/area attacks through the new map's walls.
+  Echoes can damage Engin and enemies. Positions scale to the current arena;
+  echoes last only their original recorded duration and do not create more echoes.
+  Fixed Evolve mode therefore has zero, one, then two prior-round echoes.
+
+`node engin-evolve.test.cjs` verifies costs, attacks, reactor rebuilding, injection,
+revival, historical recording and Volcano aim limits. `node online.test.cjs` also
+checks host-authoritative Engin Evolve state and remote attacks using simulated
+transport. These checks do not exercise real internet connectivity.
