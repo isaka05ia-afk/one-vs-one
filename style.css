@@ -23,3 +23,5 @@
 #attacks button{touch-action:none;user-select:none;-webkit-user-select:none}#trainingReset{touch-action:manipulation}
 
 .infinityPicker{position:fixed;inset:8vh 5vw;z-index:50;background:#15192ef5;padding:16px;border:2px solid #bda5ff;border-radius:14px;overflow:auto}.infinityPicker[hidden]{display:none}.infinityPicker canvas{width:100%;max-height:65vh;object-fit:fill;touch-action:none;border:1px solid #bda5ff}
+
+#evolveChoiceHelp{white-space:pre-line}#dragonEvolutionTabs{display:flex;flex-wrap:wrap;gap:6px}#dragonEvolutionTabs[hidden]{display:none}#dragonEvolutionTabs [aria-selected="true"]{border-color:#9edcff;background:#294760}

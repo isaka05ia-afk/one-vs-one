@@ -627,7 +627,7 @@ The menu offers **Med Evolve / Utan Evolve** for ordinary games. With Evolve off
 normal three-card choices still work, but duplicate cards are never offered.
 
 **Evolve — Bäst av 3** is a match-length option compatible with 1v1, FFA and teams.
-Choose from the fifteen implemented Evolves; the selected Evolve determines the
+Choose from the twenty implemented Evolves; the selected Evolve determines the
 character. Bots also choose an Evolve, and every loadout is fixed for the match.
 No between-round card drafts. First to two wins, with a three-round cap; score
 ties after three rounds are draws. Maps continue rerolling.
@@ -663,8 +663,8 @@ Evolves for The Essy Kid, Door Man and Sailer. Bot lobby choices use the same li
 - **Real Ship ×2 — Titanic:** Wave/Headwind plus a Titanic call (32 s cooldown).
   Random left/right arrival, 2.5 s warning/horn and a marked central danger band.
   The ship ignores terrain, can carry caster/allies/enemies sideways and deals
-  260 damage once per carried fighter on reaching the opposite edge. Escape
-  vertically into the top/bottom safe lanes; flight/dodge can avoid capture.
+  260 damage once per carried fighter on reaching the opposite edge. Reach
+  the top/bottom safe lanes before contact. Contact guarantees a grab, even in flight or dodge.
   At most two ships can be active; round reset clears all ships and passengers.
 - **Drunken Man ×2 — Toxic Captain:** four times ordinary damage and green waves.
   Host-authoritative movement rotation changes every 2.5 seconds. A compass
@@ -678,3 +678,55 @@ map rules, delayed artillery through cover and Titanic damage to every team.
 Online and party suites cover all five guest kits, chosen artillery bots, shared
 Sea maps and Titanic warnings. Tests use simulated transport, not real internet
 routes; browser/device playtesting remains separate.
+
+## Laores — five owned-round Evolves
+
+The five Dragon families now support duplicate-card Evolves, making **20** choices
+across four fighters in Evolve mode. Dragon Evolve growth counts rounds **owned**,
+not the match round: an Evolve first used in match round four starts at its own
+round one. The start is stored by the host and synchronized per fighter.
+
+The selection menu has **Fördelar**, **Nackdelar** and **Rondutveckling** tabs for
+Dragon Evolves, and the in-match status shows the owned-round number.
+
+- **Lizard ×2 — Walking Volcano:** all three attacks change. Lava Ball explodes
+  (26/34/42 damage); Molten Breath deals 5/7/9 per pulse; Volcanic Inferno deals
+  70/95/120 after 1.1 s charge. Owned round two adds splitting embers and burning
+  ground; round three widens and strengthens attacks. HP 150/180/210; speed
+  170/150/130. No Fly or Dodge. Stationary during the charged beam.
+- **Studied ×2 — Arcane Hunter:** Arcane Missile, Hunter Orb and Arcane Swarm.
+  Homing turn rates grow per owned round; swarm fires 3/5/7 weak shots. Walls
+  stop them, and they cannot home onto invisible Blue Flash. HP 110/120/130.
+- **No Time to Wait ×2 — Primal Dragon, Lord of All:** enormous first form with
+  650 HP, 180 speed, Primal Fire 132 damage and Sovereign Inferno 209. Not immune
+  to damage. Owned round two: 170 HP, 125 speed, 45/71 damage. Round three: 55 HP,
+  90 speed, 15/24 damage. Later owned rounds weaken it further. Colors and size
+  change with age. No ordinary No Time to Wait aging is double-applied.
+- **Toothless ×2 — The Blue Flash:** 65 HP; movement 360/400/440. Hold Blue Flight
+  for invisible flight, release to land. Energy 1.4/2/2.6 seconds, regenerating
+  on the ground. No attacks during flight. After 0.7 s inside a block, eject to
+  safe ground, take 20 HP and 1.2 s stun; warn before this and before exhaustion.
+  R1 has Bolt + Flight (2 buttons). R2 adds Bomb (3 buttons). R3 keeps exactly
+  three: Bolt / Plasma Charge / Flight. Tap Plasma Charge for Bomb; hold 0.8 s
+  for Beam, slowing movement while charging. **No fourth attack.** Enemy bodies,
+  ground markers and minimap icons are hidden during flight; manual area hits
+  still work. Ordinary player dodging cancels a pending plasma charge.
+- **Hydra ×2 — Many Become One:** 2/3/4 heads at owned rounds 1/2/3, then up to
+  6. Each head is a life; revive with about 25% HP. Extra heads autonomously fire
+  weak shots toward the aimed visible enemy, so losing heads reduces firepower.
+  Large hitbox, 140/150/160 HP and 145/135/125 speed. Main attacks: Hydra Fire,
+  Hydra Breath and Hydra Roar. Lost heads reset with the next round.
+
+### Titanic and bot fixes
+
+Titanic contact now guarantees a grab for everyone, including flying/dodging
+fighters. It cancels their actions and holds them until delivery; escape must
+happen **before contact**. The 260-damage delivery and safe lanes remain.
+Bots have a **90% priority roll** to select an offered valid Evolve. Their chance
+of being offered the repeat card remains the same 10% as human players.
+
+Protocol build 50 includes owned-round starts, Blue Flight hold/release/cancel and
+charge state, first-round Hydra extra-life validation and guaranteed Titanic grabs.
+Checks include `dragon-evolve.test.cjs`, all prior Evolve suites, ordinary gameplay,
+simulated duel/party transport, all fifteen Dragon bot/owned-round combinations
+and the prior team utility suites. Real browser/network testing is separate.
