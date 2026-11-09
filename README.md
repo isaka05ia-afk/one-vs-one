@@ -600,3 +600,43 @@ Online transport tests are simulated; real two-device network testing is separat
 Targeted Evolve tests cover both new kits, lethal self-cost, blocking/counters,
 immobile guard and the exact 10% offer threshold. Simulated online tests cover
 guest Overprotected HP/block/counter and Never Stop HP costs.
+
+## Door Man Evolves and Evolve match format
+
+All five Door Man cards now support a duplicate-card Evolve, using both card slots.
+The normal draft retains the 10% repeat-offer chance, shared with The Essy Kid.
+
+- **Hotel ×2 — Infinity Space:** keep normal Running Man and Lock damage. The
+  third button opens a full-map position picker (desktop and touch). Choose a free
+  position to teleport, leaving two public doors that enemies and allies may use.
+  Four-second cooldown, no teleporting into walls or restricted Kids Pools.
+- **Late ×2 — Last Second:** 45 HP, one 38-damage dash with 12-second cooldown.
+  Invulnerable during its 0.55-second rush. A successful enemy hit resets the
+  cooldown; a miss stuns the user for 0.8 seconds. Walls still block movement.
+- **Magic ×2 — One Key Fits All:** a slow giant key (48 damage, 1.5-second Lock,
+  nine-second cooldown) passes through walls. Infinity Lock is the second attack:
+  0.35-second guaranteed stun on everyone else, including allies, every seven
+  seconds. Running Man and portals are removed.
+- **Family ×2 — Family Business:** no direct attacks. Two 15-HP doors can each
+  spawn four 5-HP relatives. Losing or replacing a door removes its relatives.
+- **No More Speed ×2 — I Live Here Now:** immobile body, no dodge. Place a remote
+  door near the aimed enemy, then move the door with movement controls and aim/fire
+  from it. Camera follows the door, but the vulnerable body retains all health.
+
+The menu offers **Med Evolve / Utan Evolve** for ordinary games. With Evolve off,
+normal three-card choices still work, but duplicate cards are never offered.
+
+**Evolve — Bäst av 3** is a match-length option compatible with 1v1, FFA and teams.
+Choose from the ten implemented Evolves; the selected Evolve determines the
+character. Bots also choose an Evolve, and every loadout is fixed for the match.
+No between-round card drafts. First to two wins, with a three-round cap; score
+ties after three rounds are draws. Maps continue rerolling.
+
+Online hosts choose the format/rules. Guests may choose their Evolve before joining
+or change it in the connected lobby before the host starts. Party hosts may choose
+a bot's Evolve in its lobby seat. Protocol build 48 synchronizes the new format,
+rule toggle, selections, public/controlled doors and evolving fighter state.
+
+Checks: `node door-evolve.test.cjs`, `node evolve.test.cjs`, `node test.cjs`,
+`node online.test.cjs`, `node party.test.cjs`, and team utility suites. Transport is
+simulated; real device-to-device network validation remains separate.

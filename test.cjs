@@ -1,7 +1,7 @@
 const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
 const context=new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
 const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){}},setAttribute(){},append(){},add(){},addEventListener(){},getContext:()=>context,querySelector:()=>node(),getBoundingClientRect:()=>({left:0,top:0,width:1000,height:700}),value:'local',textContent:'',innerHTML:''});
-const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','olympic.js','oldteam.js','engin.js','kids.js','pain.js','gods.js','controls.js','enginextras.js','ai-strategies.js','battle.js','combat.js','aiming.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
+const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','olympic.js','oldteam.js','engin.js','kids.js','pain.js','gods.js','controls.js','enginextras.js','ai-strategies.js','battle.js','combat.js','aiming.js','evolutions.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
 // Other-fighter regression tests use a stationary 140-HP training target.
 let dummyTarget=false;
 const run=code=>{const result=vm.runInContext(code,sandbox);if(dummyTarget)vm.runInContext("if(fighters.length===2&&$('mode').value==='local'&&fighters[1].id===3&&fighters[1].maxHp===125){if(fighters[1].hp>0)fighters[1].hp+=15;fighters[1].maxHp=140}",sandbox);return result};
@@ -406,7 +406,7 @@ for(let id=0;id<6;id++){
  assert.equal(run(`new Set(cardFamilies(${id})).size`),5);
  const family=run(`cardFamilies(${id})`);
  for(const card of family){sandbox.auditCard=card;assert(run('!!CARD_DEFS[auditCard]'))}
- for(let n=0;n<30;n++){sandbox.auditOwned=id===4?['selfish_runner']:[family[n%5]];const offers=run(`offeredCards(${id},auditOwned)`);assert.equal(offers.length,3);assert.equal(new Set(offers).size,3);assert(run(`offeredCards(${id},auditOwned).every(c=>cardFamilies(${id}).includes(c)&&(!auditOwned.map(cardFamily).includes(c)||${id}===0&&ESSY_EVOLVES.includes(c)))`))}
+ for(let n=0;n<30;n++){sandbox.auditOwned=id===4?['selfish_runner']:[family[n%5]];const offers=run(`offeredCards(${id},auditOwned)`);assert.equal(offers.length,3);assert.equal(new Set(offers).size,3);assert(run(`offeredCards(${id},auditOwned).every(c=>cardFamilies(${id}).includes(c)&&(!auditOwned.map(cardFamily).includes(c)||evolveCards(${id}).includes(c)))`))}
  assert.equal(run(`validLoadout(${id},['vitality'])`),false);
  assert.equal(run(`validLoadout(${id},['force'])`),false);
  assert.equal(run(`validLoadout(${id},['haste'])`),false);
