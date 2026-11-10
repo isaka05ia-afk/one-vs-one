@@ -984,16 +984,16 @@ claim is made by these tests.
 ### The Mannequin
 Faceless wooden Control fighter (110 HP): Needle Stitch attaches a breakable tether, Pull the Thread reels the target in, and Tripwire places two destructible anchors. Three card families are currently available:
 - **Training Dummy:** wooden katana, timed frontal Perfect Block, Wooden Slash and Triple Slash. Missing a parry leaves a recovery window; area damage bypasses it.
-- **Spirit:** two bodies with shared HP; Dodge becomes a vulnerable, delayed possession transfer. Inactive bodies are lifeless, invulnerable and do not stop projectiles.
+- **Spirit:** three bodies with shared HP; Dodge cycles through all three bodies with a vulnerable, delayed possession transfer. Inactive bodies are lifeless, invulnerable and do not stop projectiles.
 - **Haunted Dojo:** combine both cards. A successful parry resets possession cooldown; Triple Slash can continue after one body swap.
 - **The Perfect Counter (Training Dummy ×2):** steel katana, Cut, and Slashes of the Gods, which requires the target to remain stunned by this fighter's own Perfect Block.
-- **Five Empty Bodies (Spirit ×2):** place five stationary bodies on the map before each round, select the initial body and press Ready. All players wait for placement. Each body has independent attack cooldowns; HP remains shared. Dodge opens body selection. Supported in practice, fixed Evolve matches and authoritative online/party play.
+- **Five Empty Bodies (Spirit ×2):** place five bodies on the map before each round, select the initial body and press Ready. All players wait for placement. Each body has independent attack cooldowns; HP remains shared. The possessed body can walk normally; inactive bodies stay at their last position. Dodge opens body selection. Supported in practice, fixed Evolve matches and authoritative online/party play.
 
 Regression checks: `node mannequin.test.cjs`, `node mannequin-online.test.cjs` and `node party.test.cjs`. Network checks use simulated transport; real internet/mobile play still needs manual verification.
 
 - **Pins and Needles:** 95 HP; fast Pin Shot, Sew Together and Unravel. Missed shots plant 5-HP needles (six maximum, 18 s lifetime). Web crossings deal 5 damage and slow; returning needles pierce enemies once each. Needles and threads remain visible and destructible.
 - **Sewing Blade (Pins + Training Dummy):** faster, weaker katana attacks; misses leave needles, the final Triple Slash recalls them, and Perfect Block gives a shorter 0.7 s stun plus three needle shots.
-- **Haunted Web (Pins + Spirit):** the empty body anchors the web. A possession transfer disarms threads for 0.65 s and redirects recalled needles toward the newly possessed body. Shared HP and three attacks remain.
+- **Haunted Web (Pins + Spirit):** both empty bodies anchor the web. A possession transfer disarms threads for 0.65 s and redirects recalled needles toward the newly possessed body. Shared HP and three attacks remain.
 - **The Sewing Machine (Pins ×2):** 80 HP, 12 ground needles. Hold Needle Storm for a stationary, aimable burst of at most 2.4 s; release or stun interrupts. Cross Stitch shows a 0.9 s warning before two damaging diagonal lines. Unravel Everything recalls all needles. Dodge becomes Cut Loose: consume all needles/projectiles/webs for a short escape dash, with an 8 s cooldown. No needles means no dash. The skin adds multiple thread spools and needle fingers.
 
 Run `node pins.test.cjs` for pin limits/destruction, web crossings, piercing recall, both card orders, hold/root/aim/release, warning timing and Cut Loose costs. Mannequin online and party tests also cover the new card/evolution with simulated transport.
