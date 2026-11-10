@@ -805,3 +805,36 @@ single-card No Pain and its existing combinations keep their 0.8 s / 4 HP rules.
 no refunds, low-HP safety, each athlete, AI, rare offers and fixed Evolve mode.
 `node online.test.cjs` checks guest charging, host-paid HP, cancellation, the HP
 floor, snapshot validation and fixed-Evolve selection through simulated transport.
+
+
+## Selfish ×2 — All About Me
+
+Training accepts two matching Selfish athlete cards. Fixed best-of-three Evolve
+mode offers three explicit choices: **Can’t Stop (Runner)**, **Deep End (Swimmer)**
+and **Thin Ice (Skater)**, for 29 total Evolve selections. Each choice retains
+one athlete, her three buttons and 120 HP for the entire match. Between-round
+respawns never change her. Selecting a rare second Selfish card in a series
+uses the already-selected athlete directly, without opening another choice.
+Different Selfish athletes cannot be combined.
+
+- Runner: hold Sprint on keyboard/touch to keep rushing. Movement input or aim
+  steers it. Over three seconds speed rises from 500 to 1100 and damage from
+  22 to 66; turning falls from 2.2 to 0.35 rad/s. Energy Drink boosts these to
+  1320 speed / 99 damage and costs its usual 5 HP. Releasing, stun, grab or
+  cancelled input stops the run and starts the 3.6 s cooldown. Energy Drink or
+  Never Happened can interrupt Sprint. Bot/direct-tap runs stop after 3 s.
+- Swimmer: once-per-round Pool floods almost the whole arena (a circle centered
+  on the arena with radius 47% of its diagonal). Normal water rules apply to
+  everyone. She has 400 speed in water and only 85 on dry ground. Splash deals
+  32 in water / 14 on land, radius 80, 650 range and 170 push. Steerable Dive
+  lasts 1.8 s at 600 water / 320 land speed.
+- Skater: Ice Trail emits radius-100 ice for six seconds; patches last 12 s.
+  Ice Dash lasts 0.5 s and gives two Bleed, or five on ice. Spin Cycle makes
+  two hits normally or six on ice, each giving two Bleed. Slippery terrain uses
+  much heavier momentum for her, making braking and turning difficult.
+
+`node selfish-evolve.test.cjs` checks training, matching-card validation,
+first-athlete locking, three-round persistence, held Sprint/release/interrupt,
+rewind escape, water dependence, pool reuse prevention and enhanced ice/spin.
+Online and party tests cover all three Evolve choices, synchronized fixed
+athletes and Runner hold/release through simulated transport.

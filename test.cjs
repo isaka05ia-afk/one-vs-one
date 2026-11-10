@@ -406,7 +406,7 @@ for(let id=0;id<6;id++){
  assert.equal(run(`new Set(cardFamilies(${id})).size`),5);
  const family=run(`cardFamilies(${id})`);
  for(const card of family){sandbox.auditCard=card;assert(run('!!CARD_DEFS[auditCard]'))}
- for(let n=0;n<30;n++){sandbox.auditOwned=id===4?['selfish_runner']:[family[n%5]];const offers=run(`offeredCards(${id},auditOwned)`);assert.equal(offers.length,3);assert.equal(new Set(offers).size,3);assert(run(`offeredCards(${id},auditOwned).every(c=>cardFamilies(${id}).includes(c)&&(!auditOwned.map(cardFamily).includes(c)||evolveCards(${id}).includes(c)))`))}
+ for(let n=0;n<30;n++){sandbox.auditOwned=id===4?['selfish_runner']:[family[n%5]];const offers=run(`offeredCards(${id},auditOwned)`);assert.equal(offers.length,3);assert.equal(new Set(offers).size,3);assert(run(`offeredCards(${id},auditOwned).every(c=>cardFamilies(${id}).includes(cardFamily(c))&&(!auditOwned.map(cardFamily).includes(cardFamily(c))||evolveCards(${id}).includes(c)))`))}
  assert.equal(run(`validLoadout(${id},['vitality'])`),false);
  assert.equal(run(`validLoadout(${id},['force'])`),false);
  assert.equal(run(`validLoadout(${id},['haste'])`),false);

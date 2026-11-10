@@ -1,5 +1,5 @@
 'use strict';
-const OLYMPIC_EVOLVES=['no_pain'];
+const OLYMPIC_EVOLVES=['no_pain',...SELFISH_IDS];
 function painEvolve(f){return isOlympic(f)&&cardCount(f.cards,'no_pain')===2}
 function painChargeTime(f){return painEvolve(f)?2:.8}
 function painFraction(f){return painEvolve(f)&&painActive(f)?Math.min(1,(painState(f).spent||0)/25):0}
