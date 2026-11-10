@@ -11,7 +11,7 @@ const close=(a,b)=>assert(Math.abs(a-b)<.00001,`${a} != ${b}`);
 function step(s){run(`for(let n=0;n<${Math.ceil(s/.01)};n++)update(.01)`)}
 function setup(n=0){sandbox.athlete=n;run("$('mode').value='training';$('format').value='series';$('map').value='court';$('opponent').value='0';$('trainingCard1').value='so_power';$('trainingCard2').value='so_power';selected=4;start();teamState(fighters[0]).active=athlete;syncTeam(fighters[0]);fighters[0].x=500;fighters[1].x=1100;fighters[0].y=fighters[1].y=550;fighters[0].aim=0;walls=[];inputMode='mouse';mouseAim=false;$('trainingImmortal').checked=false;$('trainingImmortalDummy').checked=true;$('aimBeforeShoot').checked=true");}
 for(let n=0;n<3;n++){setup(n);assert(run('powerEvolved(fighters[0])'));assert(run('validAthletics(fighters[0])'));close(run('getMoves(fighters[0]).length'),3);run('render()')}
-close(run('allEvolutions().length'),34);assert(run("validLoadout(4,['so_power','so_power'])"));
+close(run('allEvolutions().length'),35);assert(run("validLoadout(4,['so_power','so_power'])"));
 setup();run('fighters[1].x=600;walls=[{x:850,y:400,w:50,h:300}];attack(0,0)');step(.64);close(run('trainingStats.damage'),0);step(.04);close(run('trainingStats.damage'),85);assert(run('fighters[1].x<830'));close(run('fighters[0].hp'),120);
 setup();run('fighters[0].x=100;attack(0,0)');step(.7);close(run('fighters[0].hp'),90);close(run('teamState(fighters[0]).active'),0);
 setup();run('fighters[0].x=100;attack(0,1)');step(.3);run('attack(0,0)');step(.7);close(run('teamState(fighters[0]).active'),1);close(run('fighters[0].hp'),80);
