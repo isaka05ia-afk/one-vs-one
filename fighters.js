@@ -36,7 +36,7 @@ function drawFighter(c,f,time=0,preview=false){if(drawEngineeringEvolve(c,f,time
 
 function drawEngin(c,f,time=0,preview=false){
  if(enginMonster(f)){drawEnginMonster(c,f,time,preview);return}
- const magic=hasCard(f,'magic_tech'),infection=hasCard(f,'infected'),veins=hasCard(f,'veins')&&!magic,armor=hasCard(f,'heavy_armor'),v2=hasCard(f,'uranium_v2'),skin=infection?(veins?'#83a6ac':'#9cab83'):veins?'#8fb3d3':'#8c513b',firing=f.reactor?.left>0,charging=f.cast>0&&['reactorbeam','tractorbeam'].includes(getMoves(f)[f.move]?.[1]),hot=f.cast>0&&f.move===1,walk=Math.sin(time*12)*(Math.abs(f.vx||0)>0?7:0),glow=hot?'#ff6546':magic?'#c6a4ff':'#a8ff57';
+ const magic=hasCard(f,'magic_tech'),infection=hasCard(f,'infected'),veins=hasCard(f,'veins')&&!magic,armor=hasCard(f,'heavy_armor'),v2=hasCard(f,'uranium_v2'),skin=infection?(veins?'#83a6ac':'#9cab83'):veins?'#8fb3d3':'#8c513b',firing=f.reactor?.left>0,charging=f.cast>0&&['reactorbeam','tractorbeam','atomicbeam'].includes(getMoves(f)[f.move]?.[1]),hot=f.cast>0&&f.move===1,walk=Math.sin(time*12)*(Math.abs(f.vx||0)>0?7:0),glow=hot?'#ff6546':magic?'#c6a4ff':'#a8ff57';
  c.save();c.translate(f.x,f.y-(magicFlight(f)?18+Math.sin(time*3)*4:0));c.scale(f.face||1,1);c.globalAlpha=f.dodge>0?.35:f.hurt>0?.6:1;c.lineCap='round';c.shadowColor=glow;c.shadowBlur=preview?16:7;
  // Heavy reactor backpack, glass coolant tank and arm hoses.
  c.fillStyle='#34434b';c.fillRect(-48,-111,35,75);c.strokeStyle='#8b9a9f';c.lineWidth=4;c.strokeRect(-48,-111,35,75);c.fillStyle='#192b2d';c.fillRect(-43,-104,24,57);c.fillStyle=glow;c.fillRect(-40,-78-Math.sin(time*3)*4,18,27+Math.sin(time*3)*4);c.fillStyle='#dfff94';c.fillRect(-37,-100,4,45);

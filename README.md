@@ -742,9 +742,12 @@ training and the fixed-loadout best-of-three Evolve mode (25 choices total).
   warned arena-wide strikes. Engin has a harmless rush; a destroyed reactor takes
   a stationary 2.2 s rebuild. Bots can attack the reactor.
 - **Uranium V2 ×2 — Living Atom Bomb:** slots are Atomic Beam, Doomsday, Nuclear
-  Orb. Damage 120/135/120, cooldowns 14/20/18 s and HP costs 28/42/14. Beam
-  charge 1.8 s, slow turning and final 0.5 s aim lock. Doomsday warns for 2.3 s;
-  the orb has a visible 3.5 s countdown and can hurt its creator. Bots flee it.
+  Orb. Beam channels ten 18-damage pulses over 1.5 s after a 0.8 s charge,
+  with stationary feet, slow aim steering, recoil and wall blocking, like the
+  original Reactor Beam. Doomsday/Orb deal 135/120 damage; cooldowns 14/20/18 s
+  and HP costs 28/42/14. The large purple orb explodes on its fourth wall
+  bounce (a corner counts once), with a visible bounce counter. Its explosion
+  can hurt its creator. Bots flee it.
 - **Into the Veins ×2 — Uranium Addict:** a blue monster with rush, leap and
   injection. Fuel lasts 10 s, enabling 6 HP/s regeneration. Injection self-stuns
   for 1.2 s; empty fuel reduces speed/damage and drains 2 HP/s. Rage affects steering.
@@ -762,3 +765,5 @@ training and the fixed-loadout best-of-three Evolve mode (25 choices total).
 revival, historical recording and Volcano aim limits. `node online.test.cjs` also
 checks host-authoritative Engin Evolve state and remote attacks using simulated
 transport. These checks do not exercise real internet connectivity.
+
+Never Dead now has a separate rotten zombie silhouette: crooked bare limbs, exposed bones, ragged clothes, damaged face and drooping jaw, with no reactor equipment.
