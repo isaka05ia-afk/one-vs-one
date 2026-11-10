@@ -980,3 +980,13 @@ tests cover synchronized Sea warnings/damage and allied protection. Core gamepla
 regression checks also pass with simulated transport. Headless Chromium could
 not start in the sandbox (Crashpad setsockopt EPERM), so no live browser/network
 claim is made by these tests.
+
+### The Mannequin
+Faceless wooden Control fighter (110 HP): Needle Stitch attaches a breakable tether, Pull the Thread reels the target in, and Tripwire places two destructible anchors. Only two card families are currently available:
+- **Training Dummy:** wooden katana, timed frontal Perfect Block, Wooden Slash and Triple Slash. Missing a parry leaves a recovery window; area damage bypasses it.
+- **Spirit:** two bodies with shared HP; Dodge becomes a vulnerable, delayed possession transfer. Inactive bodies are lifeless, invulnerable and do not stop projectiles.
+- **Haunted Dojo:** combine both cards. A successful parry resets possession cooldown; Triple Slash can continue after one body swap.
+- **The Perfect Counter (Training Dummy ×2):** steel katana, Cut, and Slashes of the Gods, which requires the target to remain stunned by this fighter's own Perfect Block.
+- **Five Empty Bodies (Spirit ×2):** place five stationary bodies on the map before each round, select the initial body and press Ready. All players wait for placement. Each body has independent attack cooldowns; HP remains shared. Dodge opens body selection. Supported in practice, fixed Evolve matches and authoritative online/party play.
+
+Regression checks: `node mannequin.test.cjs`, `node mannequin-online.test.cjs` and `node party.test.cjs`. Network checks use simulated transport; real internet/mobile play still needs manual verification.
