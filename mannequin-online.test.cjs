@@ -23,10 +23,10 @@ async function advance(h,g,seconds){for(let i=0;i<seconds*100;i++){now.ms+=10;h.
   const targetFixture=hostId===4;if(targetFixture)hostId=0;
   if(guestId===2)h.run('Math.random=()=>.999');
   h.run(`selected=${hostId};$('mode').value='online';$('map').value='${map}';$('format').value='${format}';syncOpponent()`);g.run(`selected=${guestId};$('mode').value='online';syncOpponent();chooseOnlineGuest()`);
-  await h.run('createOnlineHost()');g.nodes.netIn.value=h.nodes.netOut.value;await g.run('applyOnlineCode()');h.nodes.netIn.value=g.nodes.netOut.value;await h.run('applyOnlineCode()');await flush();h.run('beginOnlineMatch()');await flush();if(targetFixture)h.run('netSession.testTarget140=true;netSession.testTargetRound=-1');assert.equal(g.run('fighters[1].id'),guestId)
+  h.run("$('evolutionRules').value='medium'");await h.run('createOnlineHost()');g.nodes.netIn.value=h.nodes.netOut.value;await g.run('applyOnlineCode()');h.nodes.netIn.value=g.nodes.netOut.value;await h.run('applyOnlineCode()');await flush();h.run('beginOnlineMatch()');await flush();if(targetFixture)h.run('netSession.testTarget140=true;netSession.testTargetRound=-1');assert.equal(g.run('fighters[1].id'),guestId)
  }
 
- await reconnect(0,6,'series','court');
+ await reconnect(0,6,'series','court');assert.equal(g.nodes.evolutionRules.value,'medium');assert.equal(g.run('evolutionChance'),.25);assert.equal(g.run('validConfig({...netSession.config,evolutionChance:1})'),false);
  for(const cards of [[],['dummy_training'],['dummy_spirit'],['dummy_training','dummy_spirit'],['dummy_training','dummy_training'],['dummy_spirit','dummy_spirit']]){
  h.sandbox.testCards=cards;h.run('loadouts[1]=testCards;spawnRound();walls=[]');await advance(h,g,.1);assert.equal(g.run('fighters[1].id'),6);assert(g.run('validSnapshot(exportOnlineSnapshot())'));
  if(cards[0]==='dummy_spirit'&&cards.length===2){assert(g.run('mannequinSetupPending()'));const clock=h.run('clock');for(const p of [{x:500,y:100},{x:700,y:100},{x:900,y:100},{x:1100,y:100},{x:1300,y:100}]){g.sandbox.p=p;g.run("sendMannequinAction('dollplace',p)");await advance(h,g,.08);}assert.equal(h.run('mannequinState(fighters[1]).bodies.length'),5);assert.equal(h.run('clock'),clock);g.run("sendMannequinAction('dollstart2');sendMannequinAction('dollready')");await advance(h,g,.1);assert(h.run('active()'));assert.equal(g.run('fighters[1].x'),900);g.run("sendMannequinAction('dollswap4')");await advance(h,g,.4);assert.equal(g.run('fighters[1].x'),1300);assert(g.run('validSnapshot(exportOnlineSnapshot())'));}
