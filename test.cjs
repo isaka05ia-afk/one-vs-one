@@ -331,7 +331,7 @@ setup(0,0);run('setAttackScheme("auto");autoAttackKeys="123";keys.add("w")');tes
 
 function setupYouth(cards,n=0,enemy=0){setup(4,enemy);sandbox.youthCards=cards;run('loadouts[0]=youthCards;spawnRound();walls=[];mapId="grove";fighters[0].x=300;fighters[1].x=550;fighters[0].y=fighters[1].y=350;inputMode="touch"');for(let j=0;j<n;j++)run('switchAthlete(fighters[0])')}
 function fullPain(slot){run(`beginPain(0,${slot})`);step(.81);run(`releasePain(0,${slot})`)}
-assert.equal(run("validLoadout(4,['kids','no_pain'])"),true);assert.equal(run("validLoadout(4,['kids','kids'])"),false);assert.equal(run("validLoadout(4,['no_pain','no_pain'])"),false);assert.equal(run("validLoadout(0,['kids'])"),false);
+assert.equal(run("validLoadout(4,['kids','no_pain'])"),true);assert.equal(run("validLoadout(4,['kids','kids'])"),false);assert.equal(run("validLoadout(4,['no_pain','no_pain'])"),true);assert.equal(run("validLoadout(0,['kids'])"),false);
 setupYouth(['kids']);assert.equal(run('athleteName(fighters[0])'),'Sugar Rush');run('attack(0,0)');step(.4);assert.equal(run('fighters[1].hp'),128);assert(run('kidsState(fighters[0]).dip>1.8'));assert(run('heroSpeed(fighters[0])<200'));run('render()');
 setupYouth(['kids']);run('attack(0,1)');assert.equal(run('kidsState(fighters[0]).candy'),4);assert(run('heroSpeed(fighters[0])>300'));step(4.1);assert(run('kidsState(fighters[0]).dip>2.8'));assert.equal(run('canTeamAttack(fighters[0],1)'),false);
 setupYouth(['kids'],1);run('fighters[1].x=450;attack(0,0)');step(.4);assert.equal(run('fighters[1].hp'),143);assert(run('fighters[1].x>500'));

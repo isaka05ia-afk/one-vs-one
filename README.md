@@ -769,3 +769,39 @@ transport. These checks do not exercise real internet connectivity.
 Never Dead now has a separate rotten zombie silhouette: crooked bare limbs, exposed bones, ragged clothes, damaged face and drooping jaw, with no reactor equipment.
 
 The returning Nuclear Orb also deals 120 damage on contact with its creator after arming by separation or a wall bounce. A 1 s contact cooldown prevents per-frame hits. Contact leaves the orb active; its fourth bounce still triggers its explosion. Dodge avoids contact.
+
+
+## Olympic Team Evolve — Beyond the Limit
+
+**No Pain, No Gain ×2** is now available through the rare repeat-card offer,
+training and the fixed-loadout Evolve mode. This adds the 26th Evolve choice.
+It keeps the three athletes and Switch; other Olympic Evolves remain unimplemented.
+
+Hold any attack for up to **2 s**. Charging immediately spends **12.5 HP/s**, up
+to **25 HP**, from the active athlete. Release early for proportional power:
+`damage multiplier = 1 + 3 × (actual HP spent / 25)`, reaching **4×**. A tap
+uses the ordinary attack. Charging slows movement as with regular No Pain.
+Cancelling, missing, being stunned or failing to execute never refunds the cost.
+The charge stops draining at **1 active-athlete HP**. Energy Drink reserves its
+ordinary additional 5 HP cost so it cannot cause an automatic switch after charging.
+HP loss remains part of the normal team HP and is synchronized by the host.
+
+At full power:
+
+- Runner: Sprint deals 72 damage (108 with Energy Drink), lasts 0.75 s and has
+  a wider contact area. Energy Drink lasts 10 s and still costs its normal 5 HP.
+- Swimmer: Splash deals 48 damage, has double range, radius 100 and pushes 300.
+  Dive lasts 1.8 s, is steerable at 550 speed and deals 32 damage once per enemy.
+- Skater: Ice Dash deals 12 damage and adds five Bleed (seven when started on
+  ice). Ice Trail emits radius-120 patches lasting 16 s for seven seconds.
+- Charged Switch still changes athlete and gives an eight-second speed boost.
+
+Strength for damage and control scales with actual HP paid, not time alone.
+An athlete with only 8 HP can pay 7 HP; she cannot buy full power by charging
+at the HP floor. Every new round resets charge state and HP debt. Ordinary
+single-card No Pain and its existing combinations keep their 0.8 s / 4 HP rules.
+
+`node pain-evolve.test.cjs` verifies budgets, partial/full charge, interruption,
+no refunds, low-HP safety, each athlete, AI, rare offers and fixed Evolve mode.
+`node online.test.cjs` checks guest charging, host-paid HP, cancellation, the HP
+floor, snapshot validation and fixed-Evolve selection through simulated transport.
