@@ -929,3 +929,54 @@ fort roots/HP/attacks/Switch and bot refill navigation. Online and party tests
 verify actual guest input, round-to-round age/HP changes, growing children,
 living-ink actors, refill puddles and rooted movement over simulated transport.
 Real network/signalling routes were not exercised.
+
+
+## Match insights, live practice tools and The Sea support
+
+Completed matches now show a responsive result panel for every player: actual
+capped damage dealt/taken (including captain hull), projectile hits/launches,
+evaded hits, effective healing, guarded/reflected damage, ability HP costs and
+the part of damage supplied by The Sea. Projectile precision counts each
+projectile once even if it produces multiple hits. Dodge near-misses require a
+projectile path intersection or an avoided hit; repeating frames do not count
+again. Zombie/Hydra revivals do not erase the damage that exhausted the old life,
+and overkill is capped at the actual HP available. Self-hits and HP costs are not
+credited as damage to enemies. Bleed attribution follows its contributing owners.
+
+The build breakdown shows observed damage/healing/blocking/costs while each card
+combination was in use. It does not invent a counterfactual damage bonus for each
+individual card. Match data accumulates across rounds, resets on rematch, is
+host-authoritative and is validated/imported with online snapshots. Training has
+its own damage counter and is excluded from competitive match totals.
+
+During training, the new tools below the play controls let you select both cards
+and owned-round/age step, apply the build without returning to the menu, reset
+cooldowns (including Giant Hands and Olympic personal cooldowns), restore the
+dummy, clear the damage counter or start a new trial. Applying a build cleans up
+old effects/state and retains legal player positions. Dummy modes are Still,
+Moving, Avoiding (no attacks) and Fighting, with live difficulty selection.
+Existing immortality/no-cooldown training options remain available in setup.
+Controls stay above the tools on mobile.
+
+Only **The Sea** has new arena events. Every nine seconds after an initial eight
+seconds, a living My Home Evolve Sailer receives one of three warned attacks:
+
+- Sea’s Wrath: three staggered water eruptions, 16 damage each.
+- Ghost Broadside: a 90-wide horizontal cannon lane, 24 damage.
+- Captain’s Storm: a marked 140-radius strike, 28 damage.
+
+Warnings last 1.25–1.8 seconds. Events attack only the source Sailer's enemies;
+the Sailer and that Sailer's allies are protected. Multiple opposing Sea owners
+take turns receiving support for their own side. Dead owners lose pending
+support. Bots react to the marked danger and seek a safe direction. No other
+map receives these events. Training disables them by default, with an optional
+The Sea event checkbox to practice them deliberately.
+
+`node game-upgrades.test.cjs` covers capped damage/guards/healing/costs,
+projectile accuracy, evasion de-duplication, Bleed, resurrection accounting,
+build/round totals/results/rematches, practice controls and Sea behavior.
+Online tests cover authoritative guest result panels and rematch resets; party
+tests cover synchronized Sea warnings/damage and allied protection. Core gameplay, Evolve, map and team
+regression checks also pass with simulated transport. Headless Chromium could
+not start in the sandbox (Crashpad setsockopt EPERM), so no live browser/network
+claim is made by these tests.

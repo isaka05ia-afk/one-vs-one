@@ -12,3 +12,5 @@ refreshBattleSetup();
 initEvolutionUI();
 
 initDragonEvolutionUI();
+
+initPracticeTools();
