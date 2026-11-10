@@ -775,7 +775,7 @@ The returning Nuclear Orb also deals 120 damage on contact with its creator afte
 
 **No Pain, No Gain ×2** is now available through the rare repeat-card offer,
 training and the fixed-loadout Evolve mode. This adds the 26th Evolve choice.
-It keeps the three athletes and Switch; other Olympic Evolves remain unimplemented.
+It keeps the three athletes and Switch; Too Old and Kids Evolves remain unimplemented.
 
 Hold any attack for up to **2 s**. Charging immediately spends **12.5 HP/s**, up
 to **25 HP**, from the active athlete. Release early for proportional power:
@@ -811,7 +811,7 @@ floor, snapshot validation and fixed-Evolve selection through simulated transpor
 
 Training accepts two matching Selfish athlete cards. Fixed best-of-three Evolve
 mode offers three explicit choices: **Can’t Stop (Runner)**, **Deep End (Swimmer)**
-and **Thin Ice (Skater)**, for 29 total Evolve selections. Each choice retains
+and **Thin Ice (Skater)**. There are now 30 total Evolve selections. Each choice retains
 one athlete, her three buttons and 120 HP for the entire match. Between-round
 respawns never change her. Selecting a rare second Selfish card in a series
 uses the already-selected athlete directly, without opening another choice.
@@ -823,8 +823,9 @@ Different Selfish athletes cannot be combined.
   1320 speed / 99 damage and costs its usual 5 HP. Releasing, stun, grab or
   cancelled input stops the run and starts the 3.6 s cooldown. Energy Drink or
   Never Happened can interrupt Sprint. Bot/direct-tap runs stop after 3 s.
-- Swimmer: once-per-round Pool floods almost the whole arena (a circle centered
-  on the arena with radius 47% of its diagonal). Normal water rules apply to
+- Swimmer: once-per-round Pool now covers **at most half the arena area**. Its
+  centered radius is the smaller of `sqrt(W*H/(2*pi))` and half the shorter
+  arena side minus 22. Normal water rules apply to
   everyone. She has 400 speed in water and only 85 on dry ground. Splash deals
   32 in water / 14 on land, radius 80, 650 range and 170 push. Steerable Dive
   lasts 1.8 s at 600 water / 320 land speed.
@@ -838,3 +839,37 @@ first-athlete locking, three-round persistence, held Sprint/release/interrupt,
 rewind escape, water dependence, pool reuse prevention and enhanced ice/spin.
 Online and party tests cover all three Evolve choices, synchronized fixed
 athletes and Runner hold/release through simulated transport.
+
+
+## So Much Power ×2 — No Control
+
+Available as a rare second So Much Power card, in training and fixed best-of-three
+Evolve mode. All three athletes retain their own 40 HP and Switch.
+
+- **Runner — Wrecking Kick:** 0.65 s visible windup, 10 direct damage, 700 push
+  and 75 extra damage if the enemy hits a wall. A miss recoils 350; hitting a
+  wall during recoil costs 30 own HP. Energy Drink still costs 5 HP and doubles
+  both push/recoil (and the recoil wall penalty), making a bad boosted miss
+  capable of knocking out Runner. Cooldown 7.5 s.
+- **Swimmer — Walking Whirlpool:** hold to grow a moving field from radius 90
+  to 350 over four seconds. Movement slows to 30%. It pulls enemies **and allies**
+  at 175/s; fighters can move/dodge away. Release throws nearby caught fighters
+  in the aimed direction for 350–670 push; enemies take 14–30 damage, allies take
+  no direct damage. Switch, interruption or cancellation discards the field.
+  Direct taps/bots release after two seconds; human holds cap at four. Cooldown
+  11 s from release. Tidal Wave remains the first attack.
+- **Skater — Shattered Ice:** a 0.45 s warned wave deals 8 damage and three Bleed,
+  then splits into five returning shards. Starting on ice widens the wave from
+  radius 64 to 100, adds two Bleed and produces seven shards. Each shard deals
+  7 damage and two Bleed, bounces twice and can hit its creator. Shards are queued
+  until the projectile update completes so they survive the wave's removal.
+  Ice Trail remains available and creates stronger sliding terrain.
+
+The Selfish Evolve Pool nerf is separate: normal Selfish and No Pain Pool sizes
+are unchanged. The area bound holds on every map, including Labyrinth and Sea.
+
+`node power-evolve.test.cjs` checks recoil/Drink/wall damage, growing/released/
+interrupted whirlpools, allied pull without damage, Switch, queued shards,
+self-hits/Bleed/bounces and the pool-area bound on all maps. Simulated online
+and party tests cover the new Evolve choice, guest hold/release, projectile
+snapshots and round cleanup. Real internet transport was not exercised.
