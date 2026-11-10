@@ -775,7 +775,7 @@ The returning Nuclear Orb also deals 120 damage on contact with its creator afte
 
 **No Pain, No Gain ×2** is now available through the rare repeat-card offer,
 training and the fixed-loadout Evolve mode. This adds the 26th Evolve choice.
-It keeps the three athletes and Switch; Too Old and Kids Evolves remain unimplemented.
+It keeps the three athletes and Switch; All five Olympic card families now have Evolves.
 
 Hold any attack for up to **2 s**. Charging immediately spends **12.5 HP/s**, up
 to **25 HP**, from the active athlete. Release early for proportional power:
@@ -811,7 +811,7 @@ floor, snapshot validation and fixed-Evolve selection through simulated transpor
 
 Training accepts two matching Selfish athlete cards. Fixed best-of-three Evolve
 mode offers three explicit choices: **Can’t Stop (Runner)**, **Deep End (Swimmer)**
-and **Thin Ice (Skater)**. There are now 30 total Evolve selections. Each choice retains
+and **Thin Ice (Skater)**. There are now 32 total Evolve selections. Each choice retains
 one athlete, her three buttons and 120 HP for the entire match. Between-round
 respawns never change her. Selecting a rare second Selfish card in a series
 uses the already-selected athlete directly, without opening another choice.
@@ -873,3 +873,59 @@ interrupted whirlpools, allied pull without damage, Switch, queued shards,
 self-hits/Bleed/bounces and the pool-area bound on all maps. Simulated online
 and party tests cover the new Evolve choice, guest hold/release, projectile
 snapshots and round cleanup. Real internet transport was not exercised.
+
+
+## Olympic age Evolves — the last two families
+
+**Too Old ×2 — Still Not Retired** and **Kids ×2 — Too Young for This** are
+available through rare duplicate offers, training and fixed best-of-three Evolve.
+All five Olympic card families now evolve (seven menu choices because Selfish has
+three locked athlete variants); the game has 32 Evolve selections in total.
+
+Age counts rounds **owned**, including the first one. Acquisition in match round
+four starts at owned round one. Fixed Evolve mode starts at one and advances each
+round. Training's Round / Age Step field previews steps one through five. Visuals,
+HP, speed and abilities follow the same stored stage in multiplayer snapshots.
+
+Too Old, owned rounds 1 / 2 / 3:
+
+- Mother becomes Grandma; her child becomes child / teen / adult. Parent and child
+  remain connected by a visible 145-distance cord. The one child's HP is
+  40 / 65 / 95 and melee damage 8 / 13 / 19. Protect Grandma commands the child
+  and gives a short frontal guard. Switching dismisses the child.
+- Yoga has Ancient Sun Beam (25 / 38 / 56 damage), with increasingly long
+  0.7 / 1.0 / 1.3 s aimable charge. Sacred Circle damages enemies and heals allies
+  for 5 / 7 / 9 HP/s. Switching removes her circle.
+- Living History summons 1 / 2 / 3 living tattoos. Activation costs 3 / 5 / 7 HP,
+  and upkeep costs 1 / 2 / 3 HP/s. Each tattoo deals 7 / 10 / 13 nearby damage
+  every 0.8 s and can be destroyed. Recall Ink or Switch stops the cost and
+  dismisses them. The summon lasts at most seven seconds.
+- Team HP falls 104 / 85 / 66 and movement slows with age. Additional owned rounds
+  four/five continue the trend, with stronger powers and increasingly fragile bodies.
+
+Kids, owned rounds 1 / 2 / 3:
+
+- Runner and Swimmer shrink from children toward babies. Each has 40 / 32 / 24 HP.
+  Runner's normal speed falls 240 / 190 / 130, but Sugar Burst gives
+  460 / 620 / 780 speed and +40% Baby Rush damage, followed by a harsh energy dip.
+- Swimmer has a **100-water tank**, starting with 50 each round. Water Gun costs
+  12; Water Balloon costs 35 and leaves a refill puddle for the round. Hold the
+  Water Gun button **while in water** to refill at 45/s; release to shoot, or
+  cancel to keep the water without firing. The button remains usable for reload
+  even when empty or cooling down, so no fourth attack is needed. On a dry map
+  with no water source, gunfire reserves enough for one emergency balloon.
+  Bots create/refill at puddles rather than remaining dry and unable to attack.
+- Lego Fortress has 140 / 150 / 160 HP, a larger hitbox, powerful ranged Lego
+  and barricades. She cannot walk, dodge or be ordinarily pushed. Switch leaves
+  the fortress form; existing boats/grabs/Titanic can still transport her.
+  Younger stages four/five further strengthen the fort while weakening the others.
+- Switch cancels water refill, ends Sugar Burst (keeping its dip risk), and
+  changes athlete. Water ammunition stays with the team during that round.
+
+`node olympic-age.test.cjs` checks all six athletes across three owned stages,
+late acquisition, cord/child growth, age HP/speed, sun healing/charge, tattoo
+costs/recall, sugar bursts/dips, water-only refill/ammo/puddles/empty-button safety,
+fort roots/HP/attacks/Switch and bot refill navigation. Online and party tests
+verify actual guest input, round-to-round age/HP changes, growing children,
+living-ink actors, refill puddles and rooted movement over simulated transport.
+Real network/signalling routes were not exercised.
