@@ -1,0 +1,26 @@
+const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
+const context=new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
+const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){}},setAttribute(){},append(){},add(){},addEventListener(){},getContext:()=>context,querySelector:()=>node(),getBoundingClientRect:()=>({left:0,top:0,width:1000,height:700}),value:'local',textContent:'',innerHTML:''});
+const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','olympic.js','oldteam.js','engin.js','kids.js','pain.js','gods.js','controls.js','enginextras.js','ai-strategies.js','battle.js','combat.js','aiming.js','evolutions.js','sailer-evolutions.js','dragon-evolutions.js','engin-evolutions.js','timeline.js','olympic-age.js','game-upgrades.js','mannequin.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
+
+const run=c=>vm.runInContext(c,sandbox);
+
+
+
+
+
+const close=(a,b)=>assert(Math.abs(a-b)<.00001,`${a} != ${b}`);
+function step(s){run(`for(let n=0;n<${Math.ceil(s/.01)};n++)update(.01)`)}
+function duel(id=0,enemy=0){sandbox.own=id;sandbox.other=enemy;run("selected=own;$('mode').value='local';$('battleMode').value='duel';$('opponent').value=String(other);$('map').value='court';$('format').value='series';start();walls=[];fighters[0].x=200;fighters[1].x=600;fighters[0].y=fighters[1].y=550;fighters[0].aim=fighters[0].lockedAim=0;fighters[1].aim=Math.PI;inputMode='mouse';mouseAim=false");}
+function practice(id=0){sandbox.own=id;run("selected=own;$('mode').value='training';$('map').value='court';$('opponent').value='0';$('trainingCard1').value='none';$('trainingCard2').value='none';$('trainingDummy').value='still';$('trainingStage').value='3';start();walls=[];fighters[0].x=200;fighters[1].x=600;fighters[0].y=fighters[1].y=550;fighters[0].aim=fighters[0].lockedAim=0;inputMode='mouse';mouseAim=false;$('trainingImmortal').checked=false;$('trainingImmortalDummy').checked=true");}
+
+function blockKit(cards=['dummy_training'],enemy=0,enemyCards=[]){duel(6,enemy);sandbox.a=cards;sandbox.b=enemyCards;run('loadouts[0]=a;loadouts[1]=b;roundNumber=2;spawnRound();walls=[];fighters[0].x=200;fighters[1].x=600;fighters[0].y=fighters[1].y=550;fighters[0].aim=0;fighters[1].aim=fighters[1].lockedAim=Math.PI;mouseAim=false');}
+for(const [cards,window] of [[['dummy_training'],.35],[['dummy_training','dummy_training'],.25],[['dummy_training','dummy_pins'],.35]]){blockKit(cards);run("$('aimBeforeShoot').checked=true;beginPlayerAttack(0)");close(run('mannequinState(fighters[0]).parry'),window);run('endPlayerAttack(0)');close(run('mannequinState(fighters[0]).parry'),window);step(window-.02);assert.equal(run('hit(fighters[1],fighters[0],10)'),false);close(run('fighters[0].hp'),run('fighters[0].maxHp'));blockKit(cards);run('beginPlayerAttack(0)');step(window+.02);assert.equal(run('hit(fighters[1],fighters[0],10)'),true);assert(run('mannequinState(fighters[0]).recovery>0'));}
+blockKit();run('executeMannequin(0,0);fighters[0].aim=Math.PI');assert.equal(run('hit(fighters[1],fighters[0],10,{beam:true,origin:fighters[1]})'),true);
+blockKit();run('executeMannequin(0,0)');assert.equal(run('hit(fighters[1],fighters[0],10,{area:true})'),true);
+for(const [id,cards,slot] of [[0,[],1],[2,['lizard'],2],[2,['lizard','lizard'],2],[2,['no_wait','no_wait'],2]]){blockKit(['dummy_training'],id,cards);const hp=run('fighters[0].hp');run('executeMannequin(0,0);execute(1,'+slot+')');close(run('fighters[0].hp'),hp);assert(run('fighters[1].stun>0'));}
+for(const cards of [[],['magic_tech'],['uranium_v2','uranium_v2']]){blockKit(['dummy_training'],3,cards);run('fighters[1].reactor.left=1.5;fighters[1].reactor.tick=0;fighters[1].move=0;executeMannequin(0,0);updateReactor(1,.01)');close(run('fighters[0].hp'),110);close(run('fighters[1].reactor.left'),0);assert(run('fighters[1].stun>1'));}
+blockKit(['dummy_training'],4,['kids','too_old']);run('teamState(fighters[1]).active=2;syncTeam(fighters[1]);fighters[1].lockedAim=Math.PI;executeMannequin(0,0);execute(1,0)');close(run('fighters[0].hp'),110);assert(run('fighters[1].stun>0'));
+blockKit(['dummy_training'],4,['too_old','selfish_swimmer']);run('oldTeamState(fighters[1]).sunReady=true;fighters[1].lockedAim=Math.PI;executeMannequin(0,0);execute(1,0)');close(run('fighters[0].hp'),110);assert(run('fighters[1].stun>0'));
+blockKit(['dummy_training'],3,['magic_tech','magic_tech']);run("fighters[1].x=1000;fighters[1].y=900;executeMannequin(0,0);replayTimelineEvent({owner:1},{width:W,height:H},{type:'beam',x:600,y:550,ex:200,ey:550,width:12,damage:20})");close(run('fighters[0].hp'),110);assert(run('fighters[1].stun>0'));
+console.log('PASS: press-to-parry (release cannot duplicate), exact 350/250 ms windows, miss recovery, frontal-only/area bypass, actual Scissors/Inferno/Volcanic/Primal/Robot/Sun and Reactor/Tractor/Atomic beams; channels stop and attacker is stunned.');

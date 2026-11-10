@@ -21,7 +21,7 @@ function executeOld(i,kind,m,u){const f=fighters[i];if(!isOldTeam(f))return fals
  if(kind==='yogabreath'){healFighter(f,painActive(f)?10:6);oldAreaHit(i,f,m[3],.8,m[2]);return true}
  if(kind==='yogacircle'){zone(i,f.x,f.y,m[3]*(painActive(f)?1.35:1),m[2],0,'yogamat',3);zones[zones.length-1].healRate=painActive(f)?6:4;return true}
  if(kind==='praisethesun'){o.sunReady=true;spark(f.x,f.y,'#ffe28c',24);return true}
- if(kind==='sunbeam'){let reach=0;for(let d=4;d<=m[3];d+=4){if(!free(f.x+u.x*d,f.y+u.y*d,2))break;reach=d}hitDoorBeam(i,reach,m[2],2.5);beams.push({x:f.x,y:f.y,ex:f.x+u.x*reach,ey:f.y+u.y*reach,life:.24,size:2.5,color:'#ffe06a'});for(const b of beamEnemies(i,reach,23))hit(f,b,m[2]);o.sunReady=false;return true}
+ if(kind==='sunbeam'){let reach=0;for(let d=4;d<=m[3];d+=4){if(!free(f.x+u.x*d,f.y+u.y*d,2))break;reach=d}hitDoorBeam(i,reach,m[2],2.5);beams.push({x:f.x,y:f.y,ex:f.x+u.x*reach,ey:f.y+u.y*reach,life:.24,size:2.5,color:'#ffe06a'});for(const b of beamEnemies(i,reach,23))hit(f,b,m[2],{beam:true,origin:f});o.sunReady=false;return true}
  if(kind==='cruelsun'){projectile(i,'cruelsun',m[2],m[3],180,28);o.sunReady=false;return true}
  if(kind==='tattoorage'){o.rage=6;return true}
  if(kind==='baddiepunch'){oldAreaHit(i,f,m[3],.8,m[2]);return true}
