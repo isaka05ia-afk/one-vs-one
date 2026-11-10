@@ -767,3 +767,5 @@ checks host-authoritative Engin Evolve state and remote attacks using simulated
 transport. These checks do not exercise real internet connectivity.
 
 Never Dead now has a separate rotten zombie silhouette: crooked bare limbs, exposed bones, ragged clothes, damaged face and drooping jaw, with no reactor equipment.
+
+The returning Nuclear Orb also deals 120 damage on contact with its creator after arming by separation or a wall bounce. A 1 s contact cooldown prevents per-frame hits. Contact leaves the orb active; its fourth bounce still triggers its explosion. Dodge avoids contact.
