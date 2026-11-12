@@ -33,3 +33,5 @@
 #magicChoices{display:grid;gap:12px}#magicChoices label{display:grid;gap:6px}#magicChoices select{width:100%;min-height:44px}#magicChoices button{min-height:44px;text-align:left}#magicHelp,#webHelp{line-height:1.5}
 
 .mainTabs{display:flex;gap:10px;margin:20px 0}.mainTabs [aria-selected="true"]{background:#d8ff62;color:#101322}.adventureSetup{max-width:760px;margin:24px auto;text-align:center;padding:30px}.adventureSetup h2{font-size:clamp(32px,7vw,60px);margin:12px 0}.adventureSetup p{line-height:1.7}.adventureSetup canvas{max-width:100%}.adventureSpeech{padding:12px 18px;min-height:48px;background:#242032;border:1px solid #8e73a7;text-align:center;color:#eedcfa;font-style:italic;border-radius:10px}.adventureSetup[hidden],.mainTabs[hidden],.adventureSpeech[hidden]{display:none}
+
+.harborTalk{max-width:720px;margin:14px auto;padding:20px;border:1px solid #c5af77}.harborTalk p{font-size:18px;line-height:1.6}.harborTalk button{margin:6px}#harborInteract{margin:12px 0}.harborTalk[hidden],#harborInteract[hidden],#adventureContinue[hidden]{display:none}

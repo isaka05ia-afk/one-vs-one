@@ -38,7 +38,7 @@ run('startAdventure();paused=false;fighters[0].spawnShield=0;applyDamage(fighter
 run('startAdventure();paused=false;for(let n=0;n<1500&&!finished;n++)update(.01);render();updateHud()');
 assert(run('adventure.elapsed')>0);
 run('start()');assert.equal(run('adventure'),null);assert.equal(run('fighters[0].isAdventurePlayer'),undefined);
-assert.equal(run('adventureDialogue(20,true)[1]'),'Do I always apologise?');
+assert(run('adventureDialogue(20,true)[0]').includes('How many times'));
 
 run("running=false;adventure=null;adventureSettings=null;selected=5;$('mode').value='ai';$('map').value='harbor';startAdventure();paused=false");
 const beforeRetry=run('adventure.attempt');run('startAdventure()');assert.equal(run('adventure.attempt'),beforeRetry+1);
@@ -65,8 +65,8 @@ assert(run('bossGrowthLines(12)[1]').includes('seen this before'));assert(run('b
 // The transformations and new boss-only modifiers never affect normal Door Man.
 run('start()');assert.equal(run('adventure'),null);close(run('heroDamage({id:1,cards:[]})'),1);assert.equal(run('fighterRadius({id:1,cards:[]})'),run('R'));
 // Story advances slowly; transformation recognition uses actual completed scenes.
-assert.equal(run('adventureDialogue(7).join("|")'),run('adventureDialogue(1).join("|")'));
-assert.notEqual(run('adventureDialogue(8).join("|")'),run('adventureDialogue(7).join("|")'));
+assert.equal(run('adventureDialogue(9).join("|")'),run('adventureDialogue(1).join("|")'));
+assert.notEqual(run('adventureDialogue(10).join("|")'),run('adventureDialogue(9).join("|")'));
 assert.equal(run('bossGrowthLines(4).join("|")'),run('bossGrowthLines(1).join("|")'));
 run("window.localStorage={data:{},getItem(k){return this.data[k]||null},setItem(k,v){this.data[k]=v}};adventureSave('one-vs-one-door-attempts',30);startAdventure();paused=false;adventurePhaseTwo()");assert.equal(run('adventure.cutscene.lines[0]'),'Why are you still here?');close(run("adventureStored('one-vs-one-door-form-views')"),0);
 run('updateBossGrowth(8.4);updateBossGrowth(1)');close(run("adventureStored('one-vs-one-door-form-views')"),1);
