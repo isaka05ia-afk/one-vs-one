@@ -1165,7 +1165,7 @@ Sailer’s pre-Kraken scene is rewritten as **charge → interruption/grab → d
 
 ## Curse och djurfolket
 
-The Queen of Curses är en kunglig varelse med energikrona, svans och ett brett tandat leende. Cursed Needle märker motståndaren. Royal Decree skapar ett synligt förbannat område. Punishment öppnar ett val på de tre befintliga attackknapparna: No Escape förbannar nästa dodge, No Violence nästa attack, och tredje knappen avbryter. Förbud, tid och återstående straff syns ovanför offret. Fem kort: The Cursed Blade, This Is My Kingdom, Blood Debt, Double Sentence och Royal Blood.
+The Queen of Curses är en kunglig varelse med energikrona, svans och ett brett tandat leende. Cursed Needle märker motståndaren. Royal Decree skapar ett synligt förbannat område. Punishment öppnar ett val på de tre befintliga attackknapparna: No Escape förbannar nästa dodge, No Violence nästa attack, och tredje knappen avbryter. Förbud, tid och återstående straff syns ovanför offret. Fem kort: The Cursed Blade, This Is My Kingdom, Shared Suffering, A Thousand Curses och Forever Yours.
 
 Vasta är nu en kanin, Latissa en delfin och Solea en igelkott, alla humanoider i medeltida kläder. Samma arter följer med i kortkombinationerna, barn-/äldreformerna, gudformerna och evos. Deras spelmekanik är oförändrad. Sailer har tydligare kortdetaljer, segel, vågor och kanonkulor.
 
@@ -1183,3 +1183,18 @@ Cursed Blade ×2, The Hungry Blade, har endast en attack. Varje själ ger +22 sk
 Kingdom ×2, The Land Beyond Me, låser henne vid en tron. Åtta sigill driver de första två attackerna; siktriktningen väljer sigill. Sista förmågan väljer deltagaren närmast riktningen över hela banan, även lagkamrater, och visar en förvarning innan regeln aktiveras. Förstörda sigill krymper området och kostar drottningen 5 HP. Håll Dodge/Shift (Enter för lokal spelare 2) för Royal Guard: ett långsamt vridbart frontskydd med 90 hållbarhet. På mobil hålls Dodge-knappen och dras för riktning. Släpp för ett svagt knuffande svanssvep. Skyddet kan brytas; inga attacker eller nya aktiva förbannelser kan kastas medan hon garderar.
 
 Båda evos finns i vanliga kortval, träning och Evolve-match. `queen-evolve.test.cjs` och `queen-evolve-online.test.cjs` verifierar själar, sigill, kombon, riktning, vänliga förbannelser, skydd och nätverkssynk med simulerad transport.
+
+
+### Queen: de tre sista korten och evos
+
+Shared Suffering ger 40 extra maxliv och en långsammare tankstil. Bind Suffering länkar ett mål: 35% av verklig inkommande fiendeskada delas. Med klingan laddar överförd skada nästa svärdsattack; med kungariket delas skadan mellan dess länkade fiender. Med A Thousand Curses delar hon även sjukdomar och får korta svaga själveffekter. Med Forever Yours kan en enda länk inte brytas av avstånd eller skydd resten av ronden.
+
+A Thousand Curses sänker direkt skada och staplar Bleed, Burn, Slow och Stun-märken. Fyra Stun-märken utlöser en kort bedövning med återhämtningsintervall. Kungarikets sigill sprider varsin effekt; klingans själar lägger fler staplar på Soul Release. Forever Yours lämnar svaga permanenta förbannelser resten av ronden, även genom död, avstånd och renande effekter. Tillsammans ger de Endless Affliction. Klingan + Forever lämnar försvarssänkande ärr; kungariket + Forever låter dess regel följa offret även utanför området.
+
+Shared Suffering ×2: One Wound, Two Bodies, 195 maxliv och låg direkt skada. 70% verklig skada och läkning delas åt båda håll med ett valt mål. Överförd skada/läkning och HP-kostnader kan inte studsa vidare.
+
+A Thousand Curses ×2: The Living Plague, 75 maxliv, nästan ingen direkt skada och ingen vanlig Dodge. Plague Thorn, Miasma och Pandemic bygger och sprider förbannelser mellan närstående fiender.
+
+Forever Yours ×2: Written Into the World. Förbannelser och egen offrad max-HP följer med mellan ronderna i samma match. Varje ny permanent förbannelse kostar ett maxliv; hon kan till slut förbruka sitt liv. En ny match eller återställning av träning rensar detta. Förbannelserna använder separat tillstånd så att tidsresor, återupplivning och vanliga statusrensningar inte raderar dem.
+
+Verifiering: `node queen-afflictions.test.cjs` och `node queen-afflictions-online.test.cjs`, plus befintliga spel-/online-/evo-regressioner. Online använder simulerad transport.

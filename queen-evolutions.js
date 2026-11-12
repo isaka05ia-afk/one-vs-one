@@ -1,5 +1,5 @@
 'use strict';
-const QUEEN_EVOLVES=['cursed_blade','my_kingdom'];
+const QUEEN_EVOLVES=['cursed_blade','my_kingdom','shared_suffering','thousand_curses','forever_yours'];
 const queenTouchGuard={held:false,aim:null};
 function queenEvolve(f,c){return f?.id===8&&cardCount(f.cards,c)===2;}
 function queenThrone(f){return queenEvolve(f,'my_kingdom');}
@@ -19,7 +19,7 @@ function queenEvolutionDescription(c){return c==='cursed_blade'?'THE HUNGRY BLAD
 function initializeQueenRoyalRound(){queenTouchGuard.held=false;queenTouchGuard.aim=null;for(const [i,f] of fighters.entries()){f.queenLifeSeen=f.hp>0&&!f.leoBenched&&!f.clone;if(f.id!==8)continue;queenRoyalState(f);if(queenThrone(f))createQueenKingdom(i,{x:f.x,y:f.y},true);}}
 function collectQueenSouls(){for(const q of fighters){if(q.hp<=0||!queenBlade(q)||q.borrowing)continue;const s=queenRoyalState(q);for(const [i,victim] of fighters.entries()){
  if(victim===q||victim.hp>0||!victim.queenLifeSeen||victim.clone||victim.leoBenched||s.absorbed.includes(i)||victim.isAdventurePlayer&&victim.playerLives>1)continue;
- s.absorbed.push(i);s.souls++;q.maxHp=queenMaxHP(q.cards,s.souls);q.hp=Math.min(q.hp,q.maxHp);if(hasCard(q,'blood_debt'))healFighter(q,10);spark(q.x,q.y,'#d3f0cb',20);syncQueenGraves(q);
+ s.absorbed.push(i);s.souls++;q.maxHp=queenMaxHP(q.cards,s.souls);q.hp=Math.min(q.hp,q.maxHp);spark(q.x,q.y,'#d3f0cb',20);syncQueenGraves(q);
  }} }
 function queenKingdom(f){const i=fighterIndex(f);return zones.find(z=>z.owner===i&&z.kind==='queen_kingdom'&&z.life>0);}
 function queenSigils(f){return actors.filter(a=>a.queenSigil&&a.owner===fighterIndex(f)&&a.hp>0);}
@@ -31,12 +31,12 @@ function syncQueenGraves(f){if(!queenGraveKingdom(f))return;const z=queenKingdom
 function queenActiveSigil(f){return queenSigils(f).sort((a,b)=>Math.abs(Math.atan2(Math.sin(angle(f,a)-f.aim),Math.cos(angle(f,a)-f.aim)))-Math.abs(Math.atan2(Math.sin(angle(f,b)-f.aim),Math.cos(angle(f,b)-f.aim))))[0];}
 function queenGlobalTarget(f){return fighters.filter(b=>b!==f&&b.hp>0&&!b.clone).map(b=>({b,delta:Math.abs(Math.atan2(Math.sin(angle(f,b)-f.lockedAim),Math.cos(angle(f,b)-f.lockedAim)))})).sort((a,b)=>a.delta-b.delta||distance(f,a.b)-distance(f,b.b))[0]?.b;}
 function queenCurseTarget(i,range){const f=fighters[i];return queenThrone(f)?queenGlobalTarget(f):combatEnemies(i).find(b=>b.dodge<=0&&cone(f,b,range,.5));}
-function applyQueenRule(owner,target,rule,power,uses,left){target.curseRules=(target.curseRules||[]).filter(c=>c.owner!==owner||c.rule!==rule);target.curseRules.push({owner,rule,left,power,uses});spark(target.x,target.y,'#e782ac',16);}
+function applyQueenRule(owner,target,rule,power,uses,left){target.curseRules=(target.curseRules||[]).filter(c=>c.owner!==owner||c.rule!==rule);target.curseRules.push({owner,rule,left,power,uses});queenAfterRule(owner,target,target.curseRules.at(-1));spark(target.x,target.y,'#e782ac',16);}
 function queenIssueRule(i,target,rule,power,uses,left){if(queenThrone(fighters[i])){zone(i,target.x,target.y,34,0,1,'queen_sentence',.3);Object.assign(zones.at(-1),{target:fighterIndex(target),rule,power,uses,sentenceLeft:left,total:1.3});}else applyQueenRule(i,target,rule,power,uses,left);}
 function executeQueenRoyal(i,slot,m){const f=fighters[i],s=queenRoyalState(f),kind=m[1];
  if(kind==='queen_kingdom'){createQueenKingdom(i,f.target||aimTarget(i,m[3]));return true;}
  if(kind==='queen_soulcut'||kind==='queen_hungry'){const reach=m[3],hungry=kind==='queen_hungry';f.leoFlash=.4;f.queenSlash=.4;hitDoorCone(i,reach,hungry?1.25:.8,m[2]);let awakened=false;for(const b of combatEnemies(i))if(cone(f,b,reach,hungry?1.25:.8)&&hit(f,b,m[2],{origin:f})){addQueenMark(b,i);if(!awakened&&queenGraveKingdom(f)){const z=queenKingdom(f),grave=s.graves.filter(g=>z&&distance(g,z)<z.r).sort((a,c)=>distance(a,b)-distance(c,b))[0];if(grave&&z&&distance(b,z)<z.r&&s.graveCd<=0){zone(i,b.x,b.y,80,m[2]*.55,.6,'queen_gravecut',.35);Object.assign(zones.at(-1),{sx:grave.x,sy:grave.y,tx:b.x,ty:b.y,total:.95});s.graveCd=1.4;awakened=true;}}}spark(f.x+Math.cos(f.lockedAim)*70,f.y+Math.sin(f.lockedAim)*70,'#dbedc0',12);return true;}
- if(kind==='queen_release'){const speed=800;const shot={x:f.x,y:f.y,vx:Math.cos(f.lockedAim)*speed,vy:Math.sin(f.lockedAim)*speed,life:m[3]/speed,r:14+s.souls*4,owner:i,kind:'queen_soulwave',damage:m[2],souls:s.souls,hitFighters:[],hitObjects:[],color:'#c7e8b9'};if(hasCard(f,'double_sentence')){shot.damage*=.75;const second={...shot,delay:.22,hitFighters:[],hitObjects:[]};shots.push(second);trackTimelineProjectile(second);insightShot(second);}shots.push(shot);trackTimelineProjectile(shot);insightShot(shot);return true;}
+ if(kind==='queen_release'){const speed=800;const shot={x:f.x,y:f.y,vx:Math.cos(f.lockedAim)*speed,vy:Math.sin(f.lockedAim)*speed,life:m[3]/speed,r:14+s.souls*4,owner:i,kind:'queen_soulwave',damage:m[2],souls:s.souls,hitFighters:[],hitObjects:[],color:'#c7e8b9'};shots.push(shot);trackTimelineProjectile(shot);insightShot(shot);return true;}
  if(queenThrone(f)&&['curse_needle','curse_decree'].includes(kind)){const sigil=queenActiveSigil(f)||(f.borrowing?f:null);if(!sigil)return true;const target=queenThroneAimPoint(i,m[3],sigil);const a=angle(sigil,target);if(kind==='curse_needle'){const shot={x:sigil.x,y:sigil.y,vx:Math.cos(a)*620,vy:Math.sin(a)*620,life:650/620,r:7,owner:i,kind:'curse_needle',damage:m[2],color:'#df9fbb'};shots.push(shot);trackTimelineProjectile(shot);insightShot(shot);}else{const d=Math.min(m[3],distance(sigil,target));zone(i,sigil.x+Math.cos(a)*d,sigil.y+Math.sin(a)*d,140,m[2],.9,'queen_decree',4);Object.assign(zones.at(-1),{total:4.9,beat:0});}return true;}
  return false;}
 function updateQueenRoyalZone(z,dt){if(!['queen_kingdom','queen_sentence','queen_gravecut','queen_tailsweep'].includes(z.kind))return null;z.life-=dt;z.delay-=dt;const f=fighters[z.owner];if(!f||f.hp<=0){actors=actors.filter(a=>!(a.owner===z.owner&&a.queenSigil));return false;}

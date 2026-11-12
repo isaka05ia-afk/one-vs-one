@@ -1,7 +1,7 @@
 'use strict';
 let dollCorpses=[],voodooBooks=[],magicSerial=0,magicPicker='',magicUiKey='';
 const nativeBorrowStates=new WeakMap();
-const BORROW_KEYS=['queenRoyal','queenChoosing','queenSavedCd','reactor','athletics','engineEvo','dragonEvo','sailer','giant','stage','ageStart','evolveStart','olympicAgeRound','headsLost','breath','breathTick','shipHp','shipBroken','jacketGiven','clapCount','clapPending','counterReady'];
+const BORROW_KEYS=['queenFate','queenRoyal','queenChoosing','queenSavedCd','reactor','athletics','engineEvo','dragonEvo','sailer','giant','stage','ageStart','evolveStart','olympicAgeRound','headsLost','breath','breathTick','shipHp','shipBroken','jacketGiven','clapCount','clapPending','counterReady'];
 function magicClone(v){return JSON.parse(JSON.stringify(v))}
 function voodooState(f){return f.voodoo??={banks:[],copies:[null,null,null],ready:true,ritual:null,skin:-1,body:-1,active:-1,mark:-1,markLeft:0,rolls:[],last:0,cooldowns:[]}}
 function voodooEvo(f){return mannequinEvo(f,'dummy_voodoo')}
