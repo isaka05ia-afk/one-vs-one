@@ -21,11 +21,17 @@ run('for(let t=0;t<125;t++)update(.01)');close(run('fighters[0].hp'),85);
 run('fighters[0].cd[1]=0;attack(0,1);applyDamage(fighters[0],5)');assert.equal(run('fighters[0].drinking'),0);assert.equal(run('fighters[0].potions'),1);
 run('fighters[1].hp=123;applyDamage(fighters[0],999)');assert.equal(run('fighters[0].playerLives'),2);close(run('fighters[0].hp'),110);close(run('fighters[1].hp'),123);assert.equal(run('fighters[0].potions'),1);
 run('applyDamage(fighters[0],999)');assert.equal(run('fighters[0].playerLives'),2);
-run('fighters[0].spawnShield=0;fighters[0].x=300;fighters[0].y=550;fighters[1].x=350;fighters[1].y=550;fighters[0].aim=0;dragonHoldInput(0,2,true);hit(fighters[1],fighters[0],20)');close(run('fighters[0].hp'),107);
-run('dragonHoldInput(0,2,false);hit(fighters[1],fighters[0],20)');close(run('fighters[0].hp'),87);
+run('fighters[0].spawnShield=0;fighters[0].x=300;fighters[0].y=550;fighters[1].x=350;fighters[1].y=550;fighters[0].aim=0;dragonHoldInput(0,2,true);hit(fighters[1],fighters[0],20,{scaled:true})');close(run('fighters[0].hp'),107);
+run('dragonHoldInput(0,2,false);hit(fighters[1],fighters[0],20,{scaled:true})');close(run('fighters[0].hp'),87);
 run('dragonHoldInput(0,2,true);clearInput()');assert.equal(run('fighters[0].blockHeld'),false);
-run('applyDamage(fighters[1],999)');assert.equal(run('adventure.phase'),2);close(run('fighters[1].hp'),340);close(run('fighters[0].hp'),87);assert.equal(run('fighters[0].potions'),1);
-run('applyDamage(fighters[1],999)');close(run('fighters[1].hp'),340);
+run('applyDamage(fighters[1],999)');assert.equal(run('adventure.phase'),2);close(run('fighters[1].hp'),420);close(run('fighters[0].hp'),87);assert.equal(run('fighters[0].potions'),1);
+run('applyDamage(fighters[1],999)');close(run('fighters[1].hp'),420);
+// Growth cutscene freezes the entire fight and cycles retry-aware dialogue.
+assert.equal(run('active()'),false);const frozenPlayerX=run('fighters[0].x'),frozenBossX=run('fighters[1].x');
+run('attack(0,0);applyDamage(fighters[0],50);applyDamage(fighters[1],50);render();update(2)');close(run('fighters[0].hp'),87);close(run('fighters[1].hp'),420);close(run('fighters[0].x'),frozenPlayerX);close(run('fighters[1].x'),frozenBossX);
+assert(run('bossMonsterScale()')>1);const earlyScale=run('bossMonsterScale()');run('paused=true;update(2)');close(run('adventure.cutscene.elapsed'),2);run('paused=false;update(2);render()');assert(run('bossMonsterScale()')>earlyScale);assert(run('adventure.line').includes('sorry'));
+run('update(2.5);render()');assert.equal(run('adventure.cutscene.line'),2);run('update(2)');assert.equal(run('adventure.cutscene'),null);close(run('bossMonsterScale()'),2.65);assert.equal(run('active()'),true);
+assert.equal(run('fighterRadius(fighters[1])'),48);assert(run('heroDamage(fighters[1])')>1);
 run('adventure.transition=0;adventure.warnings=[];fighters[0].dodge=0;bossWarning("grab",fighters[0],.1);tickAdventure(.2)');assert(run('fighters[0].hp')<87);assert(run('fighters[0].stun')>0);
 run('render();updateHud();applyDamage(fighters[1],999)');assert.equal(run('adventure.ended'),true);assert.equal(run('finished'),true);
 run('startAdventure();paused=false;fighters[0].spawnShield=0;applyDamage(fighters[0],999);fighters[0].spawnShield=0;applyDamage(fighters[0],999);fighters[0].spawnShield=0;applyDamage(fighters[0],999)');assert.equal(run('fighters[0].playerLives'),0);assert.equal(run('adventure.ended'),true);
@@ -43,4 +49,19 @@ run("$('aimBeforeShoot').checked=true;var blockButton=document.createElement('bu
 run("blockButton.onpointerup({pointerId:9})");assert.equal(run('fighters[0].blockHeld'),false);
 run("blockButton.onpointerdown({pointerId:10,clientX:0,clientY:0,preventDefault(){},pointerType:'touch'});blockButton.onpointercancel({pointerId:10})");assert.equal(run('fighters[0].blockHeld'),false);
 run('fighters[0].x=300;fighters[0].y=550;fighters[1].x=370;fighters[1].y=550;fighters[0].aim=0;fighters[0].lockedAim=0;beginPlayerAttack(0)');const hpBeforeSlash=run('fighters[1].hp');run('endPlayerAttack(0)');assert(run('fighters[1].hp')<hpBeforeSlash);
+// Door Run uses two actual doors and swept damage, including crossing in a long tick.
+run('startAdventure();paused=false;walls=[];fighters[0].x=800;fighters[0].y=550;fighters[1].x=200;fighters[1].y=550;startBossDoorRush()');assert(run('adventure.doorRush'));assert.equal(run('adventure.doorRush.passes'),2);
+run('render();tickBossDoorRush(1)');assert.equal(run('adventure.doorRush.stage'),'running');const rushHP=run('fighters[0].hp');run('tickBossDoorRush(.8)');assert(run('fighters[0].hp')<rushHP);
+const afterPass=run('fighters[0].hp');run('tickBossDoorRush(.01)');close(run('fighters[0].hp'),afterPass);
+run('fighters[0].x=800;fighters[0].y=850;for(let i=0;i<300;i++)tickBossDoorRush(.01)');assert.equal(run('adventure.doorRush'),null);
+// Sidestepping and dodging a pass avoid its damage.
+run('fighters[0].x=800;fighters[0].y=550;startBossDoorRush();tickBossDoorRush(1);fighters[0].y=850');const avoidHP=run('fighters[0].hp');run('tickBossDoorRush(.8)');close(run('fighters[0].hp'),avoidHP);
+run('adventure.doorRush=null;fighters[0].x=800;fighters[0].y=550;startBossDoorRush();tickBossDoorRush(1);fighters[0].dodge=1');run('tickBossDoorRush(.8)');close(run('fighters[0].hp'),avoidHP);
+// Phase-two rush makes three passes; more attacks include a warned key fan and door slam.
+run('adventure.doorRush=null;adventure.phase=2;fighters[0].dodge=0;startBossDoorRush()');assert.equal(run('adventure.doorRush.passes'),3);
+run('adventure.doorRush=null;adventure.warnings=[];shots=[];bossWarning("keys",fighters[1],.1);tickAdventure(.2);render()');assert.equal(run('shots.length'),5);
+run('adventure.warnings=[];bossWarning("slam",fighters[0],.1)');const slamHP=run('fighters[0].hp');run('tickAdventure(.2)');assert(run('fighters[0].hp')<slamHP);
+assert(run('bossGrowthLines(8)[1]').includes('seen this before'));assert(run('bossGrowthLines(3)[1]').includes('not surprised'));
+// The transformations and new boss-only modifiers never affect normal Door Man.
+run('start()');assert.equal(run('adventure'),null);close(run('heroDamage({id:1,cards:[]})'),1);assert.equal(run('fighterRadius({id:1,cards:[]})'),run('R'));
 console.log('Adventure: abilities, potion interruption, lives, damage/block, two phases, grabs, defeat, AI/render, arena isolation OK');
