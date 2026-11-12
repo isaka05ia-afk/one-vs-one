@@ -35,3 +35,6 @@ setupRoyal(['cursed_blade']);run("var royalRandom=Math.random;fighters[1].id=3;f
 setupRoyal(['my_kingdom']);run('executeQueen(0,1);fighters[1].x=600;updateQueenRoyalZone(queenKingdom(fighters[0]),.01);fighters[1].x=1000;var escapedHp=fighters[1].hp;triggerQueenCurse(1,"dodge")');assert.equal(run('fighters[1].hp'),run('escapedHp'));
 for(const map of run('Object.keys(MAPS)')){sandbox.mapToCheck=map;run("mapId=mapToCheck;setArena(mapToCheck);loadouts[0]=['my_kingdom','my_kingdom'];roundNumber=0;cardDraft=null;spawnRound()");assert(run('queenSigils(fighters[0]).every(a=>free(a.x,a.y,8))'),map+' sigils remain reachable');run('render()');}
 console.log('PASS: zombie revivals do not yield souls; kingdom-only rules stop at its edge; throne sigils stay outside obstacles on all arenas.');
+
+setupRoyal(['my_kingdom','my_kingdom']);run('var farField=queenKingdom(fighters[0]);farField.r=farField.baseRadius=900;updateQueenRoyalZone(farField,.01);mouseAim=true;aimPoint={x:1500,y:500};fighters[0].aim=fighters[0].lockedAim=0;fighters[0].target={x:930,y:500};executeQueen(0,0)');assert(run('shots[0].vx')>0);assert(Math.abs(run('shots[0].vy'))<.001);
+console.log('PASS: a distant sigil aims outward at the real cursor instead of a target clamped around the throne.');
