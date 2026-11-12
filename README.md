@@ -4,7 +4,7 @@
 
 # One vs One — Arena
 
-En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensioner, manuellt sikte, projektiler som kan missa och symmetriska väggar som skydd. Sex egna karaktärer. Boten får en slumpad fighter inför varje ny match och behåller den under alla ronder.
+En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensioner, manuellt sikte, projektiler som kan missa och symmetriska väggar som skydd. Nio egna karaktärer. Boten får en slumpad fighter inför varje ny match och behåller den under alla ronder.
 
 ## Spela
 Öppna index.html eller kör `python3 -m http.server 8080` och besök localhost:8080. Inga byggsteg behövs.
@@ -1161,3 +1161,12 @@ The Olympians now wager **a journey through time to Engin**, replacing their for
 Sailer’s pre-Kraken scene is rewritten as **charge → interruption/grab → drag overboard → rescue**. He charges a fatal golden-paddle attack at The Player, with a visible lethal lane and “No escape” framing. At 2.6 s Kraken interrupts before the blow; the tentacle grabs him, drags him away and the paddle drops onto the deck. The final beat calls for rescue. All combat is frozen throughout; player HP/lives/potions carry unchanged into Kraken. The HUD initially shows Sailer’s final attack rather than revealing Kraken before its entrance.
 
 `node time-reward.test.cjs` verifies saved-winner access to the new reward, paused/immune travel, Engin dialogue, return/replay, every interruption-scene beat and unchanged player resources, plus developer save isolation. Olympian trial, Kraken/harbor, visuals, melee access, controls/boss, Adventure and key-marker regressions pass. The full simulated-online suite loads the new time-rift module. Actual Chromium screenshots remain blocked by this executor’s Crashpad setsockopt restrictions.
+
+
+## Curse och djurfolket
+
+The Queen of Curses är en kunglig varelse med energikrona, svans och ett brett tandat leende. Cursed Needle märker motståndaren. Royal Decree skapar ett synligt förbannat område. Punishment öppnar ett val på de tre befintliga attackknapparna: No Escape förbannar nästa dodge, No Violence nästa attack, och tredje knappen avbryter. Förbud, tid och återstående straff syns ovanför offret. Fem kort: Long Reign, Thorned Oath, Blood Debt, Double Sentence och Royal Blood.
+
+Vasta är nu en kanin, Latissa en delfin och Solea en igelkott, alla humanoider i medeltida kläder. Samma arter följer med i kortkombinationerna, barn-/äldreformerna, gudformerna och evos. Deras spelmekanik är oförändrad. Sailer har tydligare kortdetaljer, segel, vågor och kanonkulor.
+
+Verifiering: `node queen.test.cjs`, `node queen-online.test.cjs` och `node creature-art.test.cjs`. Onlineprovet använder simulerad transport. Figurernas bilder har även renderats med Canvas för visuell granskning.

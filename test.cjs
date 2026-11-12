@@ -1,7 +1,7 @@
 const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
 const context=new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
 const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){}},setAttribute(){},append(){},add(){},addEventListener(){},getContext:()=>context,querySelector:()=>node(),getBoundingClientRect:()=>({left:0,top:0,width:1000,height:700}),value:'local',textContent:'',innerHTML:''});
-const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','olympic.js','oldteam.js','engin.js','kids.js','pain.js','gods.js','controls.js','enginextras.js','ai-strategies.js','battle.js','combat.js','aiming.js','evolutions.js','sailer-evolutions.js','dragon-evolutions.js','engin-evolutions.js','timeline.js','olympic-age.js','game-upgrades.js','mannequin.js','mannequin-web.js','mannequin-voodoo.js','leo.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
+const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','olympic.js','oldteam.js','engin.js','kids.js','pain.js','gods.js','controls.js','enginextras.js','ai-strategies.js','battle.js','combat.js','aiming.js','evolutions.js','sailer-evolutions.js','dragon-evolutions.js','engin-evolutions.js','timeline.js','olympic-age.js','game-upgrades.js','mannequin.js','mannequin-web.js','mannequin-voodoo.js','leo.js','queen.js','creature-art.js','game.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
 // Other-fighter regression tests use a stationary 140-HP training target.
 let dummyTarget=false;
 const run=code=>{const result=vm.runInContext(code,sandbox);if(dummyTarget)vm.runInContext("if(fighters.length===2&&$('mode').value==='local'&&fighters[1].id===3&&fighters[1].maxHp===125){if(fighters[1].hp>0)fighters[1].hp+=15;fighters[1].maxHp=140}",sandbox);return result};
@@ -79,8 +79,8 @@ setup(5);run('attack(0,2)');step(.6);run('nextTestRound()');assert.equal(run('bo
 console.log('PASS: Sailer health/speed, wide wave push and delay, wind pull and cover/dodge, boat windup/capture/action lock/transport/release, mobile destination, wall stop, sidestep and round cleanup.');
 assert.equal(run('roster[4].name'),'OLYMPIC TEAM');
 const savedRandom=Math.random;
-for(let id=0;id<8;id++){
- run(`Math.random=()=>${(id+.1)/8};$('mode').value='ai';start()`);assert.equal(run('fighters[1].id'),id);assert.equal(run('fighters[1].maxHp'),run(`roster[${id}].hp`));run('nextTestRound()');assert.equal(run('fighters[1].id'),id);
+for(let id=0;id<run('roster.length');id++){
+ run(`Math.random=()=>${(id+.1)/run('roster.length')};$('mode').value='ai';start()`);assert.equal(run('fighters[1].id'),id);assert.equal(run('fighters[1].maxHp'),run(`roster[${id}].hp`));run('nextTestRound()');assert.equal(run('fighters[1].id'),id);
  step(4);assert(run('fighters.every(f=>free(f.x,f.y)&&Number.isFinite(f.hp))'));
 }
 Math.random=savedRandom;
@@ -138,7 +138,7 @@ setup(5);run("loadouts[0]=['capten'];spawnRound();useTestMap();applyDamage(fight
 setup(5);run("loadouts[0]=['my_home']");const savedCardRandom=Math.random;let harborRolls=0;for(let i=0;i<100;i++){let calls=0;Math.random=()=>calls++===0?i/100:.2;run('nextCardMap()');if(run('mapId')==='harbor')harborRolls++}Math.random=savedCardRandom;assert.equal(harborRolls,60);
 run("$('map').value='grove'");setup(5);run("loadouts[0]=['canons'];spawnRound();useTestMap();fighters[0].x=100;fighters[0].y=350;attack(0,2)");step(.3);assert.equal(run('shots.length'),0);step(.4);assert.equal(run('shots[0].kind'),'heavycannon');assert.equal(run('getMoves(fighters[0]).length'),3);
 setup(4);run('fighters[0].hp=0;endRound()');assert.equal(run('cardDraft.options.join()'),'selfish,so_power,too_old');run("selectAbilityCard('so_power')");step(2.3);assert.equal(run('fighters[0].maxHp'),120);run('fighters[0].hp=0;endRound()');run("selectAbilityCard('too_old')");step(2.3);assert.equal(run('fighters[0].maxHp'),150);run('fighters[0].hp=0;endRound()');assert.equal(run('finished'),true);assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),2);
-for(let id=0;id<8;id++)for(const card of ['vitality','force','haste']){assert.equal(run(`validLoadout(${id},['${card}'])`),false)}
+for(let id=0;id<run('roster.length');id++)for(const card of ['vitality','force','haste']){assert.equal(run(`validLoadout(${id},['${card}'])`),false)}
 setup(0);run("$('mode').value='ai';fighters[1].hp=0;endRound()");assert.equal(run('loadouts[1].length'),1);assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),0);
 setupMap('grove',5,'quick');run('fighters[0].hp=0;endRound()');assert.equal(run('cardDraft'),null);assert.equal(run('loadouts[0].length'),0);run('start()');assert.equal(run('loadouts[0].length+loadouts[1].length'),0);
 Math.random=previousDraftRNG;console.log('PASS: loss-only three-card draft blocks next round; two-card cap; all Sailer pair orders; Capten removes slot 3 and absorbs overflow damage; boat repair and water speed; exact 60/100 My Home outcomes; narrow cannon replacement; generic HP/damage/speed; AI choice; Quick Match/no post-final draft; reset.');
@@ -401,7 +401,7 @@ setupEngin(['magic_tech','heavy_armor']);assert.equal(run('fighters[0].maxHp'),2
 setupEngin(['magic_tech','uranium_v2']);assert.equal(run('getMoves(fighters[0])[0][2]'),9.6);assert.equal(run('getMoves(fighters[0])[2][2]'),48);run('attack(0,2)');assert.equal(run('shots[0].r'),27);assert.equal(run('shots[0].selfDamage'),125);assert.equal(run('validEnginClone({cards:{}})'),false);
 setupEngin(['infected','heavy_armor']);assert.equal(run('fighters[0].maxHp'),157.5);
 
-for(let id=0;id<8;id++){
+for(let id=0;id<run('roster.length');id++){
  assert.equal(run(`cardFamilies(${id}).length`),5);
  assert.equal(run(`new Set(cardFamilies(${id})).size`),5);
  const family=run(`cardFamilies(${id})`);

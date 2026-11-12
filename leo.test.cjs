@@ -1,7 +1,7 @@
 const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
 const context=new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
 const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){}},setAttribute(){},append(){},add(){},addEventListener(){},getContext:()=>context,querySelector:()=>node(),getBoundingClientRect:()=>({left:0,top:0,width:1000,height:700}),value:'local',textContent:'',innerHTML:''});
-const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','olympic.js','oldteam.js','engin.js','kids.js','pain.js','gods.js','controls.js','enginextras.js','ai-strategies.js','battle.js','combat.js','aiming.js','evolutions.js','sailer-evolutions.js','dragon-evolutions.js','engin-evolutions.js','timeline.js','olympic-age.js','game-upgrades.js','mannequin.js','mannequin-web.js','mannequin-voodoo.js','leo.js','game.js','adventure.js','adventure-harbor.js','adventure-olympians.js','adventure-time-rift.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
+const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','olympic.js','oldteam.js','engin.js','kids.js','pain.js','gods.js','controls.js','enginextras.js','ai-strategies.js','battle.js','combat.js','aiming.js','evolutions.js','sailer-evolutions.js','dragon-evolutions.js','engin-evolutions.js','timeline.js','olympic-age.js','game-upgrades.js','mannequin.js','mannequin-web.js','mannequin-voodoo.js','leo.js','queen.js','creature-art.js','game.js','adventure.js','adventure-harbor.js','adventure-olympians.js','adventure-time-rift.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
 
 const run=c=>vm.runInContext(c,sandbox);
 
@@ -15,7 +15,7 @@ const run=c=>vm.runInContext(c,sandbox);
 
 
 run("$('mode').value='local';$('opponent').value='0';$('format').value='series';$('map').value='court';selected=7;start();fighters[0].x=600;fighters[0].y=500;fighters[1].x=700;fighters[1].y=500;fighters[0].lockedAim=0;fighters[1].dodge=0");
-assert.equal(run('roster.length'),8);assert.equal(run('cardFamilies(7).length'),5);assert.equal(run("validLoadout(7,['leo_ice','leo_ice'])"),false);assert.equal(run("validLoadout(7,['leo_ice','leo_earth'])"),false);
+assert.equal(run('roster.length'),9);assert.equal(run('cardFamilies(7).length'),5);assert.equal(run("validLoadout(7,['leo_ice','leo_ice'])"),false);assert.equal(run("validLoadout(7,['leo_ice','leo_earth'])"),false);
 for(const element of ['base','flames','thunder','earth','ice','corruption']){
  run(`fighters[0].cards=${element==='base'?'[]':JSON.stringify(['leo_'+element])};fighters[0].maxHp=leoMaxHP(fighters[0].cards);fighters[0].hp=100;fighters[1].hp=fighters[1].maxHp;fighters[1].guard=0;fighters[1].dodge=0;fighters[1].x=700;fighters[0].x=600`);
  const hp=run('fighters[1].hp');run('executeLeo(0,0);updateLeoShot(shots.at(-1),.15);drawFighter(contextDummy||ctx,fighters[0],0,false)'.replace('contextDummy||',''));
