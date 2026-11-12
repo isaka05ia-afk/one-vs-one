@@ -1165,8 +1165,21 @@ Sailer’s pre-Kraken scene is rewritten as **charge → interruption/grab → d
 
 ## Curse och djurfolket
 
-The Queen of Curses är en kunglig varelse med energikrona, svans och ett brett tandat leende. Cursed Needle märker motståndaren. Royal Decree skapar ett synligt förbannat område. Punishment öppnar ett val på de tre befintliga attackknapparna: No Escape förbannar nästa dodge, No Violence nästa attack, och tredje knappen avbryter. Förbud, tid och återstående straff syns ovanför offret. Fem kort: Long Reign, Thorned Oath, Blood Debt, Double Sentence och Royal Blood.
+The Queen of Curses är en kunglig varelse med energikrona, svans och ett brett tandat leende. Cursed Needle märker motståndaren. Royal Decree skapar ett synligt förbannat område. Punishment öppnar ett val på de tre befintliga attackknapparna: No Escape förbannar nästa dodge, No Violence nästa attack, och tredje knappen avbryter. Förbud, tid och återstående straff syns ovanför offret. Fem kort: The Cursed Blade, This Is My Kingdom, Blood Debt, Double Sentence och Royal Blood.
 
 Vasta är nu en kanin, Latissa en delfin och Solea en igelkott, alla humanoider i medeltida kläder. Samma arter följer med i kortkombinationerna, barn-/äldreformerna, gudformerna och evos. Deras spelmekanik är oförändrad. Sailer har tydligare kortdetaljer, segel, vågor och kanonkulor.
 
 Verifiering: `node queen.test.cjs`, `node queen-online.test.cjs` och `node creature-art.test.cjs`. Onlineprovet använder simulerad transport. Figurernas bilder har även renderats med Canvas för visuell granskning.
+
+
+### Queen: The Cursed Blade och This Is My Kingdom
+
+Katanan ersätter Needle med Soul Cut och Punishment med Soul Release. Slutliga utslagningar av alla andra deltagare, även lagkamrater, ger högst en själ per person och rond. Summons, separata relay-medlemmar, Hydras huvuden och lyckade Zombie-återupplivningar ger inga extra själar. Själarna ökar skada/räckvidd, förbrukas inte och återställs nästa rond.
+
+This Is My Kingdom skapar ett enda växande territorium med fyra förstörbara sigill och en synlig No Dodge-regel. Drottningen måste stanna inne för att växa det. Grave Kingdom-kombinationen skapar gravar av själarna; Soul Cut väcker ett förvarnat extra gravhugg.
+
+Cursed Blade ×2, The Hungry Blade, har endast en attack. Varje själ ger +22 skada och +30 räckvidd men −12 maxliv, minst 35. Svärdet drar siktet mot närmaste fiende under uppladdningen och spelaren kan styra emot.
+
+Kingdom ×2, The Land Beyond Me, låser henne vid en tron. Åtta sigill driver de första två attackerna; siktriktningen väljer sigill. Sista förmågan väljer deltagaren närmast riktningen över hela banan, även lagkamrater, och visar en förvarning innan regeln aktiveras. Förstörda sigill krymper området och kostar drottningen 5 HP. Håll Dodge/Shift (Enter för lokal spelare 2) för Royal Guard: ett långsamt vridbart frontskydd med 90 hållbarhet. På mobil hålls Dodge-knappen och dras för riktning. Släpp för ett svagt knuffande svanssvep. Skyddet kan brytas; inga attacker eller nya aktiva förbannelser kan kastas medan hon garderar.
+
+Båda evos finns i vanliga kortval, träning och Evolve-match. `queen-evolve.test.cjs` och `queen-evolve-online.test.cjs` verifierar själar, sigill, kombon, riktning, vänliga förbannelser, skydd och nätverkssynk med simulerad transport.

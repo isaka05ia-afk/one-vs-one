@@ -1,6 +1,6 @@
 'use strict';
 const SAILER_EVOLVES=['my_home','capten','canons','real_ship','drunk'];
-function allEvolutions(){return [...MANNEQUIN_CARDS,...ESSY_EVOLVES,...DOOR_EVOLVES,...SAILER_EVOLVES,...DRAGON_EVOLVES,...ENGIN_EVOLVES,...OLYMPIC_EVOLVES]}
+function allEvolutions(){return [...QUEEN_EVOLVES,...MANNEQUIN_CARDS,...ESSY_EVOLVES,...DOOR_EVOLVES,...SAILER_EVOLVES,...DRAGON_EVOLVES,...ENGIN_EVOLVES,...OLYMPIC_EVOLVES]}
 function randomEvolution(){const cards=allEvolutions();return cards[Math.floor(Math.random()*cards.length)]}
 function sailerEvolve(f,c){return !!f&&f.id===5&&cardCount(f.cards,c)===2}
 function hasSeaEvolution(){return loadouts.some(cards=>cardCount(cards,'my_home')===2)}
