@@ -222,6 +222,13 @@ async function advance(h,g,seconds){for(let i=0;i<seconds*100;i++){now.ms+=10;h.
  console.log('PASS: remote Beyond the Limit selection/charging, progressive host-paid HP, full 25-HP/4x rush, cancel without refund, active 1-HP floor, valid snapshots and fixed-Evolve lobby.');
  console.log('PASS: remote Atomic Beam channels wide repeated pulses with synchronized HP cost and stun interruption.');
  console.log('PASS: five remote Engin Evolves, valid authoritative snapshots, reactor destruction/rebuild, nuclear-orb slot/HP cost, injection stun/fuel, zombie revival/shield/Over Power and two historical echoes.');
+
+ // Touch drag/release works remotely with desktop direct attacks switched off.
+ await reconnect(0,0,'quick','court');h.run('walls=[];fighters[0].x=500;fighters[0].y=300;fighters[1].x=500;fighters[1].y=550;fighters[1].cd=[0,0,0]');await advance(h,g,.1);
+ g.run("$('aimBeforeShoot').checked=false;inputMode='touch';var remoteTouchButton=document.createElement('button');bindPainAttackButton(remoteTouchButton,1);remoteTouchButton.onpointerdown({pointerId:19,pointerType:'touch',clientX:100,clientY:100,preventDefault(){}});remoteTouchButton.onpointermove({pointerId:19,clientX:100,clientY:190})");
+ assert.equal(g.run('ownOnlineInput().fire'),false);assert.equal(g.run('ownOnlineInput().auto'),false);await advance(h,g,.5);assert.equal(h.run('fighters[1].cd[1]'),0);
+ g.run('remoteTouchButton.onpointerup({pointerId:19})');await advance(h,g,.1);assert(Math.abs(h.run('fighters[1].lockedAim')-Math.PI/2)<.001);assert(h.run('fighters[1].cast')>0);await advance(h,g,.35);assert(h.run('beams.some(b=>b.ey>b.y&&Math.abs(b.ex-b.x)<.001)'));assert.equal(h.run('fighters[0].hp'),150);assert.equal(g.run('touchAim.active'),false);await closePair();
+ console.log('PASS: guest touch hold/drag/release locks manual aim, suppresses premature auto-fire and shoots once with desktop direct attacks enabled.');
  console.log('PASS: five guest Dragon Evolves, owned-round starts/aging, Hydra first-round revive validation, held Blue invisibility/release/no attacks and three-button charged beam.');
  console.log('PASS: online fixed Evolve choices/HP/dash immunity/no drafts/two-win finish and host no-Evolve rule.');
  console.log('PASS: remote Evolve duplicate loadouts, synchronized Giant Hands switch, Sniper HP and fragile factory spawns.');

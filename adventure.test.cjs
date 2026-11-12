@@ -51,14 +51,14 @@ run("blockButton.onpointerdown({pointerId:10,clientX:0,clientY:0,preventDefault(
 run('fighters[0].x=300;fighters[0].y=550;fighters[1].x=370;fighters[1].y=550;fighters[0].aim=0;fighters[0].lockedAim=0;beginPlayerAttack(0)');const hpBeforeSlash=run('fighters[1].hp');run('endPlayerAttack(0)');assert(run('fighters[1].hp')<hpBeforeSlash);
 // Door Run uses two actual doors and swept damage, including crossing in a long tick.
 run('startAdventure();paused=false;walls=[];fighters[0].x=800;fighters[0].y=550;fighters[1].x=200;fighters[1].y=550;startBossDoorRush()');assert(run('adventure.doorRush'));assert.equal(run('adventure.doorRush.passes'),2);
-run('render();tickBossDoorRush(1)');assert.equal(run('adventure.doorRush.stage'),'running');const rushHP=run('fighters[0].hp');run('tickBossDoorRush(.8)');assert(run('fighters[0].hp')<rushHP);
+run('render();tickBossDoorRush(1.7)');assert.equal(run('adventure.doorRush.stage'),'running');const rushHP=run('fighters[0].hp');run('tickBossDoorRush(.8)');assert(run('fighters[0].hp')<rushHP);
 const afterPass=run('fighters[0].hp');run('tickBossDoorRush(.01)');close(run('fighters[0].hp'),afterPass);
 run('fighters[0].x=800;fighters[0].y=850;for(let i=0;i<300;i++)tickBossDoorRush(.01)');assert.equal(run('adventure.doorRush'),null);
 // Sidestepping and dodging a pass avoid its damage.
-run('fighters[0].x=800;fighters[0].y=550;startBossDoorRush();tickBossDoorRush(1);fighters[0].y=850');const avoidHP=run('fighters[0].hp');run('tickBossDoorRush(.8)');close(run('fighters[0].hp'),avoidHP);
-run('adventure.doorRush=null;fighters[0].x=800;fighters[0].y=550;startBossDoorRush();tickBossDoorRush(1);fighters[0].dodge=1');run('tickBossDoorRush(.8)');close(run('fighters[0].hp'),avoidHP);
+run('fighters[0].x=800;fighters[0].y=550;adventure.recovery=0;startBossDoorRush();tickBossDoorRush(1.7);fighters[0].y=850');const avoidHP=run('fighters[0].hp');run('tickBossDoorRush(.8)');close(run('fighters[0].hp'),avoidHP);
+run('adventure.doorRush=null;fighters[0].x=800;fighters[0].y=550;adventure.recovery=0;startBossDoorRush();tickBossDoorRush(1.7);fighters[0].dodge=1');run('tickBossDoorRush(.8)');close(run('fighters[0].hp'),avoidHP);
 // Phase-two rush makes three passes; more attacks include a warned key fan and door slam.
-run('adventure.doorRush=null;adventure.phase=2;fighters[0].dodge=0;startBossDoorRush()');assert.equal(run('adventure.doorRush.passes'),3);
+run('adventure.doorRush=null;adventure.phase=2;adventure.recovery=0;fighters[0].dodge=0;startBossDoorRush()');assert.equal(run('adventure.doorRush.passes'),3);
 run('adventure.doorRush=null;adventure.warnings=[];shots=[];bossWarning("keys",fighters[1],.1);tickAdventure(.2);render()');assert.equal(run('shots.length'),5);
 run('adventure.warnings=[];bossWarning("slam",fighters[0],.1)');const slamHP=run('fighters[0].hp');run('tickAdventure(.2)');assert(run('fighters[0].hp')<slamHP);
 assert(run('bossGrowthLines(12)[1]').includes('seen this before'));assert(run('bossGrowthLines(5)[1]').includes('not surprised'));
