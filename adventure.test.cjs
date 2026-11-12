@@ -38,7 +38,7 @@ run('startAdventure();paused=false;fighters[0].spawnShield=0;applyDamage(fighter
 run('startAdventure();paused=false;for(let n=0;n<1500&&!finished;n++)update(.01);render();updateHud()');
 assert(run('adventure.elapsed')>0);
 run('start()');assert.equal(run('adventure'),null);assert.equal(run('fighters[0].isAdventurePlayer'),undefined);
-assert.equal(run('adventureDialogue(8,true)[1]'),'Do I always apologise?');
+assert.equal(run('adventureDialogue(20,true)[1]'),'Do I always apologise?');
 
 run("running=false;adventure=null;adventureSettings=null;selected=5;$('mode').value='ai';$('map').value='harbor';startAdventure();paused=false");
 const beforeRetry=run('adventure.attempt');run('startAdventure()');assert.equal(run('adventure.attempt'),beforeRetry+1);
@@ -61,7 +61,21 @@ run('adventure.doorRush=null;fighters[0].x=800;fighters[0].y=550;startBossDoorRu
 run('adventure.doorRush=null;adventure.phase=2;fighters[0].dodge=0;startBossDoorRush()');assert.equal(run('adventure.doorRush.passes'),3);
 run('adventure.doorRush=null;adventure.warnings=[];shots=[];bossWarning("keys",fighters[1],.1);tickAdventure(.2);render()');assert.equal(run('shots.length'),5);
 run('adventure.warnings=[];bossWarning("slam",fighters[0],.1)');const slamHP=run('fighters[0].hp');run('tickAdventure(.2)');assert(run('fighters[0].hp')<slamHP);
-assert(run('bossGrowthLines(8)[1]').includes('seen this before'));assert(run('bossGrowthLines(3)[1]').includes('not surprised'));
+assert(run('bossGrowthLines(12)[1]').includes('seen this before'));assert(run('bossGrowthLines(5)[1]').includes('not surprised'));
 // The transformations and new boss-only modifiers never affect normal Door Man.
 run('start()');assert.equal(run('adventure'),null);close(run('heroDamage({id:1,cards:[]})'),1);assert.equal(run('fighterRadius({id:1,cards:[]})'),run('R'));
+// Story advances slowly; transformation recognition uses actual completed scenes.
+assert.equal(run('adventureDialogue(7).join("|")'),run('adventureDialogue(1).join("|")'));
+assert.notEqual(run('adventureDialogue(8).join("|")'),run('adventureDialogue(7).join("|")'));
+assert.equal(run('bossGrowthLines(4).join("|")'),run('bossGrowthLines(1).join("|")'));
+run("window.localStorage={data:{},getItem(k){return this.data[k]||null},setItem(k,v){this.data[k]=v}};adventureSave('one-vs-one-door-attempts',30);startAdventure();paused=false;adventurePhaseTwo()");assert.equal(run('adventure.cutscene.lines[0]'),'Why are you still here?');close(run("adventureStored('one-vs-one-door-form-views')"),0);
+run('updateBossGrowth(8.4);updateBossGrowth(1)');close(run("adventureStored('one-vs-one-door-form-views')"),1);
+run("adventureSave('one-vs-one-door-form-views',4);startAdventure();paused=false;adventurePhaseTwo()");assert(run('adventure.cutscene.lines[1]').includes('not surprised'));run('startAdventure()');close(run("adventureStored('one-vs-one-door-form-views')"),4);
+// Developer code, harmless invalid input, Adventure-only invulnerability, story isolation.
+run("$('developerCode').value='wrong'");assert.equal(run('applyAdventureDeveloperCode()'),false);assert.equal(run('adventureGodMode'),false);
+run("$('developerCode').value=' player-god '");assert.equal(run('applyAdventureDeveloperCode()'),true);assert.equal(run('adventureGodMode'),true);
+const attemptsBeforeGod=run("adventureStored('one-vs-one-door-attempts')");run('startAdventure();paused=false;applyDamage(fighters[0],9999)');close(run('fighters[0].hp'),110);assert.equal(run('fighters[0].playerLives'),3);close(run("adventureStored('one-vs-one-door-attempts')"),attemptsBeforeGod);
+run('adventurePhaseTwo();updateBossGrowth(8.4);applyDamage(fighters[1],9999)');assert.equal(run('adventure.ended'),true);close(run("adventureStored('one-vs-one-door-form-views')"),4);close(run("adventureStored('one-vs-one-door-wins')"),0);
+run('start();fighters[0].hp=100;applyDamage(fighters[0],20)');close(run('fighters[0].hp'),80);
+run('startAdventure();paused=false;setAdventureGodMode(false);applyDamage(fighters[0],10)');close(run('fighters[0].hp'),100);assert.equal(run('adventure.testRun'),true);
 console.log('Adventure: abilities, potion interruption, lives, damage/block, two phases, grabs, defeat, AI/render, arena isolation OK');
