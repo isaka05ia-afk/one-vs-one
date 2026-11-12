@@ -159,6 +159,7 @@ function update(dt){if(isGuest())return;if(running&&!paused&&!roundOver&&!finish
  if(i===0&&!isBotPlayer(i))updatePlayerAim();else if($('mode').value==='online'&&!isBotPlayer(i)&&i!==localIndex()){const input=remoteInputFor(i);f.aim=input.auto?angle(f,autoAimEnemy(i)):input.aim;}else if($('mode').value==='local')f.aim=angle(f,b);
  let v=isBotPlayer(i)?bot(f,b,dt):training&&i===1?trainingMovement(f):movementInput(i);if(isBotPlayer(i)&&drunkInverted(f))v={x:-v.x,y:-v.y};const mag=len(v.x,v.y);if(mag>1)v=norm(v.x,v.y);if(isBotPlayer(i))v=toxicMovement(f,v);v=boatSteering(f,v,dt);v=delayedMotion(f,v);
  if(f.id===3){const channel=f.reactor?.left>0;if((channel||f.cast>0&&['reactorbeam','tractorbeam','atomicbeam'].includes(getMoves(f)[f.move]?.[1]))&&f.stun<=0){const delta=Math.atan2(Math.sin(f.aim-f.lockedAim),Math.cos(f.aim-f.lockedAim));f.lockedAim+=Math.max(-.7*dt,Math.min(.7*dt,delta))}updateReactor(i,dt);updateEngin(i,dt)}
+ if(f.id===7&&f.cast>0&&f.pending>=0&&f.stun<=0&&f.grabbedBy<0&&f.boatOwner<0){f.lockedAim=f.aim;f.target=aimTarget(i,getMoves(f)[f.pending][3]);}
  updateCopiedAim(f,dt);updateEvolvedAim(f,dt);if(f.id===2&&f.cast>0&&getMoves(f)[f.pending]?.[1]&&['inferno','primalbeam'].includes(getMoves(f)[f.pending]?.[1])&&f.stun<=0&&f.grabbedBy<0&&f.boatOwner<0)f.lockedAim=f.aim;
  if(isGodTeam(f)&&f.cast>0&&getMoves(f)[f.pending]?.[1]==='robotlaser'&&f.stun<=0)f.lockedAim=f.aim;
  if(isOldTeam(f)&&f.cast>0&&f.pending>=0&&['sunbeam','cruelsun'].includes(getMoves(f)[f.pending]?.[1])&&f.stun<=0&&f.grabbedBy<0&&f.boatOwner<0)f.lockedAim=f.aim;

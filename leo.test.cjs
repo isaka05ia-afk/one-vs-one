@@ -53,3 +53,10 @@ leoScenario('corruption');run('executeLeo(0,2);var chain=zones[0];updateLeoZone(
 leoScenario('corruption');run('executeLeo(0,2);var blockedChain=zones[0];walls=[{x:700,y:300,w:60,h:400}]');assert.equal(run('updateLeoZone(blockedChain,.1)'),false);
 leoScenario();run('fighters[1].x=700;executeLeo(0,2);updateLeoZone(zones[0],.01)');assert(run('fighters[1].x')>700);
 console.log('Leo: travelling wall-piercing/multi-target/once-only wave, dodge, short melee, marked delayed meteor, teleport stun, three faults, persistent frost, breakable lifesteal chain and roar knockback PASS');
+
+// Aim remains adjustable during Leo's windup; released attacks keep their final direction.
+leoScenario();run("inputMode='mouse';mouseAim=true;aimPoint={x:850,y:500};attack(0,0);aimPoint={x:600,y:200};update(.1)");assert(Math.abs(run('fighters[0].lockedAim')+Math.PI/2)<.001);run('for(let n=0;n<70;n++)update(.01)');assert(run('shots[0].vy')<0);assert(Math.abs(run('shots[0].vx'))<.001);const shotDirection=run('shots[0].vy');run('aimPoint={x:1000,y:500};update(.1)');assert.equal(run('shots[0].vy'),shotDirection);
+leoScenario('flames');run("inputMode='mouse';mouseAim=true;aimPoint={x:850,y:500};attack(0,2);aimPoint={x:600,y:300};update(.1)");assert.equal(run('fighters[0].target.x'),600);assert.equal(run('fighters[0].target.y'),300);run('for(let n=0;n<70;n++)update(.01)');assert.equal(run('zones.find(z=>z.kind==="leo_meteor").y'),300);
+leoScenario();run("inputMode='touch';touchAim.active=true;touchAim.x=1;touchAim.y=0;attack(0,1);touchAim.x=0;touchAim.y=-1;update(.1)");assert(Math.abs(run('fighters[0].lockedAim')+Math.PI/2)<.001);
+leoScenario();run("inputMode='touch';touchAim.active=false;attack(0,0);fighters[1].x=600;fighters[1].y=250;update(.1)");assert(Math.abs(run('fighters[0].lockedAim')+Math.PI/2)<.001);
+console.log('Leo windup: mouse retargeting, ground-target distance, mobile manual/auto aim; launched crescent stays fixed PASS');
