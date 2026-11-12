@@ -1115,3 +1115,12 @@ Door Man’s damage multipliers are now **1.35 / 1.55** (previously 1.12 / 1.2),
 Sailer recognizes the key, explains that every voyage returns to the same dock, and invites the player aboard under a pretext. On the ship he demands the key: “Hand me the key. I won’t ask again.” / “You don’t understand. I am not dying in this harbor.” / “I need it more than you do.” During defeat he lunges for it, the damaged railing gives way, and Kraken captures him. After rescue he admits he meant to take it and leave the player behind. This fixed story dialogue does not imply knowledge of repeated player lives.
 
 The requested held-Slash projectile was cancelled before implementation: Slash remains a melee attack, with three ability slots. `node boss-melee.test.cjs` simulates approach and actual Slash damage against both Door forms and Sailer, a reachable portal-rush recovery, Sailer’s recovery, the damage buff/mercy scaling, key-theft dialogue and holding Slash without spawning a projectile. Controls/boss, key marker, Adventure and harbor regressions pass.
+
+
+### Visible Sailer / Kraken combat effects
+
+The Adventure ship now gives each attack its own warning and impact animation: foaming full-width Tidal Wave, directional Headwind gusts toward Sailer, golden paddle sweeps, a large suction-cupped tentacle sweep, swirling suction grabs, and tentacle slams. The paddle glows during preparation. Exposed tentacles have organic arms, suction cups and pulsing strike rings; successful Brace has a distinct gold burst. The dropped paddle glows, Sailer visibly hangs in the Kraken’s grip, and rescued Sailer appears safely on the deck. Cargo/mast/rope details replace the arena wall look on the ship.
+
+These effects draw the existing hit regions and spawn only when the original attack resolves. They add no damage ticks, do not change cooldowns/attack delays/movement/collision, freeze on pause, expire and are capped at 24 active effects. They are cleared between phases and on rescue.
+
+`node ship-visuals.test.cjs` checks all six effects against their resolution time, finite canvas coordinates, matching 130-unit strip warnings, once-only damage, paused/expired effects, Brace feedback and bounded/cleared state. Harbor, melee-access, controls/boss, Adventure and key-marker regressions also pass. Chromium screenshot testing was attempted but remains blocked by the executor’s Crashpad `setsockopt: Operation not permitted`, so real-browser visual review is still outstanding.
