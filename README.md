@@ -1066,7 +1066,7 @@ The harbor is a separate, freely walkable Adventure hub using the existing simpl
 
 Sailer’s shared Arena/menu/Adventure drawing is now an old gray-bearded sailor in a weathered captain’s coat, with boots, cap, smoking pipe and golden paddle. Existing Sailer card/Evolve mechanics remain; literal-boat Evolve retains its boat form.
 
-**The Last Crossing** begins on a large bounded wooden ship. Sailer has 310 HP, directional melee paddle sweeps, broad wave attacks and a pull attack. His boarding scene shows the bell compelling him to fight. He has fixed dialogue every attempt and no knowledge of player returns. On defeat he falls overboard and a **separate Kraken**, not a transformed Sailer, captures him. The rescue scene preserves current player HP, lives and potions.
+**The Last Crossing** begins on a large bounded wooden ship. Sailer has 310 HP, directional melee paddle sweeps, broad wave attacks and a pull attack. His boarding scene reveals that he intends to steal the player’s key so he can leave the harbor. He has fixed dialogue every attempt and no knowledge of player returns. On defeat he falls overboard and a **separate Kraken**, not a transformed Sailer, captures him. The rescue scene preserves current player HP, lives and potions.
 
 Pick up the dropped **Golden Paddle** near the port side with E/Interact, or use Slash when standing near it. It changes the three slots to **Paddle Strike / Healing Potion / Brace**. Sword strikes cannot damage Kraken. Paddle Strike deals 32 damage to a nearby aimed exposed tentacle; Kraken has 480 HP. Warned sweeps and suction attacks can be dodged; facing and Bracing a tentacle strike reduces damage and exposes it. Other exposed tentacles provide openings too. Sailer's body remains visible in the Kraken’s grip. Winning rescues him, records Chapter 2 completion outside test mode and returns you to the harbor. Losing all lives offers retry of this voyage or returning to the harbor. A voyage starts with three lives/three potions; neither refills between its two phases. The chapter ends at the rescue; further inland content is not yet implemented.
 
@@ -1102,3 +1102,16 @@ The key-salvo aiming lines are now hidden until the **final 0.1 s before firing*
 ### Faster boss reactions
 
 Door Man’s rush warnings are shorter in both forms: Running Man **0.5 / 0.4 s**, first Door Run warning **0.7 / 0.55 s**, return-pass warning **0.5 / 0.4 s**. Direction locking, single-hit collision, rush speeds (1600/1900), the final 0.1 s key marker and death-based mercy remain. Tests check both forms and mercy extension.
+
+
+### Melee access, stronger Door Man and Sailer's key motive
+
+Door Man no longer retreats at the old 105/165-unit spacing. Both forms approach and hold at **88/112 units**, inside The Player’s Slash reach including the boss hit radius. Door Run routes now extend up to **250 units to each side** rather than 400, so the existing post-rush recovery can be reached and punished without changing rush speed/warnings.
+
+Sailer approaches and holds at **90 units** instead of backing away below 190. He also stays still for **0.75 s after resolving a ship attack**, giving a melee opening. Kraken’s exposed-tentacle rescue mechanics remain.
+
+Door Man’s damage multipliers are now **1.35 / 1.55** (previously 1.12 / 1.2), about 20%/29% stronger. Death-based surrender still scales those values proportionally.
+
+Sailer recognizes the key, explains that every voyage returns to the same dock, and invites the player aboard under a pretext. On the ship he demands the key: “Hand me the key. I won’t ask again.” / “You don’t understand. I am not dying in this harbor.” / “I need it more than you do.” During defeat he lunges for it, the damaged railing gives way, and Kraken captures him. After rescue he admits he meant to take it and leave the player behind. This fixed story dialogue does not imply knowledge of repeated player lives.
+
+The requested held-Slash projectile was cancelled before implementation: Slash remains a melee attack, with three ability slots. `node boss-melee.test.cjs` simulates approach and actual Slash damage against both Door forms and Sailer, a reachable portal-rush recovery, Sailer’s recovery, the damage buff/mercy scaling, key-theft dialogue and holding Slash without spawning a projectile. Controls/boss, key marker, Adventure and harbor regressions pass.
