@@ -1097,3 +1097,8 @@ Validation: `controls-boss.test.cjs` covers locked aim/windup damage prevention/
 The key-salvo aiming lines are now hidden until the **final 0.1 s before firing**. The longer attack preparation still exists, including death-based mercy, but no persistent key aim lines are displayed during it. The old mismatch came from drawing at the boss’s scheduled position while projectiles launched from his later position. During the last 0.1 s he holds still, teleport warnings cannot move him, and shared ray geometry drives both the marker and actual 3/5 projectiles, including the 28-unit muzzle offset and 950-unit range. The marker disappears when the volley fires.
 
 `node key-marker.test.cjs` verifies the display window, a moving-boss origin, final-position hold and every canvas ray against the emitted projectile coordinates/direction/range for both forms. Controls/boss, Adventure and harbor regression suites also pass.
+
+
+### Faster boss reactions
+
+Door Man’s rush warnings are shorter in both forms: Running Man **0.5 / 0.4 s**, first Door Run warning **0.7 / 0.55 s**, return-pass warning **0.5 / 0.4 s**. Direction locking, single-hit collision, rush speeds (1600/1900), the final 0.1 s key marker and death-based mercy remain. Tests check both forms and mercy extension.
