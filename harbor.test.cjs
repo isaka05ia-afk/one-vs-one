@@ -32,7 +32,7 @@ run('fighters[0].x=500;fighters[0].y=550;fighters[0].aim=0;fighters[0].cd[0]=0;e
 run('fighters[0].aim=-Math.PI/2;fighters[0].guard=1;fighters[0].blockHeld=true;harborWarn("tentacle",fighters[0],.01);tickShip(.02)');assert(run('adventure.harbor.exposed.length')>0);assert(run('fighters[0].hp')>60);
 run('fighters[0].guard=0;fighters[0].blockHeld=false;harborWarn("suction",fighters[0],.01)');const before=run('fighters[0].hp');run('tickShip(.02)');assert(run('fighters[0].hp')<before);
 run('fighters[0].dodge=1;harborWarn("sweep",fighters[0],.01)');const avoided=run('fighters[0].hp');run('tickShip(.02)');close(run('fighters[0].hp'),avoided);
-run('applyDamage(fighters[1],999)');assert.equal(run('finished'),true);assert.equal(run("adventureStored('one-vs-one-harbor-checkpoint')"),2);assert.equal(run("adventureStored('one-vs-one-sailer-rescued')"),1);
+run('applyDamage(fighters[1],999)');assert.equal(run('finished'),true);assert.equal(run('adventure.harbor.rescued'),true);run('render()');assert.equal(run("adventureStored('one-vs-one-harbor-checkpoint')"),2);assert.equal(run("adventureStored('one-vs-one-sailer-rescued')"),1);
 run('enterHarbor();render()');assert.equal(run('adventure.harbor.rescued'),true);
 // Checkpoint survives reload-style restarting and does not spend Door Man attempts.
 const attempts=run("adventureStored('one-vs-one-door-attempts')");run('continueHarbor()');close(run("adventureStored('one-vs-one-door-attempts')"),attempts);assert.equal(run('inHarbor()'),true);
