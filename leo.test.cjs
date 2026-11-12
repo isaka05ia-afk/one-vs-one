@@ -18,7 +18,7 @@ run("$('mode').value='local';$('opponent').value='0';$('format').value='series';
 assert.equal(run('roster.length'),8);assert.equal(run('cardFamilies(7).length'),5);assert.equal(run("validLoadout(7,['leo_ice','leo_ice'])"),false);assert.equal(run("validLoadout(7,['leo_ice','leo_earth'])"),false);
 for(const element of ['base','flames','thunder','earth','ice','corruption']){
  run(`fighters[0].cards=${element==='base'?'[]':JSON.stringify(['leo_'+element])};fighters[0].maxHp=leoMaxHP(fighters[0].cards);fighters[0].hp=100;fighters[1].hp=fighters[1].maxHp;fighters[1].guard=0;fighters[1].dodge=0;fighters[1].x=700;fighters[0].x=600`);
- const hp=run('fighters[1].hp');run('executeLeo(0,0);drawFighter(contextDummy||ctx,fighters[0],0,false)'.replace('contextDummy||',''));
+ const hp=run('fighters[1].hp');run('executeLeo(0,0);updateLeoShot(shots.at(-1),.15);drawFighter(contextDummy||ctx,fighters[0],0,false)'.replace('contextDummy||',''));
  assert(run('fighters[1].hp')<hp,element+' deals damage');
  if(element==='corruption')assert(run('fighters[0].hp')>100);
  if(element==='flames')assert(run('fighters[1].burn')>0);
@@ -39,3 +39,17 @@ for(const crystal of ['','leo_flames','leo_thunder','leo_earth','leo_ice','leo_c
  run('fighters.forEach(f=>f.aiControlled=true)');for(let n=0;n<200;n++)run('update(.02);render()');assert(run('fighters.every(f=>Number.isFinite(f.hp)&&Number.isFinite(f.x))'));
 }
 console.log('Leo: real attack windups, all six forms in bot simulation and rendering PASS');
+function leoScenario(element='base'){
+ run(`$('mode').value='local';selected=7;$('opponent').value='0';start();loadouts[0]=${JSON.stringify(element==='base'?[]:['leo_'+element])};spawnRound();setArena('court');walls=[];fighters[0].x=600;fighters[0].y=500;fighters[0].aim=fighters[0].lockedAim=0;fighters[0].hp=50;fighters[0].target={x:850,y:500};fighters[1].x=850;fighters[1].y=500;fighters[1].hp=fighters[1].maxHp;fighters[1].dodge=0;shots=[];zones=[]`);
+}
+leoScenario();run('fighters.push(JSON.parse(JSON.stringify(fighters[1])));fighters[2].x=1100;walls=[{x:700,y:300,w:80,h:400}];executeLeo(0,0);var piercer=shots[0]');assert.equal(run('fighters[1].hp'),150);run('updateLeoShot(piercer,.7)');assert.equal(run('fighters[1].hp'),114);assert.equal(run('fighters[2].hp'),114);run('piercer.vx=-piercer.vx;updateLeoShot(piercer,.7)');assert.equal(run('fighters[1].hp'),114);assert.equal(run('fighters[2].hp'),114);
+leoScenario();run('fighters[1].x=700;fighters[1].dodge=1;executeLeo(0,0);updateLeoShot(shots[0],.4)');assert.equal(run('fighters[1].hp'),150);
+leoScenario();run('executeLeo(0,1)');assert.equal(run('fighters[1].hp'),150);run('fighters[1].x=700;executeLeo(0,1)');assert.equal(run('fighters[1].hp'),92);
+leoScenario('flames');run('executeLeo(0,2);var impact=zones.find(z=>z.kind==="leo_meteor");updateLeoZone(impact,.6)');assert.equal(run('fighters[1].hp'),150);run('updateLeoZone(impact,.3)');assert(run('fighters[1].hp')<150);assert(run('zones.some(z=>z.kind==="trail")'));
+leoScenario('thunder');run('executeLeo(0,2);updateLeoZone(zones[0],.01)');assert.equal(run('fighters[0].x'),850);assert(run('fighters[1].stun')>=.55);
+leoScenario('earth');run('executeLeo(0,2)');assert.equal(run('zones.filter(z=>z.kind==="leo_fault").length'),3);assert.equal(run('zones[0].x'),775);assert.equal(run('zones[2].x'),1125);
+leoScenario('ice');run('executeLeo(0,2);var frost=zones.find(z=>z.kind==="leo_prison");updateLeoZone(frost,.7)');assert(run('fighters[1].magicSlow')>0);assert(run('terrainAt(fighters[1]).ice'));const firstPulse=run('fighters[1].hp');run('updateLeoZone(frost,.71)');assert(run('fighters[1].hp')<firstPulse);
+leoScenario('corruption');run('executeLeo(0,2);var chain=zones[0];updateLeoZone(chain,.12)');assert(run('fighters[0].hp')>50);assert(run('fighters[1].x')<850);run('fighters[1].dodge=.1');assert.equal(run('updateLeoZone(chain,.01)'),false);
+leoScenario('corruption');run('executeLeo(0,2);var blockedChain=zones[0];walls=[{x:700,y:300,w:60,h:400}]');assert.equal(run('updateLeoZone(blockedChain,.1)'),false);
+leoScenario();run('fighters[1].x=700;executeLeo(0,2);updateLeoZone(zones[0],.01)');assert(run('fighters[1].x')>700);
+console.log('Leo: travelling wall-piercing/multi-target/once-only wave, dodge, short melee, marked delayed meteor, teleport stun, three faults, persistent frost, breakable lifesteal chain and roar knockback PASS');

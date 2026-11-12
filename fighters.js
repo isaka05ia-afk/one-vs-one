@@ -71,7 +71,7 @@ function drawOldSailer(c,f,t=0,preview=false){
  path(c,[[-26,-128],[-19,-146],[12,-149],[26,-134],[20,-123]],'#405967');c.fillStyle='#203847';c.fillRect(-27,-128,55,8);c.fillStyle='#d5b663';c.fillRect(-7,-139,11,8);c.fillStyle='#89958b';c.fillRect(-18,-143,6,3);
  // Pipe, glowing bowl, and a quiet smoke curl.
  c.strokeStyle='#624331';c.lineWidth=4;c.beginPath();c.moveTo(12,-104);c.lineTo(29,-101);c.stroke();c.fillStyle='#6d4933';c.fillRect(26,-108,10,12);c.fillStyle='#e6ab65';c.fillRect(28,-110,6,4);c.strokeStyle='#c7d6ce88';c.lineWidth=2;c.beginPath();c.moveTo(31,-114);c.quadraticCurveTo(22+Math.sin(t*2)*4,-127,34,-135);c.stroke();
- c.save();c.translate(attacking?56:36,attacking?-58:-26);c.rotate(attacking?.8:.12);c.strokeStyle='#b48632';c.lineWidth=7;c.beginPath();c.moveTo(0,22);c.lineTo(0,-104);c.stroke();path(c,[[-10,-101],[-12,-135],[0,-148],[12,-135],[10,-101]],'#e4bd53');c.strokeStyle='#fff0a5';c.lineWidth=2;c.beginPath();c.moveTo(0,-137);c.lineTo(0,-107);c.stroke();c.restore();
+ if(!f.hidePaddle){c.save();c.translate(attacking?56:36,attacking?-58:-26);c.rotate(attacking?.8:.12);c.strokeStyle='#b48632';c.lineWidth=7;c.beginPath();c.moveTo(0,22);c.lineTo(0,-104);c.stroke();path(c,[[-10,-101],[-12,-135],[0,-148],[12,-135],[10,-101]],'#e4bd53');c.strokeStyle='#fff0a5';c.lineWidth=2;c.beginPath();c.moveTo(0,-137);c.lineTo(0,-107);c.stroke();c.restore();}
  if(hasCard(f,'canons')){c.fillStyle='#394956';c.fillRect(28,-81,48,16);c.fillStyle='#d0bd7f';c.fillRect(69,-85,12,23)}
  if(hasCard(f,'drunk')){c.fillStyle='#63974e';c.fillRect(-38,-54,10,18)}if(f.stun>0){c.fillStyle='#ffe399';c.font='20px sans-serif';c.fillText('✦',-7,-160)}c.restore();
 }
