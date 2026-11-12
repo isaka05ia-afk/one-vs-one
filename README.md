@@ -1090,3 +1090,10 @@ Door Man’s **ordinary boss Running Man** now has a **1.1 s stationary warning*
 **Door Run** is intentionally fast once moving: **1600 / 1900 units/s** in phases one/two (previously 1050 / 1300). There is a **1.6 s initial warning** and **1.2 s warning before each return**. He is shown at the starting door during the warning, and the lane remains fixed. The visual lane matches the attack width; each pass can hit once. Previously agreed death-based surrender extends these warnings.
 
 Validation: `controls-boss.test.cjs` covers locked aim/windup damage prevention/sidestep, single-hit/recovery, no leftover lock combo, fast Door Run and return warnings, mobile drag/release/cancel and held-block aim with desktop direct attacks enabled, desktop switching and removed aim-stick markup. The simulated-online suite includes an actual guest button gesture that verifies no pre-release fire and the host’s manual beam direction. Existing core, Adventure and harbor suites also run. The older Arena test’s Cheter cooldown expectation was updated from 1.0 to the already-existing 1.6 s balance value. Chromium visual checks were attempted but blocked by this executor’s Crashpad setsockopt permission error.
+
+
+### Door Man key-fan marker
+
+The key-salvo aiming lines are now hidden until the **final 0.1 s before firing**. The longer attack preparation still exists, including death-based mercy, but no persistent key aim lines are displayed during it. The old mismatch came from drawing at the boss’s scheduled position while projectiles launched from his later position. During the last 0.1 s he holds still, teleport warnings cannot move him, and shared ray geometry drives both the marker and actual 3/5 projectiles, including the 28-unit muzzle offset and 950-unit range. The marker disappears when the volley fires.
+
+`node key-marker.test.cjs` verifies the display window, a moving-boss origin, final-position hold and every canvas ray against the emitted projectile coordinates/direction/range for both forms. Controls/boss, Adventure and harbor regression suites also pass.
