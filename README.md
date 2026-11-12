@@ -1137,11 +1137,11 @@ On the next harbor conversation, choose **Lend the key · Sail to The Olympians*
 `node kraken-story.test.cjs` validates 480 HP, all nine attack types and visuals, overlapping pressure, low-HP tempo, collision shapes, 45-second bounded combat simulation, the safe deck conversation/clue, harbor rest, explicit loan gating, key return, all Olympian conversations, return passage and developer save isolation. Existing ship visuals, harbor, melee access, controls/boss, Adventure and key-marker regressions also run. The full simulated online suite loads the complete runtime. Actual Chromium screenshots remain blocked by Crashpad setsockopt restrictions in this executor.
 
 
-## The Olympians — information for the key
+## The Olympians — a time journey for the key
 
 The friendly athletes are named **Latissa** (Swimmer, from *latissimus dorsi*), **Solea** (Skater, from *soleus*) and **Vasta** (Runner, from *vastus lateralis*). Their default appearances are redrawn with distinct sporting outfits, hair, cap/goggles, skates, details and the existing differing skin tones. The shared drawing is used by Arena previews/default Olympic Team and Adventure NPCs/bosses; transformed age/card appearances remain. Class/ability identifiers remain unchanged.
 
-At the Olympians courtyard, talk to any girl. They offer world information if you beat all three, and ask for the key if they win. The Player offers the sailor instead; Sailer answers “No.” Accepting is an explicit dialogue choice. A lost wager records a debt, but the friendly team lets you keep using the key for a rematch; no permanent inventory loss blocks retries or return travel.
+At the Olympians courtyard, talk to any girl. They offer a journey into the past to meet Engin if you beat all three, and ask for the key if they win. The Player offers the sailor instead; Sailer answers “No.” Accepting is an explicit dialogue choice. A lost wager records a debt, but the friendly team lets you keep using the key for a rematch; no permanent inventory loss blocks retries or return travel.
 
 The single boss attempt has **three sequential phases**, with **three lives/three potions shared across all phases**:
 
@@ -1149,6 +1149,15 @@ The single boss attempt has **three sequential phases**, with **three lives/thre
 - **Solea — 320 HP:** the pool freezes into ordinary slippery ice. She glides, leaves actual ice trails and chains warned skating passes. She can be damaged when stopped/recovering, with a visible **STOPPED · STRIKE** indicator; gliding/moving protection prevents damage until then. Icy fans/freezing circles pressure positioning.
 - **Vasta — 360 HP:** sprint attacks, a baitable dodge with a 3.5 s cooldown, delayed echoes of sprint paths, slowing clock circles and a position rewind. Rewind does not restore HP or erase player damage. The last phase is the fastest.
 
-Transitions freeze combat and preserve current player resources. Each phase has its own terrain, attack marks, character appearance and visual effects. After victory the friendly NPCs deliver the promised information: the bell restores roads, older paths remain below the arenas and the key can make doors remember them. The trial can be replayed. Wins/debts are stored only outside developer test mode.
+Transitions freeze combat and preserve current player resources. Each phase has its own terrain, attack marks, character appearance and visual effects. After victory the friendly NPCs open a time rift to Engin, whom they believe may help The Player find a way home. The trial can be replayed. Wins/debts are stored only outside developer test mode.
 
 `node olympian-trial.test.cjs` covers friendly challenge/consent/joke, names, actual water pulls/surfacing melee access, frozen terrain and stopped-only damage, shared resources/transitions, dodge cooldown, sprint echoes, non-healing rewind, information/retry/key safety, fixed-step rendering of all phases and cleanup before another boss/Arena. Core, full simulated-online and chapter regressions also run. The pre-existing age test’s global Evolve count was corrected from 32 to the already-existing 37 including Mannequin cards. Chromium screenshot testing remains blocked by the executor’s Crashpad setsockopt restriction; visual review on a real browser is still needed.
+
+
+## Revised time reward and Kraken interruption
+
+The Olympians now wager **a journey through time to Engin**, replacing their former world-explanation reward. Their challenge, victory dialogue and primary reward button all refer to this journey. Any previously saved trial winner can claim it without fighting again. After their conversation, choose **Enter the time rift · Find Engin**; the short time-travel sequence leads to an explorable **Engin’s Workshop — Before the Ruin**. Engin says he may be able to trace the player’s origin and help them get home. Talk/Look/Rest work there, and a return rift leads back to The Olympians. A separate replay button retains the optional trial rematch. Arrival is saved outside developer test mode; no Engin boss fight or final trip home is introduced here.
+
+Sailer’s pre-Kraken scene is rewritten as **charge → interruption/grab → drag overboard → rescue**. He charges a fatal golden-paddle attack at The Player, with a visible lethal lane and “No escape” framing. At 2.6 s Kraken interrupts before the blow; the tentacle grabs him, drags him away and the paddle drops onto the deck. The final beat calls for rescue. All combat is frozen throughout; player HP/lives/potions carry unchanged into Kraken. The HUD initially shows Sailer’s final attack rather than revealing Kraken before its entrance.
+
+`node time-reward.test.cjs` verifies saved-winner access to the new reward, paused/immune travel, Engin dialogue, return/replay, every interruption-scene beat and unchanged player resources, plus developer save isolation. Olympian trial, Kraken/harbor, visuals, melee access, controls/boss, Adventure and key-marker regressions pass. The full simulated-online suite loads the new time-rift module. Actual Chromium screenshots remain blocked by this executor’s Crashpad setsockopt restrictions.
