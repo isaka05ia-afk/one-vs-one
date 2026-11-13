@@ -65,3 +65,7 @@ render=function(){olympianRender();if(!inOlympianTrial()||!running)return;const 
 
 const olympianClearChapter=clearChapterEffects;
 clearChapterEffects=function(){for(const f of fighters)f.isOlympianBoss=false;olympianClearChapter()};
+
+// Adventure-only difficulty adjustment; Arena Olympians keep their normal damage.
+const olympianTrialDamage=heroDamage;
+heroDamage=function(f){return olympianTrialDamage(f)*(inOlympianTrial()&&f?.isOlympianBoss ? .85 : 1)};
