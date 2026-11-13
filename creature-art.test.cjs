@@ -38,3 +38,7 @@ for(const id of [0,1,2]){
 }
 assert.equal(run('roster[0].name'),'BOB');
 console.log('PASS: Bob, Door Man and Laores: every ordered card pair/evolution, all five dragon stages, both facings and animated frames; finite geometry, balanced canvas stack and Bob menu name.');
+// Exercise real visual states, including vertical movement and attack recovery endpoints.
+for(const id of [0,1,2]){sandbox.reviewId=id;run('selected=reviewId;start()');for(const state of [{vx:0,velY:100,anim:.22},{vx:100,velY:0,anim:.11,rush:.2},{anim:0,cast:.3},{anim:0,hurt:.2},{anim:0,stun:.3},{anim:0,dodge:.1},{anim:0,breath:1}]){sandbox.visualState=state;run('spawnRound();Object.assign(fighters[0],visualState);fighters[0].stage=4;');for(const t of [0,.055,.11,.22,4.6,5.2]){run(`drawFighter(strictPaint,fighters[0],${t},false)`);assert.equal(run('depths'),0);}}}
+run("var portraitDraws=0;var portraitContext={clearRect(){portraitDraws++}};var portraitCanvas={width:260,height:215,getContext(){return portraitContext}};var rosterNode=$('roster');rosterNode.querySelectorAll=()=>Array.from({length:9},()=>({querySelector:()=>portraitCanvas}));var savedPortraitDraw=drawFighter;drawFighter=()=>{};portraitPaintAt=0;animateRosterPortraits(100);animateRosterPortraits(120);animateRosterPortraits(200);drawFighter=savedPortraitDraw;");assert.equal(run('portraitDraws'),6);
+console.log('PASS: walking vertically, punch recovery, rush/cast/hurt/stun/dodge/breath and blink frames; menu portraits repaint with rate limiting.');
