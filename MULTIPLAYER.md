@@ -58,3 +58,7 @@ HP, fart, cooldowns och rundutveckling behålls. Attackskadan jämfört med v60 
 Skapad is och skapade pooler använder samma terrängfråga som banans is och vatten, oavsett vem som skapade dem. Det ger vanlig glidning, skridskoåkarens isbonus och vatteneffekter även på lagkamrater; Sailer och simmaren behåller sina vattenundantag. Utgångna fläckar räknas inte. Yogas Healing Circle läker alla levande, markbundna lagkamraters aktiva karaktär inom fältet.
 
 Nya tester: `node teamplay.test.cjs` och `node teamplay-online.test.cjs`. De täcker lagkamraters transport, grepp, virvel, portaler, livfärg, reducerad reaktorträff, is-/vattenregler, lagläkning och riktning under laddning med fyra simulerade onlineklienter.
+
+
+### v107 · different-network connections
+The shared RTC configuration restores the public EU/US TURN fallback provided by PeerJS 1.5.4, which the former STUN-only override removed. PartyHost inherits the same configuration. Quick rooms use chunked BinaryPack serialization, wait up to 45 seconds to connect and report transient ICE disconnection. Manual connections wait 15 seconds for transient disconnection recovery. Reload both devices; network build is arena-online-72. Real-network relay availability is not verified by the in-memory tests.
