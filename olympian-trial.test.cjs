@@ -15,6 +15,8 @@ const run=c=>vm.runInContext(c,sandbox);
 const close=(a,b)=>assert(Math.abs(a-b)<.00001,`${a} != ${b}`);
 run("window.localStorage={data:{},getItem(k){return this.data[k]||null},setItem(k,v){this.data[k]=v}};startAdventure();enterOlympians();fighters[0].x=1190;fighters[0].y=580;harborInteract()");assert.equal(run('adventure.dialogue.trialOffer'),true);assert(run('OLYMPIAN_WAGER.join(" ")').includes('Sailer: No.'));assert(run('OLYMPIAN_WAGER.join(" ")').includes('sailor instead'));assert.equal(run('OLYMPIAN_TRIAL.map(i=>i.name).join(",")'),'Latissa,Solea,Vasta');
 run('for(let n=0;n<OLYMPIAN_WAGER.length-1;n++)$("harborTalkNext").onclick()');assert(run("$('harborBoard').textContent").includes('ACCEPT'));run('$("harborBoard").onclick();render();update(3)');assert.equal(run('inOlympianTrial()'),true);assert.equal(run('adventure.olympian.stage'),0);assert.equal(run('fighters[0].playerLives'),3);assert.equal(run('fighters[0].potions'),3);
+assert.equal(run('OLYMPIAN_TRIAL.map(f=>f.hp).join(",")'),'280,300,340');
+run('adventure.olympian.timer=99;var slowWarning=trialWarn("vortex",{x:1400,y:900},2,30);tickOlympianTrial(.1)');close(run('slowWarning.left'),1.905);run('adventure.olympian.warnings=[]');
 assert.equal(run('terrainAt({x:900,y:550}).water'),true);assert.equal(run('terrainAt({x:350,y:550}).water'),false);
 // Swimmer actively keeps distance, pulls into water, then surfaces within melee reach.
 run('adventure.olympian.timer=99;fighters[1].x=900;fighters[1].y=550;fighters[0].x=820;fighters[0].y=550;var swim=bot(fighters[1],fighters[0],.01)');assert(run('swim.x')>0);
