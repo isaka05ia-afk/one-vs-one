@@ -20,7 +20,7 @@ const difficulties={
 let netSession=null;
 function isGuest(){return $('mode').value==='online'&&netSession?.role==='guest'}
 function localIndex(){return isGuest()?(netSession.mySlot??1):0}
-function viewFighters(){if(!isGuest()||!netSession.renderFrom||!netSession.renderTo)return fighters;const alpha=Math.max(0,Math.min(1,(performance.now()-netSession.snapshotAt)/(netSession.group?80:50)));return fighters.map((f,i)=>({...f,x:(netSession.renderFrom[i]||f).x+(f.x-(netSession.renderFrom[i]||f).x)*alpha,y:(netSession.renderFrom[i]||f).y+(f.y-(netSession.renderFrom[i]||f).y)*alpha}))}
+function viewFighters(){if(!isGuest()||!netSession.renderFrom||!netSession.renderTo)return fighters;const alpha=Math.max(0,Math.min(1,(performance.now()-netSession.snapshotAt)/(netSession.group?80:50)));return fighters.map((f,i)=>i===localIndex()?{...f,...guestMovementView(f)}:{...f,x:(netSession.renderFrom[i]||f).x+(f.x-(netSession.renderFrom[i]||f).x)*alpha,y:(netSession.renderFrom[i]||f).y+(f.y-(netSession.renderFrom[i]||f).y)*alpha})}
 function playerAttack(slot){if(isGuest()){sendOnlineAction(slot);return}attack(0,slot)}
 function playerDodge(){if(openMagicDodge())return;if(showMannequinSwap())return;if(isGuest()){sendOnlineAction('dodge');return}dodge(0)}
 let chosenDifficulty='normal',botFighter=0;
@@ -59,7 +59,7 @@ function start(){resetQueenCurseMatch();if($('mode').value==='online'&&netSessio
 $('start').onclick=start;$('back').onclick=()=>{if($('mode').value==='online'){leaveOnlineGame();return}running=false;clearInput();$('selection').hidden=false;$('game').hidden=true;document.body.classList.remove('playing')};
 function pause(){if(!running||roundOver||finished)return;if(isGuest()){clearInput();netSession.peer.send('pause',{matchId:netSession.matchId,paused:!paused});return}paused=!paused;clearInput();$('pause').textContent=paused?'Fortsätt':'Pausa';$('banner').textContent=paused?'PAUS':''}$('pause').onclick=pause;
 function active(){return running&&!paused&&!finished&&!roundOver&&!mannequinSetupPending()}
-window.addEventListener('keydown',handleGameKeyDown);window.addEventListener('keyup',handleGameKeyUp);window.addEventListener('blur',()=>{clearInput();if(active())pause()});
+window.addEventListener('keydown',handleGameKeyDown);window.addEventListener('keyup',handleGameKeyUp);window.addEventListener('blur',()=>{clearInput();if(active()&&$('mode').value!=='online')pause()});
 const canvas=$('canvas');
 function pointerPosition(e){const b=canvas.getBoundingClientRect();pointerScreen={x:(e.clientX-b.left)*VIEW_W/b.width,y:(e.clientY-b.top)*VIEW_H/b.height};return {x:camera.x+pointerScreen.x/camera.scale,y:camera.y+pointerScreen.y/camera.scale}}
 canvas.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'){rememberPointer(e);aimPoint=pointerPosition(e);mouseAim=true}});canvas.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;rememberPointer(e);e.preventDefault();aimPoint=pointerPosition(e);mouseAim=true;mouseFire=true;canvas.setPointerCapture(e.pointerId);beginPlayerAttack(0)});window.addEventListener('pointerup',()=>{if(mouseFire)endPlayerAttack(0);mouseFire=false});canvas.addEventListener('pointercancel',()=>{endPlayerAttack(0,true);mouseFire=false});canvas.oncontextmenu=e=>e.preventDefault();
@@ -207,7 +207,13 @@ function render(){updateCamera();if(isGuest())updatePlayerAim();const c=ctx;c.cl
 }
 let portraitPaintAt=0;
 function animateRosterPortraits(now){if(now-portraitPaintAt<83||$('roster').getBoundingClientRect().bottom<0)return;portraitPaintAt=now;const cards=$('roster').querySelectorAll('.card');for(const id of [0,1,2]){const canvas=cards[id]?.querySelector('canvas');if(!canvas)continue;const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);drawFighter(ctx,{id,x:130,y:205,face:1},now/1000,true);}}
-function frame(now){const dt=Math.min((now-last)/1000,.035);last=now;update(dt);if(typeof onlineTick==='function')onlineTick(dt);if(running)render();else animateRosterPortraits(now);requestAnimationFrame(frame)}requestAnimationFrame(frame);
+// One clock for both callers: the watchdog never advances a frame twice.
+function pumpGame(now){if(!Number.isFinite(now))return;const elapsed=last?Math.max(0,(now-last)/1000):0;last=now;let remaining=Math.min(elapsed,$('mode').value==='online'?.15:.035);while(remaining>0){const dt=Math.min(remaining,.025);update(dt);if(typeof onlineTick==='function')onlineTick(dt);remaining-=dt;}}
+function frame(now){try{pumpGame(now);if(running)render();else animateRosterPortraits(now);}finally{requestAnimationFrame(frame)}}requestAnimationFrame(frame);
+// Browsers can throttle RAF when another tab/window becomes active. Network
+// input and host snapshots must keep running independently of canvas painting.
+if(typeof setInterval==='function')setInterval(()=>{if(running&&$('mode').value==='online'){const now=performance.now();if(now-last>40)pumpGame(now);}},25);
+
 
 // Engin channels on the authoritative simulation; snapshots carry the visible state.
 function reactorReach(f){const u={x:Math.cos(f.lockedAim),y:Math.sin(f.lockedAim)},range=getMoves(f)[0][3];let reach=0;for(let d=4;d<=range;d+=4){if(!free(f.x+u.x*d,f.y+u.y*d,2))break;reach=d}return reach}

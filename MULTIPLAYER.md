@@ -62,3 +62,7 @@ Nya tester: `node teamplay.test.cjs` och `node teamplay-online.test.cjs`. De tä
 
 ### v107 · different-network connections
 The shared RTC configuration restores the public EU/US TURN fallback provided by PeerJS 1.5.4, which the former STUN-only override removed. PartyHost inherits the same configuration. Quick rooms use chunked BinaryPack serialization, wait up to 45 seconds to connect and report transient ICE disconnection. Manual connections wait 15 seconds for transient disconnection recovery. Reload both devices; network build is arena-online-72. Real-network relay availability is not verified by the in-memory tests.
+
+
+### v108 · frozen guest and host advantage
+Online simulation/input now have a shared-clock timer fallback independent of RAF. Online window blur no longer pauses the entire match. Guest input interval drops to 25 ms; guest-local presentation removes opponent interpolation and uses a bounded ordinary-movement preview with wall/status guards. Damage, attack results and game state stay host-authoritative; host advantage is reduced, not removed. Existing perfect-block latency tests still pass. Two real Chromium pages pass movement, shooting/cooldown, focus and mobile checks using the real PeerJS codec plus a simulated 120-ms RTT bridge. Real cross-network WebRTC is still a separate user-device check. Reload both devices for build arena-online-73.
