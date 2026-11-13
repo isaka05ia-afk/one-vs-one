@@ -18,7 +18,7 @@ run("manual.pc.connectionState='connected';manual.pc.onconnectionstatechange()")
 ctx.connection=new Events();run('quick.callbacks={onClose:r=>closedReasons.push(r),onStatus:s=>statuses.push(s)};quick.attach(connection);connection.emit("open");');
 ctx.connection.emit('iceStateChanged','disconnected');assert.equal(run('quick.closed'),false);assert(run('statuses.at(-1)').includes('tillfälligt'));
 ctx.connection.emit('iceStateChanged','connected');assert.equal(run('quick.closed'),false);
-run('quick.sendSnapshot({kept:1,absent:undefined,nested:{absent:undefined}})');const wire=ctx.connection.sent.at(-1);assert.equal(Object.hasOwn(wire.data,'absent'),false);assert.equal(Object.hasOwn(wire.data.nested,'absent'),false);
-ctx.partyLink=new Events();run('party.attachParty(partyLink);party.sendTo(1,"snapshot",{kept:1,absent:undefined})');assert(!Object.hasOwn(ctx.partyLink.sent.at(-1).data,'absent'));
+run('quick.sendSnapshot({seq:1,matchId:1,kept:1,absent:undefined,nested:{absent:undefined}})');const wire=JSON.parse(ctx.connection.sent.at(-1));assert.equal(Object.hasOwn(wire.data,'absent'),false);assert.equal(Object.hasOwn(wire.data.nested,'absent'),false);
+ctx.partyLink=new Events();run('party.attachParty(partyLink);party.sendTo(1,"snapshot",{kept:1,absent:undefined})');assert(!Object.hasOwn(JSON.parse(ctx.partyLink.sent.at(-1)).data,'absent'));
 ctx.connection.close();assert.equal(run('quick.closed'),true);assert.equal(run('closedReasons.length'),1);run('manual.close();party.close()');assert.equal(timers.size,0);
 console.log('PASS: manual/duel/party preserve direct + TURN candidates; temporary disconnect recovery; JSON-compatible chunked-transport packets; actual close and timer cleanup. No live relay availability assertion.');

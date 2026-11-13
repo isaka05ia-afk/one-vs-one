@@ -10,6 +10,19 @@ function onlineRTCConfig(){return {iceServers:[
  {urls:['turn:eu-0.turn.peerjs.com:3478','turn:us-0.turn.peerjs.com:3478'],username:'peerjs',credential:'peerjsp'}
  ],iceTransportPolicy:'all'};}
 
+// JSON is the game wire format; PeerJS BinaryPack carries this string in chunks.
+// This preserves exact JSON semantics across library/browser serializers.
+const ONLINE_PACKET_LIMIT=524288;
+function encodeOnlinePacket(type,data){const packet=JSON.stringify({protocol:ONLINE_PROTOCOL,type,data});if(packet.length>ONLINE_PACKET_LIMIT)throw Error('Speluppdateringen är för stor.');return packet;}
+function decodeOnlinePacket(value){try{if(typeof value==='string'){if(value.length>ONLINE_PACKET_LIMIT)return null;value=JSON.parse(value);}else if(JSON.stringify(value).length>ONLINE_PACKET_LIMIT)return null;return value?.protocol===ONLINE_PROTOCOL&&typeof value.type==='string'?value:null;}catch{return null;}}
+class SnapshotFlow{
+ constructor(send){this.send=send;this.inFlight=new Map();this.latest=null;this.matchId=0;this.sent=0;this.acked=0;this.replaced=0;}
+ now(){return typeof performance==='undefined'?Date.now():performance.now();}
+ offer(data){if(!Number.isSafeInteger(data?.seq)||!Number.isSafeInteger(data?.matchId))return false;if(data.matchId!==this.matchId){this.inFlight.clear();this.latest=null;this.matchId=data.matchId;}if(this.latest)this.replaced++;this.latest=data;return this.flush();}
+ flush(){const now=this.now();for(const [seq,at] of this.inFlight)if(now-at>800)this.inFlight.delete(seq);if(!this.latest||this.inFlight.size>=2)return false;const data=this.latest;if(!this.send(data))return false;this.latest=null;this.inFlight.set(data.seq,now);this.sent++;return true;}
+ ack(data){if(data?.matchId!==this.matchId||!Number.isSafeInteger(data.seq)||!this.inFlight.has(data.seq))return false;this.inFlight.delete(data.seq);this.acked++;this.flush();return true;}
+ clear(){this.inFlight.clear();this.latest=null;}
+}
 async function readLimited(stream,limit=65536){const reader=stream.getReader();let size=0;const chunks=[];try{for(;;){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>limit)throw Error('Anslutningskoden är för stor.');chunks.push(value)}}finally{await reader.cancel().catch(()=>{})}const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length}return bytes}
 async function encodeConnection(data){let bytes=new TextEncoder().encode(JSON.stringify(data)),kind='j';if(typeof CompressionStream!=='undefined'){bytes=await readLimited(new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate')));kind='z'}let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);return 'OVO1'+kind+'.'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 async function decodeConnection(code,expected){const clean=String(code).replace(/\s+/g,'');if(clean.length>50000||!/^OVO1[jz]\.[A-Za-z0-9_-]+$/.test(clean))throw Error('Koden känns inte igen. Kopiera hela anslutningskoden.');const binary=atob(clean.slice(6).replace(/-/g,'+').replace(/_/g,'/'));let bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));if(clean[4]==='z'){if(typeof DecompressionStream==='undefined')throw Error('Uppdatera webbläsaren för att läsa den här koden.');bytes=await readLimited(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate')))}if(bytes.length>65536)throw Error('Anslutningskoden är för stor.');let data;try{data=JSON.parse(new TextDecoder().decode(bytes))}catch{throw Error('Koden är skadad. Be kompisen kopiera den igen.')}if(data.protocol!==ONLINE_PROTOCOL||data.description?.type!==expected||typeof data.description.sdp!=='string'||data.description.sdp.length>60000||!/^[-a-zA-Z0-9]{8,80}$/.test(data.session||''))throw Error('Fel sorts kod. Använd värdkoden för att gå med och svarskoden hos värden.');return data}
