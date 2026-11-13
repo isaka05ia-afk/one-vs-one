@@ -1,6 +1,6 @@
 'use strict';
 const OLYMPIAN_TRIAL=[{name:'Latissa',role:'Swimmer',muscle:'latissimus dorsi',athlete:1,hp:300,color:'#69d4e7'},{name:'Solea',role:'Skater',muscle:'soleus',athlete:2,hp:320,color:'#c4ebf0'},{name:'Vasta',role:'Runner',muscle:'vastus lateralis',athlete:0,hp:360,color:'#ffc97b'}];
-const OLYMPIAN_WAGER=['Latissa: Welcome, traveler. We might know someone who can help you.','Solea: Beat all three of us and we’ll send you back in time to a man called Engin.','Vasta: He might know how to get you home. If we win, we get the key. Deal?','The Player: Could I offer the sailor instead?','Sailer: No.','Latissa: Ha! The key, traveler. Only if you agree.'];
+const OLYMPIAN_WAGER=['Latissa: Welcome to our home, traveler. Sailer told us you pulled him out of the sea.','Solea: Beat all three of us and we’ll send you back in time to a man called Engin.','Vasta: He might know how to get you home. If we win, we get the key. Deal?','The Player: Could I offer the sailor instead?','Sailer: No.','Latissa: Ha! The key, traveler. Only if you agree.'];
 function inOlympianTrial(){return adventure?.chapter==='olympian_trial'}
 function trialWon(){return !!adventure?.olympianWon||adventureStored('one-vs-one-olympian-trial-won')>0}
 function trialSafePoint(p){return safeArenaPosition({x:Math.max(195,Math.min(1405,p.x)),y:Math.max(230,Math.min(870,p.y))})}
