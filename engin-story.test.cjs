@@ -38,3 +38,8 @@ run("window.localStorage.data={'one-vs-one-olympians-arrived':'1'};continueHarbo
 run("window.localStorage.data={'one-vs-one-sailer-rescued':'1'};continueHarbor()");assert.equal(run('atShipRest()'),true);
 run("window.localStorage.data={};setAdventureGodMode(true);adventure.olympianWon=true;adventure.enginBossWon=true;enterEnginPast();takeEnginUranium();finishBobEnding()");assert.equal(run("adventureStored('one-vs-one-engin-uranium')+adventureStored('one-vs-one-bob-ending-seen')"),0);
 console.log('PASS: uranium pickup, Bob dialogue/end, persisted resume checkpoints and developer save isolation.');
+run("window.localStorage.data={};setAdventureGodMode(false);startAdventure({resume:true});adventure.olympianWon=true;enterEnginPast();startEnginBoss();update(7)");
+for(let i=0;i<5;i++){run('fighters[0].hp=0;reviveAdventurePlayer(fighters[0])');if(run('adventure.ended'))run('startEnginBoss();update(7)');}
+assert.equal(run("adventureStored('one-vs-one-engin-player-deaths')"),5);assert(!run('enginMemoryOpening(4)').includes('already killed'));run('startEnginBoss();update(.5)');assert(run('adventure.line').includes('already killed'));run('update(1.5)');assert(run('adventure.line').includes('done all of this before'));run('update(4.4)');assert(run('adventure.line').includes('How many times'));assert.equal(run('adventure.enginBoss.keyEscape'),true);
+run('update(1);setAdventureGodMode(true);fighters[0].hp=0;reviveAdventurePlayer(fighters[0])');assert.equal(run("adventureStored('one-vs-one-engin-player-deaths')"),5);
+console.log('PASS: five real Engin deaths persist and unlock repeated-history opening; first four and developer deaths are excluded.');
