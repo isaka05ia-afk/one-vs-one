@@ -3,15 +3,51 @@ function drawFighter(c,f,time=0,preview=false){if(f.id===8){drawQueen(c,f,time,p
  if(k===4){c.shadowColor=d.color;c.shadowBlur=10}c.lineCap='round';c.strokeStyle=k===1?'#333043':'#27324b';c.lineWidth=14;c.beginPath();c.moveTo(-12,-43);c.lineTo(-20-walk,0);c.moveTo(12,-43);c.lineTo(19+walk,0);c.stroke();
  path(c,[[-24,-94],[24,-94],[28,-40],[-27,-40]],k===0?'#4267b1':k===1?'#272432':'#202736');
 
- if(k===0){path(c,[[-23,-87],[0,-70],[23,-87],[17,-44],[-18,-44]],'#557fd0');c.fillStyle='#d5e5ff';c.font='bold 22px sans-serif';c.fillText('E',-7,-51)}
+ if(k===0){
+ // Bob: oversized striped shirt, short overalls and scuffed children's shoes.
+ path(c,[[-27,-93],[-15,-100],[16,-100],[28,-91],[24,-42],[-24,-42]],'#e7bc68');
+ c.fillStyle='#b96358';for(let y=-88;y<-50;y+=12)c.fillRect(-22,y,44,5);
+ path(c,[[-17,-91],[-9,-91],[-8,-66],[10,-66],[11,-91],[19,-91],[22,-39],[-21,-39]],'#527e9d');
+ c.fillStyle='#e5d6aa';c.fillRect(-6,-61,13,11);for(const x of [-12,15]){c.beginPath();c.arc(x,-66,3,0,7);c.fill();}
+ c.fillStyle='#d9ac89';c.fillRect(-23-walk,-22,12,14);c.fillRect(13+walk,-22,12,14);
+ c.fillStyle='#b8504e';c.fillRect(-32-walk,-10,28,13);c.fillRect(7+walk,-10,29,13);c.fillStyle='#eee0be';c.fillRect(-32-walk,0,28,4);c.fillRect(7+walk,0,29,4);
+ }
  if(k===0&&wearingJacket(f)){path(c,[[-29,-96],[-9,-99],[0,-78],[9,-99],[29,-96],[32,-37],[-32,-37]],'#c98d59');c.strokeStyle='#ffe0ac';c.lineWidth=4;c.beginPath();c.moveTo(0,-78);c.lineTo(0,-39);c.stroke();if(f.guard>0){c.strokeStyle='#bfeaff';c.lineWidth=7;c.beginPath();c.ellipse(41,-72,broadBlock(f)?37:25,49,0,-1.6,1.6);c.stroke()}}
  if(k===1){path(c,[[-15,-94],[0,-75],[15,-94]],'#f2e5d5');path(c,[[0,-82],[-5,-65],[0,-47],[5,-65]],'#b391fa')}
  if(k===2){path(c,[[-23,-91],[-8,-72],[-20,-44],[12,-44],[22,-80],[9,-93],[3,-64]],'#ff7845');if(f.fly>0){path(c,[[-20,-81],[-95,-132],[-65,-66],[-32,-55]],'#ffac51');path(c,[[20,-81],[95,-132],[65,-66],[32,-55]],'#ffac51')}}
  c.strokeStyle=k===1?'#373341':k===0?'#557fd0':'#f1b18b';c.lineWidth=12;c.beginPath();c.moveTo(-23,-85);c.lineTo(-34,-55+walk);c.moveTo(23,-85);c.lineTo(attack?67:35,attack?-80:-55-walk);c.stroke();
  if(k!==1&&k!==4){c.fillStyle='#efbd99';c.beginPath();c.arc(0,-114,18,0,7);c.fill();c.fillStyle='#171d30';c.fillRect(-10,-118,5,4);c.fillRect(6,-118,5,4)}
- if(k===0){path(c,[[-20,-121],[-21,-135],[13,-138],[22,-126],[37,-123]],'#92b6fa');c.fillStyle='#d6e3ff';c.fillRect(-16,-126,37,5);c.fillStyle='#d75d6b';for(const x of [-34,attack?66:35]){c.beginPath();c.arc(x,attack&&x>0?-80:-54,13*attackSize(f),0,7);c.fill()}}
+ if(k===0){
+ // Round cheeks, ears, untidy hair and a four-colour propeller cap.
+ for(const x of [-20,20]){c.fillStyle='#efbd99';c.beginPath();c.arc(x,-113,5,0,7);c.fill();}
+ path(c,[[-18,-123],[-17,-132],[-7,-137],[4,-131],[14,-136],[20,-121],[8,-125],[2,-120],[-7,-126]],'#73503d');
+ c.fillStyle='#d98e7d';c.fillRect(-16,-109,7,3);c.fillRect(10,-109,7,3);c.strokeStyle='#915c48';c.lineWidth=2;c.beginPath();c.arc(1,-109,7,.2,2.6);c.stroke();
+ path(c,[[-22,-126],[-18,-140],[0,-145],[0,-126]],'#d66758');path(c,[[0,-145],[17,-139],[23,-126],[0,-126]],'#75a783');
+ c.fillStyle='#eac45e';c.fillRect(-24,-128,49,6);path(c,[[13,-125],[34,-123],[39,-118],[15,-120]],'#5d97b4');
+ c.strokeStyle='#584e49';c.lineWidth=3;c.beginPath();c.moveTo(0,-144);c.lineTo(0,-154);c.stroke();c.save();c.translate(0,-154);c.scale(1,Math.max(.22,Math.abs(Math.cos(time*10))));c.rotate(Math.sin(time*10)*.12);path(c,[[-29,-4],[-6,-7],[0,0],[-7,5],[-29,3]],'#e6ba59');path(c,[[29,-4],[6,-7],[0,0],[7,5],[29,3]],'#69afc2');c.restore();c.fillStyle='#d96759';c.beginPath();c.arc(0,-154,4,0,7);c.fill();
+ c.fillStyle='#d75d6b';for(const x of [-34,attack?66:35]){c.beginPath();c.arc(x,attack&&x>0?-80:-54,13*attackSize(f),0,7);c.fill();c.strokeStyle='#f4bbb0';c.lineWidth=2;c.stroke();}
+ }
+ if(k===0&&hasCard(f,'full_name')){c.strokeStyle=essyEvolve(f,'full_name')?'#ffdf88':'#e6d5a0';c.lineWidth=2;for(const x of [-18-walk,21+walk]){c.beginPath();c.moveTo(x-6,-7);c.lineTo(x+5,-4);c.moveTo(x-6,-3);c.lineTo(x+5,-7);c.stroke();}if(essyEvolve(f,'full_name')){for(let j=0;j<3;j++){c.beginPath();c.moveTo(-35-j*8,-20-j*13);c.lineTo(-48-j*8,-17-j*13);c.stroke();}}}
  if(k===0&&essyEvolve(f,'gloves')){c.fillStyle='#a76c99';c.fillRect(-26,-100,52,20);for(let x=-20;x<=20;x+=20){c.fillStyle='#fff0d5';c.fillRect(x,-96,8,8)}}if(k===0&&essyEvolve(f,'jacket')&&f.guard>0){c.strokeStyle='#bfeaff';c.lineWidth=6;c.beginPath();c.ellipse(0,-74,53,83,0,0,Math.PI*2);c.stroke()}if(k===0&&hasCard(f,'cheter')){if(essyEvolve(f,'cheter')){c.fillStyle='#6d829d';c.fillRect(25,-80,95,10);c.fillStyle='#303745';c.fillRect(51,-90,22,9);c.fillRect(109,-83,15,16)}if(hasCard(f,'big_hands')){c.fillStyle='#ddac66';c.fillRect(26,-87,67,23);c.fillStyle='#6a4b38';c.fillRect(31,-65,17,25)}c.fillStyle='#d9e2f0';c.fillRect(29,-66,43,-11);c.fillStyle='#343d56';c.fillRect(33,-65,12,19)}
- if(k===1){c.fillStyle='#9e7049';c.fillRect(-23,-151,46,59);c.strokeStyle='#e0b981';c.lineWidth=4;c.strokeRect(-23,-151,46,59);c.lineWidth=1;c.strokeRect(-16,-144,32,21);c.strokeRect(-16,-117,32,19);c.fillStyle='#ffe49c';c.beginPath();c.arc(12,-119,3,0,7);c.fill();c.fillStyle='#ffe49c';c.fillRect(-4,-63,10,4);c.beginPath();c.arc(3,-58,6,0,7);c.stroke()}
+ if(k===1){
+ // A tired keeper whose face is a locked door. Brass hinges and long coat tails.
+ path(c,[[-25,-91],[-34,-24],[-13,-32],[-4,-66]],'#37394c');path(c,[[24,-91],[36,-24],[13,-32],[4,-66]],'#444358');
+ c.strokeStyle='#c1a477';c.lineWidth=2;for(const side of [-1,1]){c.beginPath();c.moveTo(side*20,-86);c.lineTo(side*24,-38);c.stroke();}
+ path(c,[[-26,-147],[-19,-160],[17,-160],[27,-147],[26,-94],[-26,-94]],'#473445');
+ path(c,[[-20,-146],[-15,-153],[15,-153],[21,-146],[21,-99],[-20,-99]],'#95684b');
+ c.strokeStyle='#d3ae73';c.lineWidth=3;c.strokeRect(-20,-146,41,47);c.lineWidth=1;c.strokeRect(-14,-140,29,17);c.strokeRect(-14,-117,29,12);
+ c.fillStyle='#d7b778';for(const y of [-140,-108])c.fillRect(-25,y,8,7);
+ c.fillStyle='#251f30';c.fillRect(-12,-134,24,5);c.fillStyle='#b8dcd2';c.fillRect(-9,-133,6,2);c.fillRect(5,-133,5,2);
+ c.fillStyle='#f4d68d';c.beginPath();c.arc(12,-119,4,0,7);c.fill();c.fillStyle='#312438';c.fillRect(11,-120,2,5);
+ c.strokeStyle='#d7b778';c.lineWidth=3;c.beginPath();c.arc(3,-59,8,0,7);c.moveTo(3,-51);c.lineTo(3,-38);c.lineTo(11,-38);c.moveTo(3,-44);c.lineTo(9,-44);c.stroke();
+ c.strokeStyle='#b7986b';c.lineWidth=2;c.beginPath();c.moveTo(-24,-78);c.quadraticCurveTo(-39,-47,-17,-45);c.stroke();
+ for(let j=0;j<3;j++){c.save();c.translate(-20+j*6,-46+j%2*5);c.rotate(-.3+j*.3);c.strokeStyle='#d9bc81';c.beginPath();c.arc(0,0,3,0,7);c.moveTo(0,3);c.lineTo(0,12);c.lineTo(4,12);c.stroke();c.restore();}
+ if(hasCard(f,'hotel')){c.fillStyle='#d4b878';c.fillRect(-14,-157,28,6);c.fillStyle='#54425a';for(let j=0;j<5;j++)c.fillRect(-11+j*5,-156,3,3);}
+ if(hasCard(f,'family')){c.fillStyle='#d5c6aa';c.fillRect(-24,-78,14,18);c.fillStyle='#8b6978';c.fillRect(-21,-74,8,7);}
+ if(hasCard(f,'late')){c.strokeStyle='#ceb276';c.lineWidth=3;c.beginPath();c.arc(29,-58,9,0,7);c.moveTo(29,-64);c.lineTo(29,-58);c.lineTo(34,-55);c.stroke();}
+ if(hasCard(f,'no_speed')){for(const x of [-21,20]){c.fillStyle='#727184';c.fillRect(x-10,-17,22,12);c.strokeStyle='#d2b77a';c.strokeRect(x-10,-17,22,12);}}
+ if(doorEvolve(f,'hotel')){c.strokeStyle='#bfb5ef';c.lineWidth=2;c.beginPath();c.ellipse(0,-126,38,48,Math.sin(time)*.15,0,7);c.stroke();}
+ }
  if(k===1&&hasCard(f,'magic')){c.fillStyle='#2c3044';c.fillRect(28,-67,40,10);c.fillRect(33,-60,10,16);c.strokeStyle='#f3db89';c.lineWidth=3;c.beginPath();c.arc(70,-62,6,0,7);c.moveTo(75,-62);c.lineTo(86,-62);c.lineTo(86,-56);c.stroke()}if(k===2){path(c,[[-22,-107],[-24,-132],[-12,-126],[-7,-158],[5,-139],[18,-153],[25,-122],[17,-108],[9,-131],[-2,-122],[-12,-126]],'#ff702f');path(c,[[-10,-133],[0,-151],[6,-131],[15,-140],[12,-119]],'#ffdd72')}
  if(k===5){
  // Sailor silhouette: striped jersey, yellow coat, captain cap and a wooden oar.

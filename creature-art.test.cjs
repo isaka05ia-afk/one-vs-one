@@ -25,3 +25,16 @@ for(const cards of loadoutsToDraw){sandbox.drawCards=cards;run('loadouts[0]=draw
 run("selected=5;start()");for(const card of run('SAILER_CARDS')){for(const cards of [[card],[card,card]]){sandbox.drawCards=cards;run('loadouts[0]=drawCards;spawnRound();fighters[0].anim=.2;drawFighter(strictPaint,fighters[0],1);drawCreatureCardEffects(strictPaint,fighters[0],1)');assert.equal(run('depths'),0);}}
 assert(run('paintOps')>1000);assert.equal(run('ATHLETES[0].properName'),'Vasta');assert.equal(run('ATHLETES[1].properName'),'Latissa');assert.equal(run('ATHLETES[2].properName'),'Solea');
 console.log('PASS: medieval rabbit/dolphin/hedgehog render through every normal card, ordered combo, all seven athlete selections/evolutions; five Sailer cards and evos; finite geometry and balanced canvas stacks.');
+
+// Render every legal Bob / Door Man / Laores build, facing and dragon stage.
+for(const id of [0,1,2]){
+ const families=Array.from(run(`cardFamilies(${id})`)),builds=[[]];
+ for(const a of families){builds.push([a],[a,a]);for(const b of families)if(a!==b)builds.push([a,b]);}
+ sandbox.reviewId=id;run('selected=reviewId;start()');
+ for(const cards of builds){sandbox.drawCards=cards;run('loadouts[0]=drawCards;spawnRound()');
+ for(const stage of id===2?[1,2,3,4,5]:[1])for(const face of [-1,1])for(const t of [0,.125,1]){
+ run(`fighters[0].stage=${stage};fighters[0].face=${face};fighters[0].anim=.2;drawFighter(strictPaint,fighters[0],${t},false);drawFighter(strictPaint,fighters[0],${t},true)`);assert.equal(run('depths'),0);
+ }}
+}
+assert.equal(run('roster[0].name'),'BOB');
+console.log('PASS: Bob, Door Man and Laores: every ordered card pair/evolution, all five dragon stages, both facings and animated frames; finite geometry, balanced canvas stack and Bob menu name.');

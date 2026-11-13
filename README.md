@@ -17,14 +17,14 @@ En duellarena ovanifrån i HTML, CSS och JavaScript. Fri rörelse i två dimensi
 ## Fighters
 | Fighter | Klass | Liv | Fart | Spelstil |
 |---|---|---:|---:|---|
-| The Essy Kid | Tank | 150 | 195 | Närslag, riktad stråle, grab och kast |
+| Bob | Tank | 150 | 195 | Närslag, riktad stråle, grab och kast |
 | Door Man | Speedster | 95 | 285 | Flanka, lås en riktad träff, rusa |
 | Laores the Dragon | Evolution | 85–185 | 160–245 | Ägg till Elder Dragon; kort ändrar formen |
 | Engin | DPS | 125 | 185 | Stationär reaktorstråle, explosion med HP-kostnad och studsande energikula |
 | Olympic Team | Relay | 3 × 40 | 180–360 | Löpare, simmare och skridskoåkare med egna liv |
 | Sailer | Control | 170 | 175 | Bred våg, vind som drar och en fångande segeljolle |
 
-Alla attacker har separata synliga cooldowns. Sten är ett tungt närslag (23 skada, 60 räckvidd, 1,5 s cooldown). Sax laddar synligt i 0,4 sekunder och skjuter sedan en riktad stråle (26 skada, 400 räckvidd, 4,2 s cooldown), som stoppas av väggar. Påse är en grab på nära håll: håll fast i 0,55 s och kasta sedan för 22 skada (145 räckvidd, 7,2 s cooldown). Båda står still under greppet, den fångade kan inte attackera eller undvika, och stun på The Essy Kid avbryter greppet. Missar och undanmanövrer ger ingen träff. Door Mans första attack är Running Man: rusa och tackla längs siktet (24 skada, 3,2 s cooldown). Andra attacken är Lock. Tredje förmågan är Dörrar: placera en dörr där du står (3 s cooldown). Han kan ha två egna dörrar, A och B, samtidigt; när båda finns kan han gå in i den ena och teleportera till den andra. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. Engin står still under Reactor Beam och avbryts av stun. Aegis har silverrustning, guldkanter, riddarhjälm och en spegelsköld.
+Alla attacker har separata synliga cooldowns. Sten är ett tungt närslag (23 skada, 60 räckvidd, 1,5 s cooldown). Sax laddar synligt i 0,4 sekunder och skjuter sedan en riktad stråle (26 skada, 400 räckvidd, 4,2 s cooldown), som stoppas av väggar. Påse är en grab på nära håll: håll fast i 0,55 s och kasta sedan för 22 skada (145 räckvidd, 7,2 s cooldown). Båda står still under greppet, den fångade kan inte attackera eller undvika, och stun på Bob avbryter greppet. Missar och undanmanövrer ger ingen träff. Door Mans första attack är Running Man: rusa och tackla längs siktet (24 skada, 3,2 s cooldown). Andra attacken är Lock. Tredje förmågan är Dörrar: placera en dörr där du står (3 s cooldown). Han kan ha två egna dörrar, A och B, samtidigt; när båda finns kan han gå in i den ena och teleportera till den andra. Fire Fly lämnar brinnande mark; överlappande eldspår får inte stapla skada varje bildruta. Engin står still under Reactor Beam och avbryts av stun. Aegis har silverrustning, guldkanter, riddarhjälm och en spegelsköld.
 
 ## Placering
 Väggar stoppar rörelse, rusningar och projektiler. Explosioner kräver fri sikt till målet. Markeringar visar var en explosion ska träffa och hur lång tid som återstår. Undanmanöver ger 0,2 sekunder osårbarhet men passerar inte genom väggar. Datorn cirklar, håller avstånd, reagerar med fördröjning och försöker hitta vägar runt skydd. Den använder riktiga projektiler och kan missa.
@@ -131,10 +131,10 @@ Anslutningen använder WebRTC och publika STUN-tjänster från Cloudflare och Go
 `node test.cjs` verifierar den befintliga spellogiken. `node online.test.cjs` kör två separata spelklienter med komprimerade koder, komplett lobbyhandshake, matchstart och kvittens, input/tillståndssynk, serverauktoritet, paus, ommatch, serieronder, frånkoppling och de olika karaktärernas nätverkskontroller. Transporten i testet är simulerad; det verifierar inte ICE/NAT eller en verklig internetanslutning. Ett försök att starta Chromium blockerades av testmiljöns socket-/nätverksbehörigheter. Verifiering mellan riktiga datorer/mobiler och olika nätverk återstår.
 
 
-## Slumpade kartor och The Essy Kid
+## Slumpade kartor och Bob
 Slumpad karta är nu det första och förvalda kartvalet. En ny match eller ommatch gör en ny slumpning; samma karta behålls under serieronderna. I onlineläge gör värden slumpningen vid start och skickar den faktiska kartan till gästen. Båda får därför alltid samma bana. Ett manuellt kartval finns kvar när ni vill spela en viss miljö.
 
-Sten/sax/påse-karaktären heter nu The Essy Kid och har ett E på hoodien. Påse har utökats från 95 till 145 räckvidd och från ungefär 74 till 115 graders träffkon. Skada, 0,55 s grepp och 7,2 s cooldown behålls. Gripet kräver fortfarande fri sikt och kan undvikas med undanmanöver. Botens avståndsbedömning använder den större grabben.
+Sten/sax/påse-karaktären heter nu Bob och har ett E på hoodien. Påse har utökats från 95 till 145 räckvidd och från ungefär 74 till 115 graders träffkon. Skada, 0,55 s grepp och 7,2 s cooldown behålls. Gripet kräver fortfarande fri sikt och kan undvikas med undanmanöver. Botens avståndsbedömning använder den större grabben.
 
 
 ## Ability Cards — comeback och nya spelstilar
@@ -226,9 +226,9 @@ Nätverksspelet synkar upp till tio dörrar, familjeskyttar, deras HP och tillh�
 
 Tester täcker alla tjugo ordnade Door Man-kortpar, fem dörrar/slumpad utgång/ersättning, faktiska Key Gun-cooldowns, halvt liv, 10-HP-dörrar, begränsade familjespawners, förstörelse, ingen teleport med Family, fällstun och andra Door Mans immunitet samt Sonic-formens tomma attacklista, styrfördröjning och kontaktskada. Simulerade tvåklientstester verifierar fem dörrar, fällor, skyttars liv/förstörelse och Sonic-formens HUD/kontaktskada. Den tidigare gränsen för riktiga WebRTC-/enhetstester kvarstår.
 
-### The Essy Kid ability cards
+### Bob ability cards
 
-The Essy Kid now offers **Cheter**, **Big Hands**, and **Gloves** instead of basic stat cards. Three choices on the first loss, two remaining choices on the second loss, plus Skip. All three pairs compose in either acquisition order.
+Bob now offers **Cheter**, **Big Hands**, and **Gloves** instead of basic stat cards. Three choices on the first loss, two remaining choices on the second loss, plus Skip. All three pairs compose in either acquisition order.
 
 - **Cheter:** identical aimed Gun in all three slots, each with an independent 1-second cooldown; 10 damage, 460 range. Shots respect walls, dodge, guard and reflection.
 - **Big Hands:** 1.5× melee/grab reach and arc, beam reach/width, gun range/projectile size; enlarged fist visuals.
@@ -239,7 +239,7 @@ The Essy Kid now offers **Cheter**, **Big Hands**, and **Gloves** instead of bas
 
 Summons use host-owned simulation and shared snapshots; guests cannot create or damage units independently. Tests cover every ordered pair, HP/destruction, distinct AI behaviors, cooldowns, bounded populations, expiry, round cleanup, remote card selection with two remaining choices, and synchronized large/flying summons. Online transport tests are simulated rather than a real network connection.
 
-The Essy Kid now has five unique cards, with three random unowned cards offered after a loss:
+Bob now has five unique cards, with three random unowned cards offered after a loss:
 
 - **New Jaket from Mom:** +100 max HP (250 total), 15% lower movement speed. Slot three becomes Jacket Block: 85% frontal damage reduction for 1.7 seconds, 7.2-second cooldown. Attacking or dodging cancels the block. With Cheter, two Guns remain; with Gloves, the first Bag instead receives the jacket and 100 HP (see below). Big Hands widens the block angle and retains larger offensive moves. A visible brown jacket and block arc show the change.
 - **Det är sten sax påse:** all attack cooldowns ×0.75. Applies after Gun, summon or block replacements; jacket block becomes 5.4 seconds, Guns 0.75 seconds, summons 5.25/6.75/8.25 seconds. Does not shorten stun, summon lifetime, summon firing intervals or dodge cooldown.
@@ -333,7 +333,7 @@ With **I Studid Magic**, slot two becomes **Magic Bomb** instead of Gravity Well
 
 Tests verify contact/max-range splash, one damage event, cover, reflection, magic stun and both acquisition orders; simulated online tests verify visible projectile snapshots, authoritative explosion damage and synchronized magic stun.
 
-All fighter attack names and attack-button tooltips are now in English, including card-based replacements. The Essy Kid uses **Rock**, **Scissors** and **Paper**; Door Man uses **Doors**; Laores starts with **Tackle**. Engin uses **Reactor Beam**, **Over Powerd** and **Radioactive Orb**. Charge labels and named references in combat hints use the same names. Gameplay values and controls are unchanged. Syntax and existing unit/gameplay checks pass.
+All fighter attack names and attack-button tooltips are now in English, including card-based replacements. Bob uses **Rock**, **Scissors** and **Paper**; Door Man uses **Doors**; Laores starts with **Tackle**. Engin uses **Reactor Beam**, **Over Powerd** and **Radioactive Orb**. Charge labels and named references in combat hints use the same names. Gameplay values and controls are unchanged. Syntax and existing unit/gameplay checks pass.
 
 **Toothless without Studied Magic is entirely plasma-themed:** Fire Ball becomes **Plasma Bolt**, a blue-white bolt with the same direct damage/range/cooldown and no fire burn. Plasma Bomb remains slot two. Fly becomes **Plasma Flight**, retaining zero damage with a purely visual plasma trail. Lizard's Inferno becomes **Plasma Beam**, preserving charge, damage and cover rules with blue-white visuals. Egg tackle also has a plasma name if present. With Studied Magic, Magic Missile, Magic Bomb and Fly keep their magical behavior/names. Unit tests check no-burn bolt damage, plasma move names and harmless flight, and preserved magic variants; existing simulated online tests pass.
 
@@ -484,7 +484,7 @@ Olympians now have five unique cards: Selfish, So Much Power, Too Old, Kids and 
 
 **Kids** turns Runner into Sugar Rush, Swimmer into Water Fight and Skater into Lego Kid. Tag! is a strong 22-damage rush followed by a 2 s slow/weak energy dip. Candy boosts speed and Tag! for 4 s, then causes a 3 s dip; Candy cannot bypass its own dip. Water Gun deals 7 damage and pushes 80 units; Water Balloon deals 12 area damage and pushes 100. Lego Throw deals no direct damage, gives 2 permanent Bleed and 0.2 s stun, respecting dodge/guard/stun immunity. Lego Wall is a passable 160×34 strip lasting 6 s, giving the enemy 6 Bleed once per placement. Bleed still deals 0.2 HP/s per stack, persists until the round ends and can defeat its victim.
 
-**Kids + Selfish:** selected child receives full team HP and ordinary Selfish damage/range/cooldown bonuses. Sugar Rush gets Halloween: other characters/summons/boats freeze for 1.5 s; the owner's two ordinary cooldowns recover 4× faster, excluding Halloween's 20 s cooldown. An energy dip follows. Water Fight gets Kids Pool, once per round, lasting the round. Adults are ejected and cannot enter; The Essy Kid and any Kids Olympians can enter. Shots cross its boundary. Pool exclusion handles walking, flight, portals, knockback and passengers, with a safe fallback exit. Lego Kid gets +1 Bleed per Lego ability plus Spiky Lego: +2 more Bleed for 5 s at a cost of 3 permanent self-Bleed (Throw 5 / Wall 9 while buffed).
+**Kids + Selfish:** selected child receives full team HP and ordinary Selfish damage/range/cooldown bonuses. Sugar Rush gets Halloween: other characters/summons/boats freeze for 1.5 s; the owner's two ordinary cooldowns recover 4× faster, excluding Halloween's 20 s cooldown. An energy dip follows. Water Fight gets Kids Pool, once per round, lasting the round. Adults are ejected and cannot enter; Bob and any Kids Olympians can enter. Shots cross its boundary. Pool exclusion handles walking, flight, portals, knockback and passengers, with a safe fallback exit. Lego Kid gets +1 Bleed per Lego ability plus Spiky Lego: +2 more Bleed for 5 s at a cost of 3 permanent self-Bleed (Throw 5 / Wall 9 while buffed).
 
 **Kids + Too Old** is Family Team: child kits remain active, with visible adult helpers. Mom/baby add 4 base Tag! damage, Yoga heals 4 HP when Water Balloon is thrown, and Baddie adds 1 Lego Throw Bleed. **Kids + So Much Power:** Power Kick replaces Tag!, Candy doubles its knockback and still causes a dip; water attacks have more range/push; Lego Wall is wider. Unique abilities, health and fields reset each round.
 
@@ -557,7 +557,7 @@ Online protocol build 45 prevents mixing old and new arena definitions. Run
 water immunity and bot navigation checks. Existing combat fixtures explicitly
 specify their walls instead of depending on the changed arena layouts.
 
-## The Essy Kid — Evolve
+## Bob — Evolve
 
 A second copy of Cheter, Big Hands or Gloves may be offered after owning the first.
 Two copies occupy both card slots and replace the ordinary build with an Evolve:
@@ -604,7 +604,7 @@ guest Overprotected HP/block/counter and Never Stop HP costs.
 ## Door Man Evolves and Evolve match format
 
 All five Door Man cards now support a duplicate-card Evolve, using both card slots.
-The normal draft retains the 10% repeat-offer chance, shared with The Essy Kid.
+The normal draft retains the 10% repeat-offer chance, shared with Bob.
 
 - **Hotel ×2 — Infinity Space:** keep normal Running Man and Lock damage. The
   third button opens a full-map position picker (desktop and touch). Choose a free
@@ -645,7 +645,7 @@ simulated; real device-to-device network validation remains separate.
 
 All five Sailer cards now support a repeat-card Evolve. The normal draft uses the
 existing 10% repeat-offer chance; Evolve mode exposes all fifteen implemented
-Evolves for The Essy Kid, Door Man and Sailer. Bot lobby choices use the same list.
+Evolves for Bob, Door Man and Sailer. Bot lobby choices use the same list.
 
 - **My Home ×2 — The Sea:** forces the exclusive **2400 × 1500** ocean arena
   for everyone, every round, including the first round of Evolve mode. It is
@@ -1198,3 +1198,7 @@ A Thousand Curses ×2: The Living Plague, 75 maxliv, nästan ingen direkt skada 
 Forever Yours ×2: Written Into the World. Förbannelser och egen offrad max-HP följer med mellan ronderna i samma match. Varje ny permanent förbannelse kostar ett maxliv; hon kan till slut förbruka sitt liv. En ny match eller återställning av träning rensar detta. Förbannelserna använder separat tillstånd så att tidsresor, återupplivning och vanliga statusrensningar inte raderar dem.
 
 Verifiering: `node queen-afflictions.test.cjs` och `node queen-afflictions-online.test.cjs`, plus befintliga spel-/online-/evo-regressioner. Online använder simulerad transport.
+
+
+## Character visual refresh (v105)
+Bob (formerly The Essy Kid) is a child wearing striped clothes, overalls and an animated propeller cap. Door Man has a panelled door head, brass hardware, key ring and long keeper coat, with card-specific details. Laores has plated belly scales, ribbed wings, jaw details and lava cracks for Walking Volcano; existing egg stages, lost wings, wizard hat, plasma colours and Hydra heads remain visible. These are visual changes; character IDs, hitboxes and combat values stay the same.

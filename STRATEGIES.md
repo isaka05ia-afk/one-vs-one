@@ -12,7 +12,7 @@ My Home använder samma jämna banfördelning som andra kort i den korta jämfö
 
 Rekommendationerna bygger på tre provade avståndspolicyer och denna validering. Det bevisar inte den bästa möjliga strategin. Korta jämförelsen använde motståndare utan kort; valideringen inkluderade kortpar. Faktisk mobilkänsla, grafik och internetanslutning behöver provas i webbläsare.
 
-- The Essy Kid: närstrid söker Paper → Rock. Gun/Big Iron håller avstånd. Gloves sätter högst tre spawns; jackpåsen prioriteras innan jackan lämnas över. Jacket blockeras mot inkommande hot.
+- Bob: närstrid söker Paper → Rock. Gun/Big Iron håller avstånd. Gloves sätter högst tre spawns; jackpåsen prioriteras innan jackan lämnas över. Jacket blockeras mot inkommande hot.
 - Door Man: Lock förbereder rusning eller skott. Magic spelar på avstånd, Family bygger skjutdörrar, Sonic jagar kontakt. No More Speed behåller sin kortare Running Man.
 - Laores: ägget söker närkontakt. Magi använder Gravity Well för att sätta upp skott. Fly används vid hot; Inferno/Time Stop kräver en användbar siktlinje. Rejuvenate används när ordningskombon faktiskt har åldrats.
 - Engin: grundformen söker fri sikt på långt avstånd. Veins söker närstrid; Magic + Veins behåller magins kontrollavstånd. Orben undviks även när den är den egna. Overload kräver att HP-kostnaden kan betalas.
@@ -25,7 +25,7 @@ Jämförelsen här använder rond 3. Tabellen är en startpunkt för egna matche
 
 | Karaktär | Kort i valordning | Spelstil | Korta tester | Nya fulla rundor |
 |---|---|---|---:|---:|
-| THE ESSY KID | Gloves → Big Hands | Håll längre avstånd | 6/6 | 2/2 |
+| BOB | Gloves → Big Hands | Håll längre avstånd | 6/6 | 2/2 |
 | DOOR MAN | Magic → I Have a Famely | Pressa närmare | 6/6 | 2/2 |
 | LAORES THE DRAGON | I Studid Magic → No Time to Wait | Anpassat avstånd | 6/6 | 2/2 |
 | ENGIN | Uranium V2 → Heavy Armor | Anpassat avstånd | 6/6 | 2/2 |
@@ -38,32 +38,32 @@ Vinstkolumnen gäller sex träningsmatcher, inte spelarens förväntade vinstcha
 
 | Karaktär | Kort i valordning | Rond | Avståndspolicy | Träningsresultat | Nya fulla rundor |
 |---|---|---:|---|---:|---:|
-| THE ESSY KID | Utan kort | 3 | Anpassat avstånd | 3/6 | 0/2 |
-| THE ESSY KID | Cheter | 3 | Anpassat avstånd | 6/6 | 2/2 |
-| THE ESSY KID | Big Hands | 3 | Anpassat avstånd | 3/6 | 0/2 |
-| THE ESSY KID | Gloves | 3 | Anpassat avstånd | 5/6 | 2/2 |
-| THE ESSY KID | New Jaket from Mom | 3 | Pressa närmare | 4.5/6 | 1/2 |
-| THE ESSY KID | Det är sten sax påse | 3 | Pressa närmare | 4.5/6 | 2/2 |
-| THE ESSY KID | Cheter → Big Hands | 3 | Håll längre avstånd | 6/6 | 2/2 |
-| THE ESSY KID | Cheter → Gloves | 3 | Anpassat avstånd | 6/6 | 2/2 |
-| THE ESSY KID | Cheter → New Jaket from Mom | 3 | Pressa närmare | 6/6 | 1/2 |
-| THE ESSY KID | Cheter → Det är sten sax påse | 3 | Anpassat avstånd | 5/6 | 2/2 |
-| THE ESSY KID | Big Hands → Cheter | 3 | Anpassat avstånd | 5.5/6 | 2/2 |
-| THE ESSY KID | Big Hands → Gloves | 3 | Håll längre avstånd | 5.5/6 | 2/2 |
-| THE ESSY KID | Big Hands → New Jaket from Mom | 3 | Anpassat avstånd | 5/6 | 1/2 |
-| THE ESSY KID | Big Hands → Det är sten sax påse | 3 | Håll längre avstånd | 5.5/6 | 1/2 |
-| THE ESSY KID | Gloves → Cheter | 3 | Anpassat avstånd | 6/6 | 2/2 |
-| THE ESSY KID | Gloves → Big Hands | 3 | Håll längre avstånd | 6/6 | 2/2 |
-| THE ESSY KID | Gloves → New Jaket from Mom | 3 | Anpassat avstånd | 6/6 | 1/2 |
-| THE ESSY KID | Gloves → Det är sten sax påse | 3 | Anpassat avstånd | 6/6 | 2/2 |
-| THE ESSY KID | New Jaket from Mom → Cheter | 3 | Anpassat avstånd | 6/6 | 2/2 |
-| THE ESSY KID | New Jaket from Mom → Big Hands | 3 | Anpassat avstånd | 6/6 | 0/2 |
-| THE ESSY KID | New Jaket from Mom → Gloves | 3 | Anpassat avstånd | 4/6 | 1/2 |
-| THE ESSY KID | New Jaket from Mom → Det är sten sax påse | 3 | Anpassat avstånd | 4/6 | 2/2 |
-| THE ESSY KID | Det är sten sax påse → Cheter | 3 | Anpassat avstånd | 5/6 | 1/2 |
-| THE ESSY KID | Det är sten sax påse → Big Hands | 3 | Anpassat avstånd | 6/6 | 2/2 |
-| THE ESSY KID | Det är sten sax påse → Gloves | 3 | Anpassat avstånd | 6/6 | 1/2 |
-| THE ESSY KID | Det är sten sax påse → New Jaket from Mom | 3 | Anpassat avstånd | 3/6 | 1/2 |
+| BOB | Utan kort | 3 | Anpassat avstånd | 3/6 | 0/2 |
+| BOB | Cheter | 3 | Anpassat avstånd | 6/6 | 2/2 |
+| BOB | Big Hands | 3 | Anpassat avstånd | 3/6 | 0/2 |
+| BOB | Gloves | 3 | Anpassat avstånd | 5/6 | 2/2 |
+| BOB | New Jaket from Mom | 3 | Pressa närmare | 4.5/6 | 1/2 |
+| BOB | Det är sten sax påse | 3 | Pressa närmare | 4.5/6 | 2/2 |
+| BOB | Cheter → Big Hands | 3 | Håll längre avstånd | 6/6 | 2/2 |
+| BOB | Cheter → Gloves | 3 | Anpassat avstånd | 6/6 | 2/2 |
+| BOB | Cheter → New Jaket from Mom | 3 | Pressa närmare | 6/6 | 1/2 |
+| BOB | Cheter → Det är sten sax påse | 3 | Anpassat avstånd | 5/6 | 2/2 |
+| BOB | Big Hands → Cheter | 3 | Anpassat avstånd | 5.5/6 | 2/2 |
+| BOB | Big Hands → Gloves | 3 | Håll längre avstånd | 5.5/6 | 2/2 |
+| BOB | Big Hands → New Jaket from Mom | 3 | Anpassat avstånd | 5/6 | 1/2 |
+| BOB | Big Hands → Det är sten sax påse | 3 | Håll längre avstånd | 5.5/6 | 1/2 |
+| BOB | Gloves → Cheter | 3 | Anpassat avstånd | 6/6 | 2/2 |
+| BOB | Gloves → Big Hands | 3 | Håll längre avstånd | 6/6 | 2/2 |
+| BOB | Gloves → New Jaket from Mom | 3 | Anpassat avstånd | 6/6 | 1/2 |
+| BOB | Gloves → Det är sten sax påse | 3 | Anpassat avstånd | 6/6 | 2/2 |
+| BOB | New Jaket from Mom → Cheter | 3 | Anpassat avstånd | 6/6 | 2/2 |
+| BOB | New Jaket from Mom → Big Hands | 3 | Anpassat avstånd | 6/6 | 0/2 |
+| BOB | New Jaket from Mom → Gloves | 3 | Anpassat avstånd | 4/6 | 1/2 |
+| BOB | New Jaket from Mom → Det är sten sax påse | 3 | Anpassat avstånd | 4/6 | 2/2 |
+| BOB | Det är sten sax påse → Cheter | 3 | Anpassat avstånd | 5/6 | 1/2 |
+| BOB | Det är sten sax påse → Big Hands | 3 | Anpassat avstånd | 6/6 | 2/2 |
+| BOB | Det är sten sax påse → Gloves | 3 | Anpassat avstånd | 6/6 | 1/2 |
+| BOB | Det är sten sax påse → New Jaket from Mom | 3 | Anpassat avstånd | 3/6 | 1/2 |
 | DOOR MAN | Utan kort | 3 | Anpassat avstånd | 3/6 | 0/2 |
 | DOOR MAN | Hottel | 3 | Anpassat avstånd | 2/6 | 1/2 |
 | DOOR MAN | I’m Late, Need to Run | 3 | Anpassat avstånd | 3/6 | 1/2 |

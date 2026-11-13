@@ -4,7 +4,7 @@ Real engine; mocked DOM/canvas; seeded RNG; 20 Hz; 25-second quick rounds; each 
 
 278 configurations, 5004 matches. Every roster has exactly five card families. Selfish participant choices belong to one family. Ordered pairs and all five dragon rounds are included.
 
-## THE ESSY KID
+## BOB
 
 Cards: cheter, big_hands, gloves, jacket, full_name.
 
