@@ -4,6 +4,7 @@ const node=()=>({style:{setProperty(){}},classList:{add(){},remove(){},toggle(){
 const nodes={};const sandbox={console,Math,Option:function(){},requestAnimationFrame(){},document:{getElementById:id=>nodes[id]??=node(),createElement:()=>node(),querySelectorAll:()=>[],body:node()},window:{addEventListener(){}},AudioContext:function(){}};vm.createContext(sandbox);for(const f of ['maps.js','fighters.js','cards.js','doors.js','dragon.js','olympic.js','oldteam.js','engin.js','kids.js','pain.js','gods.js','controls.js','enginextras.js','ai-strategies.js','battle.js','combat.js','aiming.js','evolutions.js','sailer-evolutions.js','dragon-evolutions.js','engin-evolutions.js','timeline.js','olympic-age.js','game-upgrades.js','mannequin.js','mannequin-web.js','mannequin-voodoo.js','leo.js','queen.js','queen-evolutions.js','queen-afflictions.js','creature-art.js','game.js','adventure.js','adventure-harbor.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),sandbox);
 
 const run=c=>vm.runInContext(c,sandbox);
+run(`function finishShipBossFixture(){if(fighters[1].isKraken){const p=fighters[0];p.hasPaddle=true;p.aim=0;exposeTentacle(p.x+60,p.y,5);const t=adventure.harbor.exposed.find(t=>cone(p,t,155,1.15));if(t)hitKrakenTentacle(p,t,999);}else applyDamage(fighters[1],999);}`);
 
 
 
@@ -14,7 +15,7 @@ const run=c=>vm.runInContext(c,sandbox);
 
 const close=(a,b)=>assert(Math.abs(a-b)<.00001,`${a} != ${b}`);
 run("window.localStorage={data:{},getItem(k){return this.data[k]||null},setItem(k,v){this.data[k]=v}};adventureSave('one-vs-one-door-key',1);startAdventure();enterHarbor();startSailerFight();update(6)");close(run('fighters[1].maxHp'),480);
-run('applyDamage(fighters[1],999);update(8);adventure.harbor.timer=99;fighters[0].x=800;fighters[0].y=550');
+run('finishShipBossFixture();update(8);adventure.harbor.timer=99;fighters[0].x=800;fighters[0].y=550');
 run('var seen=new Set();var maximum=0;for(let n=1;n<=9;n++){adventure.harbor.pattern=n;adventure.harbor.warnings=[];queueKrakenPattern();for(const w of adventure.harbor.warnings)seen.add(w.kind);maximum=Math.max(maximum,adventure.harbor.warnings.length)}');assert.equal(run('seen.size'),9);assert(run('KRAKEN_KINDS.every(k=>seen.has(k))'));assert(run('maximum')>=5);
 // New visuals and damage geometry have matching bounded strips/capsules/circles.
 run('var paint=new Proxy({},{get(o,k){return o[k]||(o[k]=(...a)=>{for(const v of a)if(typeof v==="number"&&!Number.isFinite(v))throw Error("Non-finite "+k)})},set(o,k,v){o[k]=v;return true}});for(let n=1;n<=9;n++){adventure.harbor.pattern=n;adventure.harbor.warnings=[];queueKrakenPattern();for(const w of adventure.harbor.warnings){drawShipAttackWarning(paint,w);addShipVisualImpact(w);drawShipVisualImpact(paint,adventure.harbor.effects.at(-1))}}');
@@ -28,7 +29,7 @@ run('adventure.harbor.pattern=0;adventure.harbor.warnings=[];adventure.harbor.ti
 // Full fight pressure stays bounded and leaves tentacles that can be struck.
 run('fighters[0].hp=110;setAdventureGodMode(true);for(let n=0;n<4500;n++){update(.01);if(n%200===0)render()}');close(run('fighters[0].hp'),110);assert(run('adventure.harbor.exposed.length')>0);assert(run('adventure.harbor.effects.length')<=24);assert(run('adventure.harbor.warnings.length')<16);
 // A real rescue opens an on-deck conversation with clue, interruption and safe harbor.
-run('setAdventureGodMode(false);adventure.testRun=false;applyDamage(fighters[1],999);enterShipAftermath();render()');assert.equal(run('adventure.chapter'),'ship_rest');assert.equal(run('adventure.dialogue.npc.name'),'Sailer');assert.equal(run('beginOlympiansVoyage()'),false);assert.equal(run('sailerTalkDone()'),false);
+run('setAdventureGodMode(false);adventure.testRun=false;finishShipBossFixture();enterShipAftermath();render()');assert.equal(run('adventure.chapter'),'ship_rest');assert.equal(run('adventure.dialogue.npc.name'),'Sailer');assert.equal(run('beginOlympiansVoyage()'),false);assert.equal(run('sailerTalkDone()'),false);
 assert(run('SAILER_AFTER_RESCUE.join(" ")').includes('no way out'));assert(run('SAILER_AFTER_RESCUE.join(" ")').includes('old heart'));assert(run('SAILER_AFTER_RESCUE.join(" ")').includes('Forget'));assert(run('SAILER_AFTER_RESCUE.join(" ")').includes('rest'));
 run('for(let n=0;n<SAILER_AFTER_RESCUE.length-1;n++)$("harborTalkNext").onclick();$("harborBoard").onclick()');assert.equal(run('inHarbor()'),true);assert.equal(run('sailerTalkDone()'),true);assert.equal(run("adventureStored('one-vs-one-sailer-talk')"),1);assert.equal(run('fighters[0].potions'),3);
 // Explicit lending choice begins the next voyage and returns the permanent key on arrival.
@@ -36,7 +37,7 @@ run('fighters[0].x=1240;fighters[0].y=550;harborInteract();$("harborTalkNext").o
 run('for(const npc of OLYMPIANS_RESIDENTS.slice(0,3)){fighters[0].x=npc.x;fighters[0].y=npc.y;harborInteract();if(!adventure.dialogue)throw Error("No conversation");$("harborTalkNext").onclick();closeHarborDialogue()}');
 run('fighters[0].x=190;fighters[0].y=550;harborInteract();$("harborTalkNext").onclick();$("harborBoard").onclick()');assert.equal(run('inHarbor()'),true);close(run('fighters[0].hp'),110);
 // Developer-mode rescue/conversations/travel are playable but never create quest saves.
-run("window.localStorage.data={};setAdventureGodMode(true);startAdventure();enterHarbor();startSailerFight();update(6);applyDamage(fighters[1],999);update(8);applyDamage(fighters[1],999);enterShipAftermath();for(let n=0;n<5;n++)$('harborTalkNext').onclick();$('harborBoard').onclick();fighters[0].x=1240;fighters[0].y=550;harborInteract();$('harborTalkNext').onclick();$('harborBoard').onclick();update(7)");assert.equal(run('atOlympians()'),true);assert.equal(run("adventureStored('one-vs-one-sailer-talk')"),0);assert.equal(run("adventureStored('one-vs-one-olympians-arrived')"),0);
+run("window.localStorage.data={};setAdventureGodMode(true);startAdventure();enterHarbor();startSailerFight();update(6);finishShipBossFixture();update(8);finishShipBossFixture();enterShipAftermath();for(let n=0;n<5;n++)$('harborTalkNext').onclick();$('harborBoard').onclick();fighters[0].x=1240;fighters[0].y=550;harborInteract();$('harborTalkNext').onclick();$('harborBoard').onclick();update(7)");assert.equal(run('atOlympians()'),true);assert.equal(run("adventureStored('one-vs-one-sailer-talk')"),0);assert.equal(run("adventureStored('one-vs-one-olympians-arrived')"),0);
 run('start();render()');assert.equal(run('adventure'),null);
 console.log('Kraken/story: 480 HP Sailer, nine visual attack types and overlap pressure, low-HP tempo, bounded simulations, ship dialogue/clue, harbor rest, explicit key loan, Olympians arrival/NPCs/return and test-save isolation PASS');
 
