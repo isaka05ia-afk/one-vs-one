@@ -3,7 +3,8 @@ const fs=require('node:fs');
 const report=JSON.parse(fs.readFileSync(__dirname+'/audit-results.json','utf8')),tactics={};
 const validation=fs.existsSync(__dirname+'/validation-results.json')?JSON.parse(fs.readFileSync(__dirname+'/validation-results.json','utf8')):null;
 for(const [index,r] of report.results.entries()){const policy=validation?.rows[index]?.selected||r.best,score=r.scores[policy];tactics[[r.id,r.cards.join('+'),r.id===2?r.round:3].join('|')]={policy,matchups:score.samples.map(s=>Number((s.win+s.margin*.25).toFixed(4)))};}
-fs.writeFileSync(__dirname+'/ai-strategies.js',"'use strict';\n// Sampled spacing policies and opponent-specific draft values. See AUDIT.md for limits.\nconst BOT_TACTICS="+JSON.stringify(tactics)+';\n');
+const planningMarker='// Runtime-only planning state:',existingStrategies=fs.readFileSync(__dirname+'/ai-strategies.js','utf8'),planningAt=existingStrategies.indexOf(planningMarker),planningRuntime=planningAt>=0?'\n'+existingStrategies.slice(planningAt):'';
+fs.writeFileSync(__dirname+'/ai-strategies.js',"'use strict';\n// Sampled spacing policies and opponent-specific draft values. See AUDIT.md for limits.\nconst BOT_TACTICS="+JSON.stringify(tactics)+';\n'+planningRuntime);
 console.log('Built',Object.keys(tactics).length,'bot recommendations');
 
 const cardNames=Object.fromEntries([...fs.readFileSync(__dirname+'/cards.js','utf8').matchAll(/^\s*(\w+):\{name:(['"])(.*?)\2/gm)].map(m=>[m[1],m[3]]));
