@@ -130,3 +130,15 @@ refreshHarborContinue=function(){storyRefreshContinue();const seen=adventureStor
 refreshHarborContinue();
 
 function enginMemoryOpening(deaths){return deaths>=5?'Engin: You… again? No. This doesn’t add up. I already killed you.':'Engin: There. The door is locked. You are exactly what I needed.';}
+
+// Replays keep the defeated/story flags and restore the whole three-phase fight.
+function replayEnginBoss(){if(!adventure||!enginBossWon())return false;if(!atEnginPast()&&!inEnginBoss())return false;closeHarborDialogue();return startEnginBoss();}
+const enginReplayDialogue=showHarborDialogue;
+showHarborDialogue=function(){enginReplayDialogue();if(atEnginPast()&&enginBossWon()){$('harborReplay').hidden=false;$('harborReplay').textContent='REPLAY ENGIN · ALL THREE PHASES';}};
+const enginReplayClick=$('harborReplay').onclick;
+$('harborReplay').onclick=()=>{if(atEnginPast()&&enginBossWon()){replayEnginBoss();return;}enginReplayClick();};
+function addEnginReplayButton(){const button=document.createElement('button');button.textContent='FIGHT ENGIN AGAIN';button.onclick=replayEnginBoss;$('banner').append(button);}
+const enginReplayFinish=finishEnginBoss;
+finishEnginBoss=function(won){const wasEnded=adventure?.ended;enginReplayFinish(won);if(won&&!wasEnded)addEnginReplayButton();};
+const enginReplayBobFinish=finishBobEnding;
+finishBobEnding=function(){enginReplayBobFinish();if(atEnginPast()&&adventure.ended)addEnginReplayButton();};
