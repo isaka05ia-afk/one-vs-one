@@ -1264,3 +1264,7 @@ Engin gradually realizes his wounds will not heal and the outsider can truly kil
 
 ## Olympians tuning (v114)
 Adventure trial HP is now Latissa 280, Solea 300, Vasta 340 (20 less per phase). The trial attack clock runs at 95% speed: warnings, dash movement and attack intervals slow together, with matching visual telegraphs. Player controls, phase cutscenes and Arena combat are unchanged. The existing 15% damage reduction remains. Validated with trial and Engin story regression tests.
+
+
+## Uranium and Bob ending (v115)
+Interact beside Engin's remains to collect a visible uranium pickup. Bob appears at the exit: 'Engin? Yo, bro, wha…', 'He… he’s dead. Who are you?', 'You don’t wanna give an answer?', 'Looks like we need to play.' The final dialogue action ends the current Adventure with TO BE CONTINUED, without starting a Bob fight. Uranium and the ending are additive local save flags; developer runs do not write them. Continue now resumes the furthest unlocked story location, including rescued Sailer, the Olympians' home and Engin's workshop/Bob, retaining legacy saves. Progress is stored separately in each browser; no cross-device cloud sync is implemented. Validated pickup/dialogue/end, persisted checkpoint routing, developer save isolation and existing Engin/time-reward regressions.

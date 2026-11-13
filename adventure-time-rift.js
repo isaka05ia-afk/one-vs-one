@@ -98,3 +98,27 @@ updateHud=function(){enginStoryHud();if(!inEnginBoss())return;const s=adventure.
 // A charging or airborne boss must not push the player through body separation.
 const enginStorySeparation=separateFighters;
 separateFighters=function(){if(inEnginBoss()&&adventure.enginBoss?.motion)return;return enginStorySeparation();};
+
+// The current Adventure ending. Progress belongs to this browser's local save.
+const BOB_WORKSHOP_LINES=["Engin? Yo, bro, wha…", "He… he's dead. Who are you?", "You don't wanna give an answer?", "Looks like we need to play."];
+function hasEnginUranium(){return !!adventure?.hasEnginUranium||adventureStored('one-vs-one-engin-uranium')>0;}
+function showBobEnding(){if(!atEnginPast()||!hasEnginUranium())return;clearInput();adventure.bobArrived=true;adventure.bobPosition={x:Math.max(360,fighters[0].x-130),y:fighters[0].y+35};adventure.dialogue={npc:{name:'Bob',bobEnding:true},index:0,lines:BOB_WORKSHOP_LINES};showHarborDialogue();adventureSay('Bob blocks the way out.',4);}
+function takeEnginUranium(){if(!atEnginPast()||!enginBossWon())return;adventure.hasEnginUranium=true;fighters[0].hasEnginUranium=true;if(!adventure.testRun)adventureSave('one-vs-one-engin-uranium',1);adventureSay('ENGIN’S URANIUM · Acquired',4);showBobEnding();}
+function finishBobEnding(){if(!atEnginPast())return;closeHarborDialogue();clearInput();adventure.bobArrived=true;adventure.ended=true;finished=roundOver=true;if(!adventure.testRun)adventureSave('one-vs-one-bob-ending-seen',1);$('banner').textContent='TO BE CONTINUED';$('combatHint').textContent='Bob stands in your way. Your progress is saved. The Adventure continues in a future update.';adventureSay('Bob: Looks like we need to play.',999);}
+const uraniumInteract=harborInteract;
+harborInteract=function(){if(atEnginPast()&&active()){const n=harborNearest();if(n?.enginRemains){if(hasEnginUranium())showBobEnding();else takeEnginUranium();return;}if(n?.timeExit&&hasEnginUranium()){showBobEnding();return;}}return uraniumInteract();};
+$('harborInteract').onclick=harborInteract;
+const bobDialogueAction=harborDialogueAction;
+harborDialogueAction=function(d){if(d?.npc.bobEnding)return {name:'TO BE CONTINUED',run:finishBobEnding};return bobDialogueAction(d);};
+const uraniumHud=updateHud;
+updateHud=function(){uraniumHud();if(!atEnginPast())return;const n=harborNearest();if(n?.enginRemains)$('harborInteract').textContent=(hasEnginUranium()?'BOB · CONTINUE':'TAKE ENGIN’S URANIUM')+' · E';if(hasEnginUranium())$('name1').textContent='THE PLAYER · Door Man’s Key · Engin’s Uranium';if(enginBossWon()){$('name2').textContent=adventure.bobArrived?'BOB':'ENGIN · DEFEATED';$('combatHint').textContent=hasEnginUranium()?'Bob blocks your escape. Speak with him.':'Stand beside Engin’s body and use Interact to take his uranium.';}};
+const uraniumRender=render;
+render=function(){uraniumRender();if(!atEnginPast()||!running)return;const c=ctx;c.save();c.scale(camera.scale,camera.scale);c.translate(-camera.x,-camera.y);if(enginBossWon()&&!hasEnginUranium()){c.shadowColor='#aaff67';c.shadowBlur=18;c.fillStyle='#aaff67';c.fillRect(1040,505,17,25);c.shadowBlur=0;}if(adventure.bobArrived){drawFighter(c,{...fighters[0],id:0,isAdventurePlayer:false,x:adventure.bobPosition?.x||490,y:adventure.bobPosition?.y||550,face:1,cards:[],anim:0,guard:0,dodge:0,hurt:0},time,true);c.fillStyle='#f5df98';c.font='bold 18px sans-serif';c.textAlign='center';c.fillText('BOB',adventure.bobPosition?.x||490,(adventure.bobPosition?.y||550)-165);}c.restore();};
+const uraniumEnter=enterEnginPast;
+enterEnginPast=function(){const ok=uraniumEnter();if(ok){adventure.hasEnginUranium=hasEnginUranium();fighters[0].hasEnginUranium=adventure.hasEnginUranium;if(hasEnginUranium())showBobEnding();}return ok;};
+// Resume the furthest unlocked story checkpoint, retaining legacy saves.
+continueHarbor=function(){startAdventure({resume:true});if(!adventure)return;if(adventureStored('one-vs-one-engin-past-arrived')||adventureStored('one-vs-one-engin-boss-won')||adventureStored('one-vs-one-engin-uranium')){adventure.olympianWon=true;enterEnginPast();}else if(adventureStored('one-vs-one-olympians-arrived')||adventureStored('one-vs-one-olympian-trial-won'))enterOlympians();else if(adventureStored('one-vs-one-sailer-rescued')&&!sailerTalkDone()){enterHarbor();enterShipAftermath();}else enterHarbor();};
+$('adventureContinue').onclick=continueHarbor;
+const storyRefreshContinue=refreshHarborContinue;
+refreshHarborContinue=function(){storyRefreshContinue();const seen=adventureStored('one-vs-one-bob-ending-seen'),uranium=adventureStored('one-vs-one-engin-uranium'),engin=adventureStored('one-vs-one-engin-past-arrived')||adventureStored('one-vs-one-engin-boss-won'),house=adventureStored('one-vs-one-olympians-arrived')||adventureStored('one-vs-one-olympian-trial-won');if(seen||uranium||engin||house){$('adventureContinue').hidden=false;$('adventureContinue').textContent=seen||uranium?'CONTINUE · BOB':engin?'CONTINUE · ENGIN’S WORKSHOP':'CONTINUE · THE OLYMPIANS’ HOUSE';}};
+refreshHarborContinue();
