@@ -29,7 +29,7 @@ function startAdventure(options={}){
  adventure.doors=[{x:280,y:230},{x:W-280,y:230},{x:280,y:H-230},{x:W-280,y:H-230}];
  shots=[];zones=[];portals=[];actors=[];boats=[];particles=[];clock=90;finished=roundOver=false;paused=true;clearInput();
  $('mainTabs').hidden=true;$('adventureSetup').hidden=true;$('adventureSpeech').hidden=false;
- $('combatHint').textContent='Adventure · Slash / Healing Potion / hold Block. Three lives. Three potions shared across all lives. Dodge to escape door traps. No cards.';
+ $('combatHint').textContent='Adventure · Slash / Healing Potion / Grab after finding Bob’s glove. Three lives. Three potions shared across all lives. Dodge to escape door traps. No cards.';
  adventureSay(adventureDialogue(adventure.deaths).join(' '),999);$('banner').textContent='THE THRESHOLD';const enter=document.createElement('button');enter.textContent='ENTER THE FIGHT';enter.onclick=()=>{paused=false;$('banner').textContent='';adventureSay('“'+adventureDialogue(adventure.deaths).at(-1)+'”');$('pause').textContent='Pausa'};$('banner').append(enter);
  updateHud();renderAttackButtons(PLAYER_MOVES);
 }
