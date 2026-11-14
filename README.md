@@ -1377,3 +1377,17 @@ Settings now include a persistent, device-local Potato mode toggle. It suppresse
 Leo visibly collapses and coughs blood after defeat. Taking the dropped sword starts a cinematic: he looks toward the Player, crushes the four elemental crystals and says “You are the one who will kill the god. Welcome, Player, to the Arena. Ha… ha… ha!” Only then does a full ten-second escape countdown begin. The harbor door is marked; reaching it shields the Player during a visible corruption explosion. Missing the deadline shows the explosion and offers a local escape retry. The sword and scene/countdown survive normal saves. Potato mode retains essential crystal, blood, door and explosion cues while reducing decorative particles.
 
 Validation: browser coverage of death, pickup, revelation, crystal destruction, ten-second deadline, save/resume, failure/retry, successful escape and sword retention, Potato mode and no runtime errors.
+
+
+## v136 — The Last Storm / The God Killer
+
+The lethal Curse-route Olympian victory awakens the Cursed Blade (34-damage melee, 70-damage charged slash). Returning to the harbor begins Sailer’s four-phase confrontation; the friendly voyage and Leo branch are unchanged.
+
+1. Storm of Grief: marked wave fans, pulling gales and paddle sweeps in the flooded harbor.
+2. Breaker of Harbors: the docks split into four platforms with connected bridges; gigantic tides force the Player to reach the marked safe platform.
+3. The Sea Serpent: a subtitled growth scene reveals Sailer’s past and sea form. Water is impassable; only two-second charged blade projectiles damage him. Blue homing harpoons must be grabbed and create six-second recovery windows. Other completed patterns also leave charge opportunities.
+4. The God Killer: a visibly wounded giant reveals the golden paddle as a trident. Only charged slashes and returned harpoons damage him. Lightning, giant tides, harpoons and a new three-lane Trident Cut combine with clear warnings.
+
+Rain, storm water, harbor buildings, platform danger/safe overlays, sea coils, transformation, trident, empowered sword, charge rings and Grab outlines make the encounter visual. Potato mode removes extra rain/particles while keeping all gameplay warnings. Scene, phase, health, hazards, sword and victory persist in normal Adventure saves. Developer code 1209 includes all four storm checkpoints; test runs protect normal progress.
+
+Validation: desktop/mobile browser tests cover the actual Curse-victory handoff, sword upgrade, all four phases, bridge traversal, safe/unsafe tide damage, water restriction, actual two-second touch charging, actual Grab button, sea-form immunity and charge openings, final returned-harpoon damage, Trident Cut damage, bounded long-run hazards, Potato mode, save/resume, life respawn and saved victory. Existing Olympian pressure, Leo ending and Potato mode browser regressions pass without runtime errors.
