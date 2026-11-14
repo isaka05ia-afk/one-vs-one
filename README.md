@@ -1365,3 +1365,8 @@ Validation: runtime tests verify living-only combinations, exact 65-damage failu
 Harbor villagers on the Curse Blade route are marked SOUL TARGET. The on-screen guide explains close-range attacks, the two-second charged slash, and that E / Talk only starts dialogue. Mobile auto-aim targets living villagers; melee now uses the current aim rather than a stale locked angle. Olympian support attacks are slightly less frequent (3.3 seconds, twin combinations 5.2 seconds). Fatal Frost Verdict instructions explicitly require Grab, remain on the death screen, and survive save/resume.
 
 Validation: pressure unit and browser tests, fatal spear save/resume, ZXC instructions and actual mobile tap killing a nearby villager; no browser errors.
+
+
+## v134 — Potato mode
+
+Settings now include a persistent, device-local Potato mode toggle. It suppresses shared cosmetic particles and Leo’s extra Adventure spectacle/absorption particles, clears existing particles when enabled, and preserves gameplay, attack telegraphs, hazards and character silhouettes. Future decorative emitters can use extraEffectsEnabled(). Browser validation covers persistence, toggling effects both ways, clearing existing effects, retained warnings and no runtime errors.
