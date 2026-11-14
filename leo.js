@@ -82,7 +82,7 @@ function drawLeoZone(c,z){const col=LEO_COLORS[z.element],warn=z.delay>0;c.save(
  if(z.kind==='leo_decree'||z.kind==='leo_arrival'){for(let n=0;n<3;n++)leoCircle(c,0,0,z.r*((time*2+n/3)%1),null,col);}
  c.restore();}
 function drawLeo(c,f,t=0,preview=false){const e=leoElement(f),col=LEO_COLORS[e],casting=f.cast>0,slot=f.move||0,m=leoMoves(f)[slot];c.save();
- if(!preview&&(casting||f.leoFlash>0)){
+ if(!preview&&!f.storyVisualOnly&&(casting||f.leoFlash>0)){
  c.save();c.translate(f.x,f.y);c.rotate(f.lockedAim||0);c.lineWidth=2;c.strokeStyle=col;c.fillStyle=col+'20';
  if(slot===0&&casting){c.setLineDash([12,10]);c.beginPath();c.moveTo(0,-(e==='earth'?90:38));c.lineTo(Math.hypot(W,H),-(e==='earth'?90:38));c.moveTo(0,e==='earth'?90:38);c.lineTo(Math.hypot(W,H),e==='earth'?90:38);c.stroke();}
  if(slot===1){c.beginPath();c.moveTo(0,0);c.arc(0,0,m[3],-1.1,1.1);c.closePath();c.fill();c.stroke();if(!casting){c.lineWidth=13;c.shadowColor=col;c.shadowBlur=18;c.beginPath();c.arc(0,0,m[3]*.75,-1.1,1.1);c.stroke();c.strokeStyle='#fff4d9';c.lineWidth=4;c.stroke();}}
