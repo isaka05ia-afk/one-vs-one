@@ -114,11 +114,11 @@ function drawLeo(c,f,t=0,preview=false){const e=leoElement(f),col=LEO_COLORS[e],
  leoPoly(c,[[-12,-37],[0,-40],[13,-36],[10,-28],[-9,-28]],'#f6d8a0');leoPoly(c,[[-4,-37],[5,-37],[0,-32]],'#3b2930');c.strokeStyle='#452b2c';c.lineWidth=2;c.beginPath();c.moveTo(-8,-30);c.lineTo(9,-30);c.stroke();leoPoly(c,[[-9,-31],[-6,-25],[-3,-31]],'#fff8e6');leoPoly(c,[[4,-31],[8,-25],[10,-31]],'#fff8e6');
  // An enormous crystal-bound greatsword, gripped with both hands.
  c.strokeStyle='#9d794e';c.lineWidth=12;c.lineCap='round';c.beginPath();c.moveTo(22,-15);c.lineTo(37,12);c.moveTo(-18,-12);c.lineTo(8,20);c.lineTo(36,27);c.stroke();
- c.save();c.translate(37,-2);const wind=casting?Math.min(1,f.cast/leoWindup(f,slot)):0;c.rotate(casting?-.8+wind*.2:f.anim>0?.8:-.14);
+ if(!f.noSword){c.save();c.translate(37,-2);const wind=casting?Math.min(1,f.cast/leoWindup(f,slot)):0;c.rotate(casting?-.8+wind*.2:f.anim>0?.8:-.14);
  c.fillStyle='#3d2a32';c.fillRect(-2,-4,9,38);c.strokeStyle='#d3aa61';c.lineWidth=2;for(let n=0;n<4;n++){c.beginPath();c.moveTo(-2,n*7+3);c.lineTo(7,n*7+8);c.stroke();}
  c.fillStyle='#e8ba76';c.fillRect(-7,9,19,8);c.fillRect(-7,24,19,8);leoPoly(c,[[-20,-13],[-16,-5],[22,-5],[27,-14],[18,-20],[3,-13],[-12,-20]],'#d2ab5d','#fff0bb');
  leoPoly(c,[[-12,-19],[-15,-83],[3,-112],[22,-83],[19,-19]],e==='base'?'#d1d9df':e==='earth'?'#8c806b':e==='corruption'?'#583564':col,'#f9e4a8');
  leoPoly(c,[[3,-105],[-5,-80],[-3,-22],[5,-22],[11,-80]],e==='corruption'?'#d79aff':'#f5f8e9');leoPoly(c,[[3,-24],[-5,-15],[3,-5],[11,-15]],e==='base'?'#ffe6a0':col,'#fff6dc');
  if(e==='corruption'){c.strokeStyle='#ef9eff';c.beginPath();c.moveTo(3,-100);c.lineTo(-5,-75);c.lineTo(9,-58);c.lineTo(-4,-38);c.stroke();}
- c.restore();c.restore();}
+ c.restore();}c.restore();}
 function leoBotSlot(f,b,visible,d){if(f.leoRecovery>0)return -1;const moves=leoMoves(f),e=leoElement(f);if(visible&&d<moves[1][3]+10&&f.cd[1]<=0)return 1;if(visible&&f.cd[2]<=0&&d<(e==='base'?250:moves[2][3])&&(e!=='corruption'||f.hp<f.maxHp*.85))return 2;return f.cd[0]<=0?0:-1;}

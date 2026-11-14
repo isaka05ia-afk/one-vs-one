@@ -1370,3 +1370,10 @@ Validation: pressure unit and browser tests, fatal spear save/resume, ZXC instru
 ## v134 — Potato mode
 
 Settings now include a persistent, device-local Potato mode toggle. It suppresses shared cosmetic particles and Leo’s extra Adventure spectacle/absorption particles, clears existing particles when enabled, and preserves gameplay, attack telegraphs, hazards and character silhouettes. Future decorative emitters can use extraEffectsEnabled(). Browser validation covers persistence, toggling effects both ways, clearing existing effects, retained warnings and no runtime errors.
+
+
+## v135 — Leo’s final revelation and escape
+
+Leo visibly collapses and coughs blood after defeat. Taking the dropped sword starts a cinematic: he looks toward the Player, crushes the four elemental crystals and says “You are the one who will kill the god. Welcome, Player, to the Arena. Ha… ha… ha!” Only then does a full ten-second escape countdown begin. The harbor door is marked; reaching it shields the Player during a visible corruption explosion. Missing the deadline shows the explosion and offers a local escape retry. The sword and scene/countdown survive normal saves. Potato mode retains essential crystal, blood, door and explosion cues while reducing decorative particles.
+
+Validation: browser coverage of death, pickup, revelation, crystal destruction, ten-second deadline, save/resume, failure/retry, successful escape and sword retention, Potato mode and no runtime errors.
