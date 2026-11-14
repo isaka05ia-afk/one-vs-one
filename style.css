@@ -61,3 +61,5 @@ body.playing .hud{margin:8px 0 12px}body.playing .mapStatus{margin-top:8px}body.
 .arena>.harborTalk h3,.arena>.harborTalk #harborTalkLine{display:none}
 .arena>.harborTalk button{margin:3px;padding:7px 10px;font-size:clamp(10px,1.15vw,14px);min-height:36px}
 @media(max-width:600px){.arena.hasAdventureDialogue>.adventureSpeech,body.playing .arena.hasAdventureDialogue>.adventureSpeech{bottom:30%}.arena>.harborTalk button{padding:5px 7px;min-height:32px}.arena>.adventureSpeech,body.playing .arena>.adventureSpeech{left:3%;right:3%;padding:7px 9px;font-size:13px}}
+
+#curseHarborHelp{position:absolute;z-index:12;top:10px;left:10px;max-width:min(540px,92%);padding:9px 12px;background:#181222dc;border:1px solid #b67bce;border-radius:7px;color:#f3e5fb;font-size:clamp(11px,1.2vw,15px);line-height:1.4;pointer-events:none;text-align:left}#curseHarborHelp b,#curseHarborHelp span{display:block}#curseHarborHelp[hidden]{display:none}@media(max-width:600px){#curseHarborHelp{top:5px;left:5px;padding:6px 8px;max-width:96%;font-size:11px}}

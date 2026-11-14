@@ -1358,3 +1358,10 @@ Frost Verdict is a prominently marked homing frost spear while Solea is alive. T
 Adventure Leo now visibly raises his greatsword while winding up and gains a restrained crown/sigil aura. Resolved slashes create large golden or elemental crescents/light trails, Kneel emits shockwaves, Earth eruptions throw stone shapes, Falling Sun has a falling meteor/fire trail, Thunder has lightning paths, and frost/fire fields emit themed particles. Corruption uses fractured purple versions. Effects follow the existing attack origins/geometry; damage and timings are unchanged. Native duplicate telegraphs are suppressed only for the renderer's temporary storyVisualOnly copy. Effects/particles are bounded at 40/320 and do not mutate the fighter's cast state. Arena Leo remains unchanged.
 
 Validation: runtime tests verify living-only combinations, exact 65-damage failure despite Dodge, actual Grab blocking with zero guard, dead-skater cancellation, unchanged friendly-trial damage, and bounded/non-mutating Leo effects. Chromium uses the real Grab button to shatter the spear, captures coordinated attacks and Leo windup/slash/meteor effects, and reports no page errors. The actual button/keyboard dragon/Leo Grab regression also passes.
+
+
+## v133 — Clear Curse Blade instructions
+
+Harbor villagers on the Curse Blade route are marked SOUL TARGET. The on-screen guide explains close-range attacks, the two-second charged slash, and that E / Talk only starts dialogue. Mobile auto-aim targets living villagers; melee now uses the current aim rather than a stale locked angle. Olympian support attacks are slightly less frequent (3.3 seconds, twin combinations 5.2 seconds). Fatal Frost Verdict instructions explicitly require Grab, remain on the death screen, and survive save/resume.
+
+Validation: pressure unit and browser tests, fatal spear save/resume, ZXC instructions and actual mobile tap killing a nearby villager; no browser errors.
